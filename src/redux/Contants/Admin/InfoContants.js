@@ -1,0 +1,1 @@
+export const infoContants = "ADD_INFO";
