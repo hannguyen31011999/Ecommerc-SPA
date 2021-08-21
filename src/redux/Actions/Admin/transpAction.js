@@ -7,11 +7,3 @@ export const listAction = (data, pagination) => ({
         pagination
     }
 });
-
-// export const paginationAction = (data, pagination) => ({
-//     type: transport.paginationContant,
-//     payload: {
-//         data,
-//         pagination
-//     }
-// });

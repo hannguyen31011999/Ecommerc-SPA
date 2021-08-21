@@ -13,10 +13,6 @@ export default (state = initialState, { type, payload }) => {
             const { data, pagination } = payload;
             return { ...state, data, pagination }
         }
-        // case transp.paginationContant: {
-        //     const { data, pagination } = payload;
-        //     return { ...state, data, pagination }
-        // }
         default:
             return { ...state };
     }

@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef, memo } from 'react';
-import { Modal, Button } from 'antd';
-import ButtonCreateComponent from '../../../components/Buttons/ButtonCreateComponent';
+import React, { memo } from 'react';
+import { Modal } from 'antd';
 
 function ModalComponent(props) {
     return (

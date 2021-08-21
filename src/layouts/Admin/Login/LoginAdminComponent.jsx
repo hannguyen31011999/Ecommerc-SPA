@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { infoAction } from '../../../redux/Actions/Admin/infoAction';
-import { Form, Input, Button, Checkbox, Alert } from 'antd';
+import { Form, Input, Button, Checkbox } from 'antd';
 import './login.scss';
 import { apiAdmin } from '../../../services/adminApi';
 import { ToastContainer, toast } from 'react-toastify';

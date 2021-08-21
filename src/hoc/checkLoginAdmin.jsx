@@ -2,10 +2,9 @@ import React from 'react'
 import { Redirect } from 'react-router-dom';
 import HeaderComponent from '../components/Admin/HeaderComponent';
 import SidebarComponent from '../components/Admin/SidebarComponent';
-import apiAdmin from '../services/adminApi';
-import { ACCESS_TOKEN, TIMESTAMP, HEADER_BEARER } from '../settings/configUrl';
+import { ACCESS_TOKEN } from '../settings/configUrl';
 import { useHistory } from 'react-router-dom';
-import { handleCompareTime, handleExpired, handleRefreshToken } from '../utils/expired';
+import { handleCompareTime, handleRefreshToken } from '../utils/expired';
 
 const checkLoginAdmin = (WrapperComponent) => (props) => {
     const history = useHistory();
