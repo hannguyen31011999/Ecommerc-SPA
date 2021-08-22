@@ -3,7 +3,7 @@ const initialState = {
     data: [],
     pagination: {
         current: 1,
-        pageSize: 25
+        pageSize: 10
     }
 }
 

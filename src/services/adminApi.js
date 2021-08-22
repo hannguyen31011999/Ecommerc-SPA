@@ -4,10 +4,13 @@ export const apiAdmin = {
     fetchApiLogin(data) {
         return callApi("api/login", "post", data);
     },
+    fetchApiLogout() {
+        return callApiAdmin('logout');
+    },
     refreshToken(token) {
         return apiRefreshToken('api/refresh/token');
     },
-    fetchInfo() {
+    fetchInfo(token) {
         return callApiAdmin('info');
     }
 }

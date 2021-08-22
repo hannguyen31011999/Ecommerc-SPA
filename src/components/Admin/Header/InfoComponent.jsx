@@ -4,10 +4,13 @@ import NotificationComponent from './NotificationComponent';
 import { useSelector, useDispatch } from 'react-redux'
 import { apiAdmin } from '../../../services/adminApi';
 import { infoAction } from '../../../redux/Actions/Admin/infoAction';
+import { useHistory } from 'react-router-dom';
+import { ACCESS_TOKEN, TIMESTAMP } from '../../../settings/configUrl';
 
 export default function InfoComponent(props) {
     const [user, setUser] = useState(useSelector(state => state.InfoReducer.user));
     const dispatch = useDispatch();
+    const history = useHistory();
     useEffect(() => {
         if (!Object.keys(user).length > 0) {
             apiAdmin.fetchInfo().then(res => {
@@ -18,6 +21,18 @@ export default function InfoComponent(props) {
             });
         }
     }, []);
+    const handleLogout = async (e) => {
+        e.preventDefault();
+        await apiAdmin.fetchApiLogout().then(res => {
+            if (res.data.status_code === 200) {
+                localStorage.removeItem(ACCESS_TOKEN);
+                localStorage.removeItem(TIMESTAMP);
+                history.push('/admin');
+            }
+        }).catch(e => {
+            console.log(e);
+        })
+    }
     return (
         <>
             <ul className="navbar-nav flex-row justify-content-end align-items-center">
@@ -44,8 +59,8 @@ export default function InfoComponent(props) {
                                 Setting
                             </a>
                         </li>
-                        <li>
-                            <a className="dropdown-item" href="*">
+                        <li onClick={handleLogout}>
+                            <a className="dropdown-item" href="">
                                 <i className="fa fa-outdent" />
                                 Logout
                             </a>

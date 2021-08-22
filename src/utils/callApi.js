@@ -1,11 +1,12 @@
-import axios from 'axios';
+// import axios from 'axios';
+import axiosConfig from '../settings/configAxios';
 import { apiAdmin } from '../services/adminApi';
 import { ACCESS_TOKEN, BASE_URL, BASE_URL_ADMIN, TIMESTAMP } from '../settings/configUrl';
-import { handleCompareTime, handleExpired, handleRefreshToken } from './expired';
+import { handleCompareTime, handleExpired } from './expired';
 import { Redirect } from 'react-router-dom';
+
 export const apiRefreshToken = (endpoint, method = "get", data = null) => {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`;
-    return axios({
+    return axiosConfig({
         method,
         url: `${BASE_URL}/${endpoint}`,
         data
@@ -13,11 +14,10 @@ export const apiRefreshToken = (endpoint, method = "get", data = null) => {
 }
 
 export const callApi = (endpoint, method = "get", data = null) => {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`;
-    return axios({
+    return axiosConfig({
         method,
         url: `${BASE_URL}/${endpoint}`,
-        data
+        data,
     });
 }
 
@@ -31,14 +31,13 @@ export const callApiAdmin = async (endpoint, method = "get", data = null) => {
             }).catch(e => {
                 localStorage.removeItem(TIMESTAMP);
                 localStorage.removeItem(ACCESS_TOKEN);
-                return <Redirect to="/admin" />
+                <Redirect to="/admin" />
             });
         }
-        return await axios({
+        return await axiosConfig({
             method,
             url: `${BASE_URL_ADMIN}/${endpoint}`,
-            data,
-            headers: { Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}` }
+            data
         });
     }
 }
