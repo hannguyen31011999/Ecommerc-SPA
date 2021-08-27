@@ -1,2 +1,10 @@
-export const listContant = "FETCH_TRANSPORT";
+export const fetchTranpContants = "FETCH_TRANS";
+export const fetchSuccessContants = "FETCH_TRANS_SUCCESS";
+export const fetchFailContants = "FETCH_TRANS_FAIL";
 export const paginationContant = "PAGINATION_TRANSPORT";
+export const fetchProvinceContant = "FETCH_PROVINCE_WARD";
+export const createWard = "CREATE_WARD";
+export const editWard = "EDIT_WARD";
+export const closeModal = "CLOSE_MODAL_WARD";
+export const updateWard = "UPDATE_WARD";
+export const deleteContant = "DELETE_WARD";

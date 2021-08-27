@@ -1,14 +1,22 @@
-import { infoContants } from "../../Contants/Admin/InfoContants";
+import * as info from "../../Contants/Admin/InfoContants";
 
 const initialState = {
     user: {
-    }
+    },
+    isLoading: false,
+    errors: ""
 }
 
 export default (state = initialState, { type, payload }) => {
     switch (type) {
-        case infoContants: {
-            return { ...state, user: payload }
+        case info.apiFetchContants: {
+            return { ...state, isLoading: true }
+        }
+        case info.apiSuccessContants: {
+            return { ...state, isLoading: false, user: payload }
+        }
+        case info.apiFailContants: {
+            return { ...state, isLoading: false, errors: payload }
         }
         default: {
             return state

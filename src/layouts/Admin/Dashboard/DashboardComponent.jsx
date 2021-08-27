@@ -4,11 +4,10 @@ import CardDashboard from './CardDashboard';
 import TableDashboard from './TableDashboard';
 
 function DashboardComponent(props) {
-
     return (
         <div className="list-card row">
             <CardDashboard />
-            <TableDashboard />
+            {/* <TableDashboard /> */}
         </div>
     )
 }

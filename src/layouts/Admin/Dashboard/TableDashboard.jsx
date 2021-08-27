@@ -1,18 +1,18 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react'
-import { apiWard } from '../../../services/adminApi';
 import { Table, Button, Input, Space, Popconfirm } from 'antd';
-import { FolderAddOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
-import ModalComponent from './ModalComponent';
 import { useSelector, useDispatch } from 'react-redux'
 import * as trans from '../../../redux/Actions/Admin/transpAction';
+import ModalComponent from './ModalComponent';
+import { ToastContainer } from 'react-toastify';
+import ModalEditComponent from './ModalEditComponent';
 
 export default function TableDashboard(props) {
-    let [ward, setWard] = useState(useSelector(state => state.TransportReducer.data));
-    let [pagination, setPagination] = useState(useSelector(state => state.TransportReducer.pagination));
-    let [loading, setLoading] = useState(true);
-    const [visible, setVisible] = useState(false);
+    let ward = useSelector(state => state.TransportReducer.data);
+    let pagination = useSelector(state => state.TransportReducer.pagination);
+    let loading = useSelector(state => state.TransportReducer.loading);
+    let [visiable, setVisiable] = useState(false);
     let [seach, setSeach] = useState({
         searchText: '',
         searchedColumn: '',
@@ -20,35 +20,16 @@ export default function TableDashboard(props) {
     let searchInput = useRef(null);
     const dispatch = useDispatch();
     useEffect(() => {
-        if (!ward.length > 0) {
-            setLoading(true);
-            apiWard.fetchApiWard(pagination.pageSize).then(res => {
-                const result = res.data.data;
-                dispatch(trans.listAction(result.data, { ...pagination, total: result.total }));
-                setWard(result.data);
-                setPagination({ ...pagination, total: result.total });
-                setLoading(false);
-            }).catch(e => {
-            });
+        if (Array.isArray(ward) && !ward.length > 0) {
+            dispatch(trans.transAction(pagination.pageSize));
         } else {
-            setLoading(false);
+            trans.loadingAct(false);
         }
-    }, []);
-    useMemo(() => {
-
-    }, [ward, pagination]);
+    }, [dispatch]);
+    console.log(987);
     const onChange = (pagination) => {
         const { current, pageSize } = pagination;
-        setLoading(true);
-        apiWard.changePagination(current, pageSize).then(res => {
-            const result = res.data.data;
-            dispatch(trans.listAction(result.data, { ...pagination, total: result.total }));
-            setWard(result.data);
-            setPagination({ current, pageSize, total: result.total });
-            setLoading(false);
-        }).catch(e => {
-
-        })
+        dispatch(trans.paginationAction(current, pageSize));
     }
     const getColumnSearchProps = dataIndex => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -121,7 +102,6 @@ export default function TableDashboard(props) {
             searchedColumn: dataIndex,
         })
     };
-
     const handleReset = clearFilters => {
         clearFilters();
         setSeach({ ...seach, searchText: '' });
@@ -131,8 +111,12 @@ export default function TableDashboard(props) {
 
         }
     }
-    const handleCreate = (e) => {
-        console.log(e);
+    const handleEdit = (id) => {
+        dispatch(trans.editWardAction(id));
+    }
+    const handleDetele = (id) => {
+        dispatch(trans.loadingAct(true));
+        dispatch(trans.deleteWardAction(id));
     }
     const columns = [
         {
@@ -171,11 +155,11 @@ export default function TableDashboard(props) {
             render: (text) => {
                 return (
                     <Space size="middle">
-                        <Button><i className="fa fa-edit"></i></Button>
+                        <Button onClick={() => { handleEdit(text.id) }}><i className="fa fa-edit"></i></Button>
                         <Popconfirm
                             placement="bottomRight"
                             title="You want to delete?"
-                            onConfirm={handleCreate}
+                            onConfirm={() => { handleDetele(text.id) }}
                             okText="Yes"
                             cancelText="No"
                         >
@@ -189,14 +173,14 @@ export default function TableDashboard(props) {
 
     return (
         <>
+            <ToastContainer />
             <div className="col-12 col-sm-6 col-xl-3 mb-3">
                 <Input.Group compact>
-                    <Input.Search size="large" allowClear defaultValue="" placeholder="Seach...." onSearch={handleSeachInput} />
+                    <Input.Search size="default" allowClear defaultValue="" placeholder="Seach...." onSearch={handleSeachInput} />
                 </Input.Group>
             </div>
-            <div className="col-12 col-sm-6 col-xl-9 d-flex justify-content-end">
-                <Button type="primary" onClick={() => setVisible(true)} icon={<FolderAddOutlined />} size="large" />
-            </div>
+            <ModalComponent />
+            <ModalEditComponent />
             <div className="col-12">
                 < Table
                     columns={columns}
@@ -207,7 +191,6 @@ export default function TableDashboard(props) {
                     rowKey="id"
                 />
             </div>
-            <ModalComponent visible={visible} setVisible={setVisible} />
         </>
 
     )

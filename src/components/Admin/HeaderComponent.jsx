@@ -1,6 +1,10 @@
 import React from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import InfoComponent from './Header/InfoComponent';
 import SeachComponent from './Header/SeachComponent';
+import { useDispatch, useSelector } from 'react-redux';
+import { apiAdmin } from '../../services/adminApi';
+import * as infoAct from '../../redux/Actions/Admin/infoAction';
 
 export default function HeaderComponent(props) {
     return (

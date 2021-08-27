@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { infoAction } from '../../../redux/Actions/Admin/infoAction';
+import * as infoAct from '../../../redux/Actions/Admin/infoAction';
 import { Form, Input, Button, Checkbox } from 'antd';
 import './login.scss';
 import { apiAdmin } from '../../../services/adminApi';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useHistory } from 'react-router-dom';
 import { handleExpired } from '../../../utils/expired';
+import { alertErrors, STATUS_FAIL } from '../../../settings/config';
 
 export default function LoginAdminComponent(props) {
     let [isCheck, setCheckBox] = useState(false);
@@ -21,21 +22,13 @@ export default function LoginAdminComponent(props) {
         formData.append('password', values.password);
         apiAdmin.fetchApiLogin(formData).then(res => {
             setLoading(false);
-            if (res.data.status_code === 500) {
-                toast.error(res.data.message, {
-                    position: "top-right",
-                    autoClose: 2000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+            if (res.data.status_code === STATUS_FAIL) {
+                alertErrors(res.data.message);
             } else {
                 let timestamp = new Date(res.data.timestamp.time);
                 let miliseconds = timestamp.getTime();
                 handleExpired(res.data.timestamp.expired, miliseconds, res.data.token);
-                dispatch(infoAction(res.data.user));
+                dispatch(infoAct.fetchInfoSuccessAct(res.data.user));
                 history.push('/admin/dashboard');
             }
         }).catch(e => {

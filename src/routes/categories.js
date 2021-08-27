@@ -16,6 +16,11 @@ const categories = [
         icon: renderIcon(<i className="fa fa-list" />)
     },
     {
+        name: 'Post',
+        url: '/admin/post',
+        icon: renderIcon(<i className="fa fa-edit" />)
+    },
+    {
         name: 'Product',
         url: '/admin/product',
         icon: renderIcon(<i className="fab fa-product-hunt" />)
@@ -23,7 +28,7 @@ const categories = [
     {
         name: 'User',
         url: '/admin/user',
-        icon: renderIcon(<i class="fa fa-user" />)
+        icon: renderIcon(<i className="fa fa-user" />)
     },
     {
         name: 'Order',
@@ -31,22 +36,9 @@ const categories = [
         icon: renderIcon(<i className="fa fa-shopping-cart" />)
     },
     {
-        name: 'Transport',
-        icon: renderIcon(<i className="fa fa-truck" />),
-        children: [
-            {
-                name: 'Province',
-                url: '/admin/province'
-            },
-            {
-                name: 'District',
-                url: '/admin/ditrict'
-            },
-            {
-                name: 'Shipping Price',
-                url: '/admin/transport'
-            }
-        ]
+        name: 'Order Details',
+        url: '/admin/order/detail',
+        icon: renderIcon(<i className="fab fa-cc-apple-pay" />)
     },
     {
         name: 'Analytics',

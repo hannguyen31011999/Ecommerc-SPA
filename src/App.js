@@ -1,8 +1,6 @@
 import './App.css';
 import './assets/sass/main.scss';
-import OrderComponent from './layouts/Admin/Order/OrderComponent';
-import DashboardComponent from './layouts/Admin/Dashboard/DashboardComponent';
-import LoginAdminComponent from './layouts/Admin/Login/LoginAdminComponent';
+import routes from './routes/route';
 import {
   BrowserRouter as Router,
   Switch,
@@ -13,9 +11,15 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/admin" component={LoginAdminComponent} />
-        <Route path="/admin/dashboard" component={DashboardComponent} />
-        <Route path="/admin/order" component={OrderComponent} />
+        {
+          routes.map((item, index) => {
+            if (item.exact) {
+              return <Route exact path={item.path} component={item.component} key={index} />
+            } else {
+              return <Route path={item.path} component={item.component} key={index} />
+            }
+          })
+        }
       </Switch>
     </Router>
   );

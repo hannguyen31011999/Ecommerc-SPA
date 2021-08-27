@@ -1,6 +1,7 @@
 import React from 'react'
+import { memo } from 'react';
 
-export default function SeachComponent() {
+function SeachComponent(props) {
     return (
         <div>
             <form action="*">
@@ -12,3 +13,5 @@ export default function SeachComponent() {
         </div>
     )
 }
+
+export default memo(SeachComponent);

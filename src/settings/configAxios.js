@@ -1,12 +1,8 @@
 import axios from 'axios';
-import { ACCESS_TOKEN, BASE_URL } from './configUrl';
+import { BASE_URL, TOKEN, ACCESS_TOKEN, BASE_URL_ADMIN } from './configUrl';
 
-const API_URL = BASE_URL + 'api/';
-axios.defaults.baseURL = API_URL;
-axios.interceptors.request.use(config => {
-    if (localStorage.getItem(ACCESS_TOKEN)) {
-        config.headers.Authorization = `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`;
-    }
-    return config
-})
-export default axios
+if (TOKEN) {
+    axios.defaults.baseURL = BASE_URL;
+    axios.defaults.headers.common['Authorization'] = `Bearer ${TOKEN}`
+}
+export default axios;

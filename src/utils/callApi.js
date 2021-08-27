@@ -1,28 +1,30 @@
-// import axios from 'axios';
-import axiosConfig from '../settings/configAxios';
+import axios from 'axios';
 import { apiAdmin } from '../services/adminApi';
 import { ACCESS_TOKEN, BASE_URL, BASE_URL_ADMIN, TIMESTAMP } from '../settings/configUrl';
 import { handleCompareTime, handleExpired } from './expired';
 import { Redirect } from 'react-router-dom';
 
 export const apiRefreshToken = (endpoint, method = "get", data = null) => {
-    return axiosConfig({
+    return axios({
+        method,
+        url: `${BASE_URL}/${endpoint}`,
+        data,
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`
+        }
+    });
+}
+
+export const callApi = (endpoint, method = "get", data = null) => {
+    return axios({
         method,
         url: `${BASE_URL}/${endpoint}`,
         data
     });
 }
 
-export const callApi = (endpoint, method = "get", data = null) => {
-    return axiosConfig({
-        method,
-        url: `${BASE_URL}/${endpoint}`,
-        data,
-    });
-}
-
 export const callApiAdmin = async (endpoint, method = "get", data = null) => {
-    if (localStorage.getItem(ACCESS_TOKEN) !== null) {
+    if (localStorage.getItem(ACCESS_TOKEN)) {
         if (handleCompareTime()) {
             await apiAdmin.refreshToken().then(res => {
                 let timestamp = new Date(res.data.timestamp.time);
@@ -34,10 +36,13 @@ export const callApiAdmin = async (endpoint, method = "get", data = null) => {
                 <Redirect to="/admin" />
             });
         }
-        return await axiosConfig({
+        return await axios({
             method,
             url: `${BASE_URL_ADMIN}/${endpoint}`,
-            data
+            data,
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`
+            }
         });
     }
 }

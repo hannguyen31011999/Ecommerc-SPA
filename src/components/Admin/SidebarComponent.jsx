@@ -4,10 +4,11 @@ import categories from '../../routes/categories';
 
 export default function SidebarComponent(props) {
     let [active, setActive] = useState(props.match.path);
+    let [minisize, setMinisize] = useState(props.location.state);
     const history = useHistory();
     const handleActive = (path) => {
         setActive(path);
-        history.push(path);
+        history.push(path, minisize);
     }
     const renderCategories = () => {
         return categories.map((item, index) => {
@@ -55,7 +56,7 @@ export default function SidebarComponent(props) {
         });
     }
     return (
-        <div className="sidebar" id="sidebar">
+        <div className={minisize ? "sidebar minisize" : "sidebar"} id="sidebar">
             <div className="sidebar__logo text-center">
                 <div className="sidebar__image">
                     <NavLink to="/admin/dashboard">
@@ -66,8 +67,11 @@ export default function SidebarComponent(props) {
             <ul className="sidebar__list">
                 {renderCategories()}
             </ul>
-            <div className="sidebar__close text-center d-none d-lg-block">
-                <button id="hide-sidebar"><i className="fa fa-angle-left" /></button>
+            <div className="sidebar__close text-center d-none d-lg-block" onClick={() => { setMinisize(!minisize) }}>
+                <button id="hide-sidebar">
+                    <i className="fa fa-angle-left" style={minisize ?
+                        { transform: "rotate(180deg)" } : {}} />
+                </button>
             </div>
         </div>
     )

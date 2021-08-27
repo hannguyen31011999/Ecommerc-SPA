@@ -3,24 +3,20 @@ import { NavLink } from 'react-router-dom';
 import NotificationComponent from './NotificationComponent';
 import { useSelector, useDispatch } from 'react-redux'
 import { apiAdmin } from '../../../services/adminApi';
-import { infoAction } from '../../../redux/Actions/Admin/infoAction';
+import * as infoAction from '../../../redux/Actions/Admin/infoAction';
 import { useHistory } from 'react-router-dom';
 import { ACCESS_TOKEN, TIMESTAMP } from '../../../settings/configUrl';
+import { memo } from 'react';
 
-export default function InfoComponent(props) {
-    const [user, setUser] = useState(useSelector(state => state.InfoReducer.user));
-    const dispatch = useDispatch();
+function InfoComponent(props) {
     const history = useHistory();
+    const dispatch = useDispatch();
+    let user = useSelector(state => state.InfoReducer.user);
     useEffect(() => {
         if (!Object.keys(user).length > 0) {
-            apiAdmin.fetchInfo().then(res => {
-                dispatch(infoAction(res.data.user));
-                setUser(res.data.user);
-            }).catch(e => {
-                console.log(e);
-            });
+            dispatch(infoAction.responseApi());
         }
-    }, []);
+    }, [dispatch]);
     const handleLogout = async (e) => {
         e.preventDefault();
         await apiAdmin.fetchApiLogout().then(res => {
@@ -78,3 +74,5 @@ export default function InfoComponent(props) {
         </>
     )
 }
+
+export default memo(InfoComponent);

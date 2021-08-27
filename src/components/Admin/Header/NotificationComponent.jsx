@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom';
 
-export default function NotificationComponent() {
+export default function NotificationComponent(props) {
     return (
         <>
             <li className="nav-item dropdown">

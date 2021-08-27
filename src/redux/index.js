@@ -2,12 +2,13 @@ import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 // Admin
 import InfoReducer from './Reducers/Admin/InfoReducer';
-import TransportReducer from './Reducers/Admin/TransportReducer';
-
+import CategoriesReducer from '../layouts/Admin/Categories/modules/CategoriesReducer';
+import PostReducer from '../layouts/Admin/Post/modules/PostReducer';
 const rootReducer = combineReducers({
     // admin
     InfoReducer,
-    TransportReducer
+    CategoriesReducer,
+    PostReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
