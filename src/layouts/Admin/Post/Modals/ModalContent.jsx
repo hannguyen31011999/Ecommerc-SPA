@@ -10,7 +10,6 @@ function ModalContent() {
     let data = useSelector(state => state.PostReducer.dataEdit);
     const dispatch = useDispatch();
     let modalContent = useSelector(state => state.PostReducer.modalContent);
-    console.log(data.content);
     return (
         <>
             <Modal
@@ -18,7 +17,7 @@ function ModalContent() {
                 centered
                 visible={modalContent}
                 onCancel={() => { dispatch(trans.modalAct(false)) }}
-                width={750}
+                width={775}
             >
                 <Markup content={data?.content} />
             </Modal>

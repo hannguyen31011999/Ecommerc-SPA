@@ -40,6 +40,7 @@ const routes = [
     {
         path: '/admin/order',
         component: OrderComponent,
+        exact: true
     },
     {
         path: '/admin/order/detail',

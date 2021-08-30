@@ -1,4 +1,4 @@
-import * as contants from './Contants';
+import * as contants from './Constants';
 
 const initialState = {
     data: [],
@@ -72,7 +72,7 @@ const PostReducer = (state = initialState, { type, payload }) => {
         case contants.seachContants: {
             const { data, total, lastPage } = payload;
             const temp = { ...state };
-            return { ...state, data, pagination: { ...state.pagination, total, lastPage }, loading: false, messageErrors: {} }
+            return { ...state, data, pagination: { ...state.pagination, pageSize: 15, total, lastPage }, loading: false, messageErrors: {} }
         }
         case contants.clearEditor: {
             return { ...state, clearEditor: payload }

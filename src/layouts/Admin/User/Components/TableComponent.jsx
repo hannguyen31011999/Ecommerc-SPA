@@ -1,18 +1,16 @@
-import React, { useEffect, useState, useRef, useMemo } from 'react'
-import { Table, Button, Input, Space, Popconfirm } from 'antd';
+import React, { useEffect, useState, useRef, memo, useCallback } from 'react'
+import { Table, Button, Input, Space, Popconfirm, Switch } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux'
-import * as trans from '../../../redux/Actions/Admin/transpAction';
-import ModalComponent from './ModalComponent';
-import { ToastContainer } from 'react-toastify';
-import ModalEditComponent from './ModalEditComponent';
+import * as trans from '../modules/Actions';
+import moment from 'moment';
+import ModalEdit from '../Modals/ModalEdit';
 
-export default function TableDashboard(props) {
-    let ward = useSelector(state => state.TransportReducer.data);
-    let pagination = useSelector(state => state.TransportReducer.pagination);
-    let loading = useSelector(state => state.TransportReducer.loading);
-    let [visiable, setVisiable] = useState(false);
+export default function TableComponent(props) {
+    let user = useSelector(state => state.UserReducer.data);
+    let pagination = useSelector(state => state.UserReducer.pagination);
+    let loading = useSelector(state => state.UserReducer.loading);
     let [seach, setSeach] = useState({
         searchText: '',
         searchedColumn: '',
@@ -20,13 +18,12 @@ export default function TableDashboard(props) {
     let searchInput = useRef(null);
     const dispatch = useDispatch();
     useEffect(() => {
-        if (Array.isArray(ward) && !ward.length > 0) {
+        if (Array.isArray(user) && !user.length > 0) {
             dispatch(trans.transAction(pagination.pageSize));
         } else {
             trans.loadingAct(false);
         }
-    }, [dispatch]);
-    console.log(987);
+    }, []);
     const onChange = (pagination) => {
         const { current, pageSize } = pagination;
         dispatch(trans.paginationAction(current, pageSize));
@@ -106,60 +103,126 @@ export default function TableDashboard(props) {
         clearFilters();
         setSeach({ ...seach, searchText: '' });
     };
-    const handleSeachInput = (values) => {
-        if (values) {
-
-        }
-    }
     const handleEdit = (id) => {
-        dispatch(trans.editWardAction(id));
+        dispatch(trans.editAct(id));
     }
     const handleDetele = (id) => {
-        dispatch(trans.loadingAct(true));
-        dispatch(trans.deleteWardAction(id));
+        dispatch(trans.deleteUserAction(id));
+    }
+    const handleChangeStatus = (id, isBool) => {
+        console.log(isBool);
     }
     const columns = [
         {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
+            width: '6%',
             ...getColumnSearchProps('id'),
             sorter: (a, b) => a.id - b.id,
             sortDirections: ['descend', 'ascend']
         },
         {
-            title: 'District_id',
-            dataIndex: 'district_id',
-            key: 'district_id',
-            ...getColumnSearchProps('district_id')
-        },
-        {
-            title: 'Ward Name',
-            dataIndex: 'ward_name',
-            key: 'ward_name',
-            ...getColumnSearchProps('ward_name'),
-            sorter: (a, b) => a.ward_name.length - b.ward_name.length,
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
+            width: "18%",
+            ...getColumnSearchProps('email'),
+            sorter: (a, b) => a.email.length - b.email.length,
             sortDirections: ['descend', 'ascend']
         },
         {
-            title: 'Price',
-            dataIndex: 'transport_price',
-            key: 'transport_price',
-            ...getColumnSearchProps('transport_price'),
-            sorter: (a, b) => a.transport_price - b.transport_price,
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+            width: "18%",
+            ...getColumnSearchProps('name'),
+            sorter: (a, b) => a.name.length - b.name.length,
             sortDirections: ['descend', 'ascend']
+        },
+        {
+            title: 'Gender',
+            dataIndex: 'gender',
+            key: 'gender',
+            width: "8%",
+            ...getColumnSearchProps('gender'),
+            sorter: (a, b) => a.gender.length - b.gender.length,
+            sortDirections: ['descend', 'ascend'],
+            render: (text, data) => {
+                return (
+                    <span>{data.gender === 1 ? 'Nam' : 'Nữ'}</span>
+                )
+            }
+        },
+        {
+            title: 'Phone',
+            dataIndex: 'phone',
+            key: 'phone',
+            width: "10%",
+            ...getColumnSearchProps('phone'),
+            sorter: (a, b) => a.phone.length - b.phone.length,
+            sortDirections: ['descend', 'ascend'],
+        },
+        {
+            title: 'Address',
+            dataIndex: 'address',
+            key: 'address',
+            width: "15%",
+            ...getColumnSearchProps('address'),
+            sorter: (a, b) => a.address.length - b.address.length,
+            sortDirections: ['descend', 'ascend'],
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            width: "5%",
+            ...getColumnSearchProps('status'),
+            sorter: (a, b) => a.status.length - b.status.length,
+            sortDirections: ['descend', 'ascend'],
+            render: (text, data) => {
+                return (
+                    data.status == 1 ?
+                        <Switch
+                            checkedChildren="Block"
+                            unCheckedChildren="Open"
+                            defaultChecked={true}
+                            onClick={() => handleChangeStatus(data.id, false)} />
+                        :
+                        <Switch
+                            checkedChildren="Block"
+                            unCheckedChildren="Open"
+                            defaultChecked={false}
+                            onClick={() => handleChangeStatus(data.id, true)} />
+                )
+            }
+        },
+        {
+            title: 'Created',
+            dataIndex: 'created_at',
+            key: 'created_at',
+            width: "10%",
+            ...getColumnSearchProps('created_at'),
+            sorter: (a, b) => a.created_at.length - b.created_at.length,
+            sortDirections: ['descend', 'ascend'],
+            render: (text) => {
+                return (
+                    <span> {moment(text.created_at).format('DD-M-YYYY')}</span>
+                )
+            }
         },
         {
             title: 'Action',
             key: 'action',
-            render: (text) => {
+            width: "15%",
+            render: (text, data) => {
                 return (
                     <Space size="middle">
-                        <Button onClick={() => { handleEdit(text.id) }}><i className="fa fa-edit"></i></Button>
+                        <Button onClick={() => { handleEdit(data.id) }}><i className="fa fa-edit"></i></Button>
                         <Popconfirm
                             placement="bottomRight"
                             title="You want to delete?"
-                            onConfirm={() => { handleDetele(text.id) }}
+                            onConfirm={() => { handleDetele(data.id) }}
                             okText="Yes"
                             cancelText="No"
                         >
@@ -170,21 +233,13 @@ export default function TableDashboard(props) {
             }
         }
     ];
-
     return (
         <>
-            <ToastContainer />
-            <div className="col-12 col-sm-6 col-xl-3 mb-3">
-                <Input.Group compact>
-                    <Input.Search size="default" allowClear defaultValue="" placeholder="Seach...." onSearch={handleSeachInput} />
-                </Input.Group>
-            </div>
-            <ModalComponent />
-            <ModalEditComponent />
+            {user.length > 0 ? <ModalEdit /> : ''}
             <div className="col-12">
                 < Table
                     columns={columns}
-                    dataSource={ward}
+                    dataSource={user}
                     pagination={pagination}
                     onChange={onChange}
                     loading={loading}
@@ -192,6 +247,5 @@ export default function TableDashboard(props) {
                 />
             </div>
         </>
-
     )
 }

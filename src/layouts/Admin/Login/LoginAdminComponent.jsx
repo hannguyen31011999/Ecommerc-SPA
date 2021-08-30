@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useHistory } from 'react-router-dom';
 import { handleExpired } from '../../../utils/expired';
 import { alertErrors, STATUS_FAIL } from '../../../settings/config';
+import { INFO } from '../../../settings/configUrl';
 
 export default function LoginAdminComponent(props) {
     let [isCheck, setCheckBox] = useState(false);
@@ -25,11 +26,13 @@ export default function LoginAdminComponent(props) {
             if (res.data.status_code === STATUS_FAIL) {
                 alertErrors(res.data.message);
             } else {
-                let timestamp = new Date(res.data.timestamp.time);
-                let miliseconds = timestamp.getTime();
-                handleExpired(res.data.timestamp.expired, miliseconds, res.data.token);
-                dispatch(infoAct.fetchInfoSuccessAct(res.data.user));
-                history.push('/admin/dashboard');
+                if (res.data.user.role === 2) {
+                    let timestamp = new Date(res.data.timestamp.time);
+                    let miliseconds = timestamp.getTime();
+                    handleExpired(res.data.timestamp.expired, miliseconds, res.data.token);
+                    localStorage.setItem(INFO, res.data.user.name);
+                    history.push('/admin/dashboard');
+                }
             }
         }).catch(e => {
             console.log(e);

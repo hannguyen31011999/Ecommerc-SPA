@@ -42,7 +42,7 @@ export default function SidebarComponent(props) {
                 return (
                     <li className={`sidebar__item ${active === item.url ? 'active__item' : ''}`}
                         onClick={() => handleActive(item.url)} key={index}>
-                        <div className="sidebar__icon" title="Product">
+                        <div className="sidebar__icon" title={item.name}>
                             {item.icon}
                         </div>
                         <div className="sidebar__title">
@@ -60,7 +60,11 @@ export default function SidebarComponent(props) {
             <div className="sidebar__logo text-center">
                 <div className="sidebar__image">
                     <NavLink to="/admin/dashboard">
-                        <img src="../img/admin.png" alt="*" />
+                        {
+                            props.match.path.split('/').length > 3 ?
+                                <img src="../../img/admin.png" alt="*" /> :
+                                <img src="../img/admin.png" alt="*" />
+                        }
                     </NavLink>
                 </div>
             </div>

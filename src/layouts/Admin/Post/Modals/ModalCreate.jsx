@@ -16,7 +16,7 @@ import { getBase64 } from '../../../../utils/getImage';
 export default function ModalCreate(props) {
     let disabled = useSelector(state => state.PostReducer.disabled);
     let [visiable, setVisiable] = useState(false);
-    let clearEditor = useSelector(state => state.PostReducer.clearEditor);
+    // let clearEditor = useSelector(state => state.PostReducer.clearEditor);
     let messageErrors = useSelector(state => state.PostReducer.messageErrors);
     let data = useRef({
         content: '',
@@ -53,7 +53,6 @@ export default function ModalCreate(props) {
             setErrors({ ...errors, content: 'Content is empty!' });
         }
     }
-    console.log('modal create');
     const handleSubmit = (values) => {
         if (image.fileList.length > 0) {
             let formData = new FormData();
@@ -100,9 +99,10 @@ export default function ModalCreate(props) {
                     dispatch(trans.clearEditorActon(false, [visiable, setVisiable],
                         [image, setImage],
                         [errors, setErrors]));
+                    form.resetFields();
                 }}
                 okText={<span>Create</span>}
-                width={750}
+                width={775}
                 okButtonProps={{ disabled: disabled }}
             >
                 <Form form={form} name="control-ref"

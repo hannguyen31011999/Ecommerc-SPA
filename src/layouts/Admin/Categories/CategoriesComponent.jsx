@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef, useMemo } from 'react'
+import React from 'react'
 import checkLoginAdmin from '../../../hoc/checkLoginAdmin'
 import { Input } from 'antd';
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import * as trans from './modules/Action';
 import { ToastContainer } from 'react-toastify';
 import ModalCreate from './Modals/ModalCreate';
@@ -13,7 +13,6 @@ function CategoriesComponent(props) {
         const { value } = e.target;
         dispatch(trans.seachCategoriesAction(15, value));
     }
-    console.log(111);
     return (
         <>
             <ToastContainer />

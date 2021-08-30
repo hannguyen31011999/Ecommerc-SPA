@@ -1,4 +1,4 @@
-import * as contants from './Contants';
+import * as contants from './Constants';
 import { apiPost } from '../../../../services/adminApi';
 import { alertSuccess, STATUS_SUCCESS } from '../../../../settings/config';
 

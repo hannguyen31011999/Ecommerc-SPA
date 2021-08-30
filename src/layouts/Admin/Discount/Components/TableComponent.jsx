@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef, memo, useCallback } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
+import moment from 'moment';
 import { Table, Button, Input, Space, Popconfirm } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
@@ -7,9 +8,9 @@ import * as trans from '../modules/Action';
 import ModalEdit from '../Modals/ModalEdit';
 
 export default function TableComponent(props) {
-    let categories = useSelector(state => state.CategoriesReducer.data);
-    let pagination = useSelector(state => state.CategoriesReducer.pagination);
-    let loading = useSelector(state => state.CategoriesReducer.loading);
+    let discount = useSelector(state => state.DiscountReducer.data);
+    let pagination = useSelector(state => state.DiscountReducer.pagination);
+    let loading = useSelector(state => state.DiscountReducer.loading);
     let [seach, setSeach] = useState({
         searchText: '',
         searchedColumn: '',
@@ -17,7 +18,7 @@ export default function TableComponent(props) {
     let searchInput = useRef(null);
     const dispatch = useDispatch();
     useEffect(() => {
-        if (Array.isArray(categories) && !categories.length > 0) {
+        if (Array.isArray(discount) && !discount.length > 0) {
             dispatch(trans.transAction(pagination.pageSize));
         } else {
             trans.loadingAct(false);
@@ -106,7 +107,7 @@ export default function TableComponent(props) {
         dispatch(trans.editAct(id));
     }
     const handleDetele = (id) => {
-        dispatch(trans.deleteCategoriesAction(id));
+        dispatch(trans.deleteDiscountAction(id));
     }
     const columns = [
         {
@@ -118,17 +119,54 @@ export default function TableComponent(props) {
             sortDirections: ['descend', 'ascend']
         },
         {
-            title: 'Categories Name',
-            dataIndex: 'categories_name',
-            key: 'categories_name',
-            ...getColumnSearchProps('categories_name'),
-            sorter: (a, b) => a.categories_name.length - b.categories_name.length,
+            title: 'Discount name',
+            dataIndex: 'discount_name',
+            key: 'discount_name',
+            ...getColumnSearchProps('discount_name'),
+            sorter: (a, b) => a.discount_name.length - b.discount_name.length,
             sortDirections: ['descend', 'ascend']
         },
         {
-            title: 'Description',
-            dataIndex: 'categories_desc',
-            key: 'categories_desc',
+            title: 'Discount type',
+            dataIndex: 'discount_type',
+            key: 'discount_type',
+            ...getColumnSearchProps('discount_type'),
+            sorter: (a, b) => a.discount_type.length - b.discount_type.length,
+            sortDirections: ['descend', 'ascend']
+        },
+        {
+            title: 'Discount value',
+            dataIndex: 'discount_value',
+            key: 'discount_value',
+            ...getColumnSearchProps('discount_value'),
+            sorter: (a, b) => a.discount_value.length - b.discount_value.length,
+            sortDirections: ['descend', 'ascend']
+        },
+        {
+            title: 'Date start',
+            dataIndex: 'discount_start',
+            key: 'discount_start',
+            ...getColumnSearchProps('discount_start'),
+            sorter: (a, b) => a.discount_start.length - b.discount_start.length,
+            sortDirections: ['descend', 'ascend'],
+            render: (text) => {
+                return (
+                    <span> {moment(text.discount_start).format('DD-M-YYYY HH:mm:ss')}</span >
+                )
+            }
+        },
+        {
+            title: 'Date end',
+            dataIndex: 'discount_end',
+            key: 'discount_end',
+            ...getColumnSearchProps('discount_end'),
+            sorter: (a, b) => a.discount_end.length - b.discount_end.length,
+            sortDirections: ['descend', 'ascend'],
+            render: (text) => {
+                return (
+                    <span> {moment(text.discount_end).format('DD-M-YYYY HH:mm:ss')}</span >
+                )
+            }
         },
         {
             title: 'Action',
@@ -153,11 +191,11 @@ export default function TableComponent(props) {
     ];
     return (
         <>
-            {categories.length > 0 ? <ModalEdit /> : ''}
+            {discount.length > 0 ? <ModalEdit /> : ''}
             <div className="col-12">
                 < Table
                     columns={columns}
-                    dataSource={categories}
+                    dataSource={discount}
                     pagination={pagination}
                     onChange={onChange}
                     loading={loading}
@@ -167,5 +205,3 @@ export default function TableComponent(props) {
         </>
     )
 }
-
-// export default memo(TableComponent);

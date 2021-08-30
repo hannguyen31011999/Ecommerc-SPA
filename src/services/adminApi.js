@@ -1,4 +1,3 @@
-import { TOKEN } from '../settings/configUrl';
 import { apiRefreshToken, callApi, callApiAdmin } from '../utils/callApi';
 
 export const apiAdmin = {
@@ -14,40 +13,6 @@ export const apiAdmin = {
     fetchInfo() {
         // return callApiAdmin(`info?token=${TOKEN}`);
         return callApiAdmin('info');
-    }
-}
-
-export const apiWard = {
-    fetchApiWard(pageSize = 10) {
-        // return callApiAdmin(`transport/list?pageSize=${pageSize}&token=${TOKEN}`);
-        return callApiAdmin(`transport/list?pageSize=${pageSize}`);
-    },
-    changePagination(currentPage, pageSize = 10) {
-        // return callApiAdmin(`transport/list?page=${currentPage}&pageSize=${pageSize}&token=${TOKEN}`);
-        return callApiAdmin(`transport/list?page=${currentPage}&pageSize=${pageSize}`);
-    },
-    seachApiWard(keyword) {
-        return callApiAdmin(`transport/list?keyword=${keyword}`);
-    },
-    fetchApiProvince() {
-        // return callApiAdmin(`transport/data?token=${TOKEN}`);
-        return callApiAdmin(`transport/data`);
-    },
-    fetchApiDistrict(id) {
-        // return callApiAdmin(`transport/data/${id}?token=${TOKEN}`);
-        return callApiAdmin(`transport/data/${id}`);
-    },
-    createWard(form) {
-        // return callApiAdmin(`transport/create?token=${TOKEN}`, 'post', form);
-        return callApiAdmin('transport/create', 'post', form);
-    },
-    editWard(id) {
-        // return callApiAdmin(`transport/edit/${id}?token=${TOKEN}`);
-        return callApiAdmin(`transport/edit/${id}`);
-    },
-    deleteWard(id) {
-        // return callApiAdmin(`transport/delete/${id}?token=${TOKEN}`, 'delete', null);
-        return callApiAdmin(`transport/delete/${id}`, 'delete', null);
     }
 }
 
@@ -74,8 +39,6 @@ export const apiCategories = {
         return callApiAdmin(`categories/seach?keyword=${keyword}&pageSize=${pageSize}`);
     }
 }
-
-
 export const apiPost = {
     fetchApi(pageSize = 10) {
         return callApiAdmin(`post/list?pageSize=${pageSize}`);
@@ -97,5 +60,53 @@ export const apiPost = {
     },
     seach(pageSize, keyword) {
         return callApiAdmin(`post/seach?keyword=${keyword}&pageSize=${pageSize}`);
+    }
+}
+
+export const apiDiscount = {
+    fetchApi(pageSize = 10) {
+        return callApiAdmin(`discount/list?pageSize=${pageSize}`);
+    },
+    changePagination(currentPage, pageSize = 10) {
+        return callApiAdmin(`discount/list?page=${currentPage}&pageSize=${pageSize}`);
+    },
+    create(form) {
+        return callApiAdmin('discount/create', 'post', form);
+    },
+    edit(id) {
+        return callApiAdmin(`discount/edit/${id}`);
+    },
+    update(id, form) {
+        return callApiAdmin(`discount/update/${id}`, 'put', form);
+    },
+    delete(id) {
+        return callApiAdmin(`discount/delete/${id}`, 'delete');
+    },
+    seach(pageSize, keyword) {
+        return callApiAdmin(`discount/seach?keyword=${keyword}&pageSize=${pageSize}`);
+    }
+}
+
+export const apiUser = {
+    fetchApi(pageSize = 10) {
+        return callApiAdmin(`user/list?pageSize=${pageSize}`);
+    },
+    changePagination(currentPage, pageSize = 10) {
+        return callApiAdmin(`user/list?page=${currentPage}&pageSize=${pageSize}`);
+    },
+    create(form) {
+        return callApiAdmin('user/create', 'post', form);
+    },
+    edit(id) {
+        return callApiAdmin(`user/edit/${id}`);
+    },
+    update(id, form) {
+        return callApiAdmin(`user/update/${id}`, 'put', form);
+    },
+    delete(id) {
+        return callApiAdmin(`user/delete/${id}`, 'delete');
+    },
+    seach(pageSize, keyword) {
+        return callApiAdmin(`user/seach?keyword=${keyword}&pageSize=${pageSize}`);
     }
 }

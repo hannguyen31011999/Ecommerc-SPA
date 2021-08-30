@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { apiAdmin } from '../services/adminApi';
 import { ACCESS_TOKEN, BASE_URL, BASE_URL_ADMIN, TIMESTAMP } from '../settings/configUrl';
-import { handleCompareTime, handleExpired } from './expired';
+import { handleCompareTime, handleExpired, handleRefreshToken } from './expired';
 import { Redirect } from 'react-router-dom';
 
 export const apiRefreshToken = (endpoint, method = "get", data = null) => {

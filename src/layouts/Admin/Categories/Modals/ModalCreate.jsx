@@ -1,4 +1,4 @@
-import React, { useState, memo, useEffect, useRef } from 'react'
+import React, { useState, memo, useEffect } from 'react'
 import {
     Form,
     Input,
@@ -21,7 +21,6 @@ function ModalCreate() {
     useEffect(() => {
 
     }, [dispatch]);
-    console.log(655);
     const handleSubmit = (values) => {
         dispatch(trans.createCategoriesAction(values, form));
     }

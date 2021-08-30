@@ -11,7 +11,7 @@ const initialState = {
     modal: false
 }
 
-const CategoriesReducer = (state = initialState, { type, payload }) => {
+const UserReducer = (state = initialState, { type, payload }) => {
     switch (type) {
         case contants.loadingContants: {
             return { ...state, loading: true }
@@ -74,4 +74,4 @@ const CategoriesReducer = (state = initialState, { type, payload }) => {
     }
 }
 
-export default CategoriesReducer;
+export default UserReducer;

@@ -1,5 +1,5 @@
 import { apiAdmin } from "../services/adminApi";
-import { ACCESS_TOKEN, TIMESTAMP } from "../settings/configUrl";
+import { ACCESS_TOKEN, INFO, TIMESTAMP } from "../settings/configUrl";
 
 export const handleExpired = (timeout, miliseconds, token) => {
     const expired = {
@@ -10,8 +10,8 @@ export const handleExpired = (timeout, miliseconds, token) => {
     localStorage.setItem(TIMESTAMP, JSON.stringify(expired));
 }
 
-export const handleRefreshToken = (history = null, props = null, isBool) => {
-    apiAdmin.refreshToken().then(res => {
+export const handleRefreshToken = async (history = null, props = null, isBool) => {
+    await apiAdmin.refreshToken().then(res => {
         let timestamp = new Date(res.data.timestamp.time);
         let miliseconds = timestamp.getTime();
         handleExpired(res.data.timestamp.expired, miliseconds, res.data.token);
@@ -20,6 +20,7 @@ export const handleRefreshToken = (history = null, props = null, isBool) => {
         history.push('/admin');
         localStorage.removeItem(TIMESTAMP);
         localStorage.removeItem(ACCESS_TOKEN);
+        localStorage.removeItem(INFO);
     });
 }
 

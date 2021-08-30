@@ -87,7 +87,7 @@ export default function ModalEdit(props) {
                     setFileList([]);
                 }}
                 okText={<span>Update</span>}
-                width={750}
+                width={775}
                 okButtonProps={{ disabled: disabled }}
             >
                 <Form form={form} name="control-ref"

@@ -1,5 +1,5 @@
 import * as contants from './Constants';
-import { apiCategories } from '../../../../services/adminApi';
+import { apiUser } from '../../../../services/adminApi';
 import { alertSuccess, STATUS_SUCCESS } from '../../../../settings/config';
 
 export const loadingAct = (loading) => ({
@@ -57,7 +57,7 @@ export const fetchFailAct = (payload) => ({
 export const transAction = (pageSize) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
-        const res = await apiCategories.fetchApiCategories(pageSize);
+        const res = await apiUser.fetchApi(pageSize);
         const result = res.data.data;
         const payload = {
             data: result.data,
@@ -74,7 +74,7 @@ export const transAction = (pageSize) => async (dispatch) => {
 export const paginationAction = (current, pageSize) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
-        const res = await apiCategories.changePagination(current, pageSize);
+        const res = await apiUser.changePagination(current, pageSize);
         const result = res.data.data;
         const payload = {
             data: result.data,
@@ -87,10 +87,10 @@ export const paginationAction = (current, pageSize) => async (dispatch) => {
 }
 
 // create
-export const createCategoriesAction = (data, form) => async (dispatch) => {
+export const createUserAction = (data, form) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
-        const res = await apiCategories.createCategories(data);
+        const res = await apiUser.create(data);
         if (res.data.status_code === STATUS_SUCCESS) {
             alertSuccess('Create success');
             form.resetFields();
@@ -113,10 +113,10 @@ export const createCategoriesAction = (data, form) => async (dispatch) => {
 }
 
 // update
-export const updateCategoriesAction = (id, data, form) => async (dispatch) => {
+export const updateUserAction = (id, data, form) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
-        const res = await apiCategories.updateCategories(id, data);
+        const res = await apiUser.update(id, data);
         if (res.data.status_code === STATUS_SUCCESS) {
             dispatch(updateAct({ update: res.data.data, id }));
             alertSuccess('Update success');
@@ -138,10 +138,10 @@ export const updateCategoriesAction = (id, data, form) => async (dispatch) => {
 }
 
 // delete
-export const deleteCategoriesAction = (id) => async (dispatch) => {
+export const deleteUserAction = (id) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
-        const res = await apiCategories.deleteCategories(id);
+        const res = await apiUser.delete(id);
         if (res.data.status_code === STATUS_SUCCESS) {
             dispatch(deleteAct(id));
             alertSuccess(res.data.message);
@@ -151,10 +151,10 @@ export const deleteCategoriesAction = (id) => async (dispatch) => {
     }
 }
 
-export const seachCategoriesAction = (pageSize, keyword) => async (dispatch) => {
+export const seachUserAction = (pageSize, keyword) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
-        const res = await apiCategories.seachCategories(pageSize, keyword);
+        const res = await apiUser.seach(pageSize, keyword);
         const result = res.data.data;
         const payload = {
             data: result.data,

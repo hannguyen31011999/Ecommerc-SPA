@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useSelector } from 'react'
 import { Redirect } from 'react-router-dom';
 import HeaderComponent from '../components/Admin/HeaderComponent';
 import SidebarComponent from '../components/Admin/SidebarComponent';
@@ -24,7 +24,7 @@ const checkLoginAdmin = (WrapperComponent) => (props) => {
             </div>
         )
     }
-    return <Redirect to="/admin" />
+    return <Redirect to="/" />
 }
 
 export default checkLoginAdmin;

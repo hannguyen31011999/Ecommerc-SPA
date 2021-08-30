@@ -25,7 +25,6 @@ export default function TableComponent() {
             trans.loadingAct(false);
         }
     }, []);
-    console.log(447);
     const onChange = (pagination) => {
         const { current, pageSize } = pagination;
         dispatch(trans.paginationAction(current, pageSize));

@@ -1,5 +1,4 @@
 import * as contants from './Constants';
-
 const initialState = {
     data: [],
     pagination: {
@@ -11,7 +10,7 @@ const initialState = {
     modal: false
 }
 
-const CategoriesReducer = (state = initialState, { type, payload }) => {
+const DiscountReducer = (state = initialState, { type, payload }) => {
     switch (type) {
         case contants.loadingContants: {
             return { ...state, loading: true }
@@ -74,4 +73,4 @@ const CategoriesReducer = (state = initialState, { type, payload }) => {
     }
 }
 
-export default CategoriesReducer;
+export default DiscountReducer;

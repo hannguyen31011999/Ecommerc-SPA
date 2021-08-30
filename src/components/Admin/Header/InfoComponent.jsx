@@ -5,28 +5,25 @@ import { useSelector, useDispatch } from 'react-redux'
 import { apiAdmin } from '../../../services/adminApi';
 import * as infoAction from '../../../redux/Actions/Admin/infoAction';
 import { useHistory } from 'react-router-dom';
-import { ACCESS_TOKEN, TIMESTAMP } from '../../../settings/configUrl';
+import { ACCESS_TOKEN, INFO, TIMESTAMP } from '../../../settings/configUrl';
 import { memo } from 'react';
 
 function InfoComponent(props) {
     const history = useHistory();
     const dispatch = useDispatch();
-    let user = useSelector(state => state.InfoReducer.user);
-    useEffect(() => {
-        if (!Object.keys(user).length > 0) {
-            dispatch(infoAction.responseApi());
-        }
-    }, [dispatch]);
+    let name = localStorage.getItem(INFO);
+    let path = window.location.pathname;
     const handleLogout = async (e) => {
         e.preventDefault();
         await apiAdmin.fetchApiLogout().then(res => {
             if (res.data.status_code === 200) {
                 localStorage.removeItem(ACCESS_TOKEN);
                 localStorage.removeItem(TIMESTAMP);
+                localStorage.removeItem(INFO);
                 history.push('/admin');
             }
         }).catch(e => {
-            console.log(e);
+            history.push('/admin');
         })
     }
     return (
@@ -39,8 +36,12 @@ function InfoComponent(props) {
                 </li>
                 <li className="nav-item dropdown">
                     <NavLink className="nav-link" to="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span className="d-none d-sm-inline-block">{user.email}</span>
-                        <img src="../img/man.png" alt="*" height={25} width={25} />
+                        <span className="d-none d-sm-inline-block">{name}</span>
+                        {
+                            path.split('/').length > 3 ?
+                                <img src="../../img/man.png" alt="*" height={25} width={25} /> :
+                                <img src="../img/man.png" alt="*" height={25} width={25} />
+                        }
                     </NavLink>
                     <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li>
