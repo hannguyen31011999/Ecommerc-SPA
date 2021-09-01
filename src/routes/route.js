@@ -2,6 +2,7 @@
 import DashboardComponent from "../layouts/Admin/Dashboard/DashboardComponent";
 import CategoriesComponent from '../layouts/Admin/Categories/CategoriesComponent';
 import UserComponent from '../layouts/Admin/User/UserComponent';
+import ProductComponent from '../layouts/Admin/Product/ProductComponent';
 import OrderComponent from '../layouts/Admin/Order/OrderComponent';
 import OrderDetailComponent from '../layouts/Admin/OrderDetails/OrderDetailComponent';
 import AnalyticsComponent from '../layouts/Admin/Analytics/AnalyticsComponent';
@@ -24,6 +25,10 @@ const routes = [
     {
         path: '/admin/categories',
         component: CategoriesComponent,
+    },
+    {
+        path: '/admin/product',
+        component: ProductComponent,
     },
     {
         path: '/admin/post',

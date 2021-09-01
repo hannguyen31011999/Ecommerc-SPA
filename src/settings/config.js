@@ -8,7 +8,7 @@ export const STATUS_FAIL = 500;
 export const alertErrors = (mess) => {
     return toast.error(mess, {
         position: "top-right",
-        autoClose: 2000,
+        autoClose: 1500,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
@@ -20,7 +20,7 @@ export const alertErrors = (mess) => {
 export const alertSuccess = (mess) => {
     return toast.success(mess, {
         position: "top-right",
-        autoClose: 2000,
+        autoClose: 1500,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,

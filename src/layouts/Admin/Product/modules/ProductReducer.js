@@ -8,17 +8,22 @@ const initialState = {
     },
     loading: false,
     disabled: false,
-    modal: false
+    modal: false,
+    modalContent: false,
+    modalOption: false,
+    modalVariant: false,
+    relationship: {
+    }
 }
 
-const UserReducer = (state = initialState, { type, payload }) => {
+const ProductReducer = (state = initialState, { type, payload }) => {
     switch (type) {
         case contants.loadingContants: {
             return { ...state, loading: true }
         }
         case contants.fetchSuccessContants: {
-            const { data, total, lastPage } = payload;
-            return { ...state, data, pagination: { ...state.pagination, total, lastPage }, loading: false }
+            const { data, total, lastPage, categories, discount } = payload;
+            return { ...state, data, pagination: { ...state.pagination, total, lastPage }, loading: false, relationship: { categories, discount } }
         }
         case contants.fetchFailContants: {
             return { ...state, disabled: payload, loading: false };
@@ -40,7 +45,7 @@ const UserReducer = (state = initialState, { type, payload }) => {
             return { ...state, data: temp, loading: false };
         }
         case contants.modalContants: {
-            return { ...state, modal: payload }
+            return { ...state, modal: payload, modalContent: payload, modalOption: payload }
         }
         case contants.editContants: {
             let temp = [...state.data];
@@ -69,15 +74,33 @@ const UserReducer = (state = initialState, { type, payload }) => {
             const temp = { ...state };
             return { ...state, data, pagination: { ...state.pagination, total, lastPage, pageSize: 15 }, loading: false }
         }
-        case contants.updateStatusContants: {
+        case contants.modalContentContants: {
             let temp = [...state.data];
-            const index = temp.findIndex((item) => item.id === payload.id);
-            temp[index] = payload;
-            return { ...state, data: temp, loading: false }
+            const index = temp.findIndex(post => post.id === payload);
+            return { ...state, dataEdit: temp[index], modalContent: true }
+        }
+        case contants.modalOptionContants: {
+            let temp = [...state.data];
+            const index = temp.findIndex(post => post.id === payload);
+            return { ...state, dataEdit: temp[index], modalOption: true }
+        }
+        case contants.modalVariantConstant: {
+            if (payload.isBool) {
+                return { ...state, product_id: payload.id, modalVariant: true }
+            } else {
+                return { ...state, modalVariant: false, product_id: null }
+            }
+        }
+        case contants.createVariantConstant: {
+            let temp = [...state.data];
+            let index = state.data.findIndex(item => item.id === payload.id);
+            state.data[index].product_variants.push(payload.variant);
+            state.data[index].product_skus.push(payload.sku);
+            return { ...state, data: temp, loading: false, dataVariant: {}, disabled: false }
         }
         default:
             return state
     }
 }
 
-export default UserReducer;
+export default ProductReducer;

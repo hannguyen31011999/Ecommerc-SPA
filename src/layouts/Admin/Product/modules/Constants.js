@@ -1,0 +1,14 @@
+export const loadingContants = "LOADING_PRODUCT";
+export const fetchSuccessContants = "FETCH_PRODUCT_SUCCESS";
+export const fetchFailContants = "FETCH_PRODUCT_FAIL";
+export const paginationContants = "PAGINATION_PRODUCT";
+export const createContants = "CREATE_PRODUCT";
+export const editContants = "EDIT_PRODUCT";
+export const updateContants = "UPDATE_PRODUCT";
+export const deleteContants = "DELETE_PRODUCT";
+export const seachContants = "SEACH_PRODUCT";
+export const modalContants = "MODAL_PRODUCT";
+export const modalContentContants = "MODAL_PRODUCT_CONTENT";
+export const modalOptionContants = "MODAL_PRODUCT_OPTION";
+export const modalVariantConstant = "MODAL_CREATE_VARIANT";
+export const createVariantConstant = "CREATE_VARIANT_PRODUCT";

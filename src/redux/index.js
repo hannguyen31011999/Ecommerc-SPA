@@ -6,6 +6,7 @@ import CategoriesReducer from '../layouts/Admin/Categories/modules/CategoriesRed
 import PostReducer from '../layouts/Admin/Post/modules/PostReducer';
 import DiscountReducer from '../layouts/Admin/Discount/modules/DiscountReducer';
 import UserReducer from '../layouts/Admin/User/modules/UserReducer';
+import ProductReducer from '../layouts/Admin/Product/modules/ProductReducer';
 
 const rootReducer = combineReducers({
     // admin
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
     CategoriesReducer,
     PostReducer,
     DiscountReducer,
-    UserReducer
+    UserReducer,
+    ProductReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

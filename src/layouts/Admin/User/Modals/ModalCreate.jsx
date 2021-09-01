@@ -154,7 +154,7 @@ export default function ModalComponent() {
                                 message: "Phone start 0 and maximum 10!"
                             }
                         ]}>
-                        <Input placeholder="Example nguyen van chien" />
+                        <Input placeholder="Example 0382484477" />
                     </Form.Item>
                     <Form.Item
                         name="address"

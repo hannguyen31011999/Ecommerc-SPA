@@ -13,7 +13,6 @@ function UserComponent() {
         const { value } = e.target;
         dispatch(trans.seachUserAction(15, value));
     }
-    console.log('user');
     return (
         <>
             <ToastContainer />

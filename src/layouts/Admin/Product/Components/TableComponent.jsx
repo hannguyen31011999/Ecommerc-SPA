@@ -1,16 +1,23 @@
 import React, { useEffect, useState, useRef, memo, useCallback } from 'react'
-import { Table, Button, Input, Space, Popconfirm, Switch } from 'antd';
+import { Table, Button, Input, Space, Popconfirm, TreeSelect } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux'
 import * as trans from '../modules/Actions';
 import moment from 'moment';
-import ModalEdit from '../Modals/ModalEdit';
+import { useHistory } from 'react-router-dom';
+import ModalContent from '../Modals/Product/ModalContent';
+import ModalOption from '../Modals/Product/ModalOption';
+import ModalEdit from '../Modals/Product/ModalEdit';
+import ModalCreateVariant from '../Modals/Variant/ModalCreateVariant';
+// import ModalEdit from '../Modals/ModalEdit';
+const { TreeNode } = TreeSelect;
 
 export default function TableComponent(props) {
-    let user = useSelector(state => state.UserReducer.data);
-    let pagination = useSelector(state => state.UserReducer.pagination);
-    let loading = useSelector(state => state.UserReducer.loading);
+    let product = useSelector(state => state.ProductReducer.data);
+    let pagination = useSelector(state => state.ProductReducer.pagination);
+    let loading = useSelector(state => state.ProductReducer.loading);
+    const history = useHistory();
     let [seach, setSeach] = useState({
         searchText: '',
         searchedColumn: '',
@@ -18,7 +25,7 @@ export default function TableComponent(props) {
     let searchInput = useRef(null);
     const dispatch = useDispatch();
     useEffect(() => {
-        if (Array.isArray(user) && !user.length > 0) {
+        if (Array.isArray(product) && !product.length > 0) {
             dispatch(trans.transAction(pagination.pageSize));
         } else {
             trans.loadingAct(false);
@@ -107,130 +114,137 @@ export default function TableComponent(props) {
         dispatch(trans.editAct(id));
     }
     const handleDetele = (id) => {
-        dispatch(trans.deleteUserAction(id));
+        dispatch(trans.deleteProductAction(id));
     }
-    const handleChangeStatus = (id, isBool) => {
-        if (isBool === 2) {
-            dispatch(trans.updateStatusAction(id, isBool));
-        } else {
-            dispatch(trans.updateStatusAction(id, isBool));
+    const handleChangeVariant = (values) => {
+        if (values) {
+            let temp = values.split('-');
+            if (temp[1] !== 'values') {
+                history.push(`/admin/variant/${temp[1]}`);
+            }
         }
-    }
+    };
     const columns = [
         {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
-            width: '6%',
+            width: '5%',
             ...getColumnSearchProps('id'),
             sorter: (a, b) => a.id - b.id,
             sortDirections: ['descend', 'ascend']
         },
         {
-            title: 'Email',
-            dataIndex: 'email',
-            key: 'email',
-            width: "18%",
-            ...getColumnSearchProps('email'),
-            sorter: (a, b) => a.email.length - b.email.length,
+            title: 'Categories_id',
+            dataIndex: 'categories_id',
+            key: 'categories_id',
+            width: '10%'
+        },
+        {
+            title: 'Discount id',
+            dataIndex: 'discount_id',
+            key: 'discount_id',
+            width: '10%',
+        },
+        {
+            title: 'Product name',
+            dataIndex: 'product_name',
+            key: 'product_name',
+            width: "20%",
+            ...getColumnSearchProps('product_name'),
+            sorter: (a, b) => a.product_name.length - b.product_name.length,
             sortDirections: ['descend', 'ascend']
         },
         {
-            title: 'Name',
+            title: 'Variant Product',
             dataIndex: 'name',
             key: 'name',
-            width: "18%",
-            ...getColumnSearchProps('name'),
-            sorter: (a, b) => a.name.length - b.name.length,
-            sortDirections: ['descend', 'ascend']
-        },
-        {
-            title: 'Gender',
-            dataIndex: 'gender',
-            key: 'gender',
-            width: "8%",
-            ...getColumnSearchProps('gender'),
-            sorter: (a, b) => a.gender.length - b.gender.length,
-            sortDirections: ['descend', 'ascend'],
+            width: "25%",
             render: (text, data) => {
                 return (
-                    <span>{data.gender === 1 ? 'Nam' : 'Nữ'}</span>
+                    <TreeSelect
+                        showSearch
+                        style={{ width: '100%' }}
+                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                        placeholder="Select variant product"
+                        allowClear
+                        treeDefaultExpandAll
+                        onChange={handleChangeVariant}
+                        key={data.id}
+                    >
+                        {
+                            data.product_variants?.map(item => {
+                                return (
+                                    <TreeNode
+                                        value={`variant-${item.id}`}
+                                        title={item.product_variant_name}
+                                        key={`variant-${item.id}`}>
+                                        {
+                                            data.product_skus?.map(values => {
+                                                if (values.product_variant_id == item.id) {
+                                                    return (
+                                                        <TreeNode
+                                                            value={`variant-values-${values.id}`}
+                                                            title={values.color}
+                                                            key={`variant-values-${values.id}`}>
+                                                        </TreeNode>
+                                                    )
+                                                }
+                                            })
+                                        }
+                                    </TreeNode>
+                                )
+                            })
+                        }
+                    </TreeSelect>
                 )
             }
         },
         {
-            title: 'Phone',
-            dataIndex: 'phone',
-            key: 'phone',
-            width: "10%",
-            ...getColumnSearchProps('phone'),
-            sorter: (a, b) => a.phone.length - b.phone.length,
-            sortDirections: ['descend', 'ascend'],
-        },
-        {
-            title: 'Address',
-            dataIndex: 'address',
-            key: 'address',
-            width: "15%",
-            ...getColumnSearchProps('address'),
-            sorter: (a, b) => a.address.length - b.address.length,
-            sortDirections: ['descend', 'ascend'],
-        },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
+            title: 'Option',
+            dataIndex: 'option',
+            key: 'option',
             width: "5%",
-            ...getColumnSearchProps('status'),
-            sorter: (a, b) => a.status.length - b.status.length,
-            sortDirections: ['descend', 'ascend'],
             render: (text, data) => {
                 return (
-                    data.status === 1 ?
-                        <Switch
-                            checkedChildren="Block"
-                            unCheckedChildren="Open"
-                            defaultChecked={true}
-                            onClick={() => handleChangeStatus(data.id, 2)} />
-                        :
-                        <Switch
-                            checkedChildren="Block"
-                            unCheckedChildren="Open"
-                            defaultChecked={false}
-                            onClick={() => handleChangeStatus(data.id, 1)} />
+                    <Button onClick={() => { dispatch(trans.modalOptionAct(data.id)) }} title="Product option"><i className="fa fa-search-plus"></i></Button>
                 )
             }
         },
         {
-            title: 'Created',
-            dataIndex: 'created_at',
-            key: 'created_at',
+            title: 'Description',
+            dataIndex: 'product_desc',
+            key: 'product_desc',
             width: "10%",
-            ...getColumnSearchProps('created_at'),
-            sorter: (a, b) => a.created_at.length - b.created_at.length,
-            sortDirections: ['descend', 'ascend'],
-            render: (text) => {
+            render: (text, data) => {
                 return (
-                    <span> {moment(text?.created_at).format('DD-M-YYYY')}</span>
+                    <Button onClick={() => {
+                        dispatch(trans.modalContentAct(data.id));
+                    }}>Detail</Button>
                 )
             }
         },
         {
             title: 'Action',
             key: 'action',
-            width: "15%",
-            render: (text) => {
+            width: "10%",
+            render: (tetext, data) => {
                 return (
                     <Space size="middle">
-                        <Button onClick={() => { handleEdit(text.id) }}><i className="fa fa-edit"></i></Button>
+                        <Button title="Add variant" onClick={() => { dispatch(trans.modalVariantAct({ id: data.id, isBool: true })) }}>
+                            <i className="fa fa-plus"></i>
+                        </Button>
+                        <Button title="Edit product" onClick={() => {
+                            dispatch(trans.editAct(data.id));
+                        }}><i className="fa fa-edit"></i></Button>
                         <Popconfirm
                             placement="bottomRight"
                             title="You want to delete?"
-                            onConfirm={() => { handleDetele(text.id) }}
+                            onConfirm={() => { handleDetele(data.id) }}
                             okText="Yes"
                             cancelText="No"
                         >
-                            <Button><i className="fa fa-trash"></i></Button>
+                            <Button title="Delete product"><i className="fa fa-trash"></i></Button>
                         </Popconfirm>
                     </Space>
                 )
@@ -239,11 +253,14 @@ export default function TableComponent(props) {
     ];
     return (
         <>
-            {user.length > 0 ? <ModalEdit /> : ''}
+            {product.length > 0 ? <ModalEdit /> : ''}
+            {product.length > 0 ? <ModalContent /> : ''}
+            {product.length > 0 ? <ModalOption /> : ''}
+            {product.length > 0 ? <ModalCreateVariant /> : ''}
             <div className="col-12">
                 < Table
                     columns={columns}
-                    dataSource={user}
+                    dataSource={product}
                     pagination={pagination}
                     onChange={onChange}
                     loading={loading}

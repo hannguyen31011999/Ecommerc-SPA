@@ -13,7 +13,6 @@ function PostComponent() {
         const { value } = e.target;
         dispatch(trans.seachPostAction(15, value));
     }
-    console.log('post component');
     return (
         <>
             <ToastContainer />

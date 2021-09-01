@@ -1,5 +1,5 @@
 import * as contants from './Constants';
-import { apiUser } from '../../../../services/adminApi';
+import { apiProduct } from '../../../../services/adminApi';
 import { alertSuccess, STATUS_SUCCESS } from '../../../../settings/config';
 
 export const loadingAct = (loading) => ({
@@ -48,26 +48,44 @@ export const seachAct = (payload) => ({
     payload
 });
 
-export const updateStatusAct = (payload) => ({
-    type: contants.updateStatusContants,
-    payload
-});
-
 export const fetchFailAct = (payload) => ({
     type: contants.fetchFailContants,
     payload
 });
 
+export const modalContentAct = (payload) => ({
+    type: contants.modalContentContants,
+    payload
+});
+
+export const modalOptionAct = (payload) => ({
+    type: contants.modalOptionContants,
+    payload
+});
+
+export const createVariantAct = (payload) => ({
+    type: contants.createVariantConstant,
+    payload
+});
+
+export const modalVariantAct = (payload) => ({
+    type: contants.modalVariantConstant,
+    payload
+})
+
+
 // fetch data
 export const transAction = (pageSize) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
-        const res = await apiUser.fetchApi(pageSize);
+        const res = await apiProduct.fetchApi(pageSize);
         const result = res.data.data;
         const payload = {
             data: result.data,
             total: result.total,
-            lastPage: result.last_page
+            lastPage: result.last_page,
+            categories: res.data.parent.categories,
+            discount: res.data.parent.discount
         }
         dispatch(fetchSuccessAct(payload));
     } catch (e) {
@@ -79,7 +97,7 @@ export const transAction = (pageSize) => async (dispatch) => {
 export const paginationAction = (current, pageSize) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
-        const res = await apiUser.changePagination(current, pageSize);
+        const res = await apiProduct.changePagination(current, pageSize);
         const result = res.data.data;
         const payload = {
             data: result.data,
@@ -92,14 +110,17 @@ export const paginationAction = (current, pageSize) => async (dispatch) => {
 }
 
 // create
-export const createUserAction = (data, form) => async (dispatch) => {
+export const createProductAction = (data, form, file, description, [image, setImage]) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
-        const res = await apiUser.create(data);
+        const res = await apiProduct.create(data);
         if (res.data.status_code === STATUS_SUCCESS) {
+            dispatch(createAct(res.data.data));
             alertSuccess('Create success');
             form.resetFields();
-            dispatch(createAct(res.data.data));
+            file.current = {};
+            description.current = '';
+            setImage({ ...image, fileList: [] });
         } else {
             const message = {};
             for (const [key, value] of Object.entries(res.data.message)) {
@@ -118,10 +139,10 @@ export const createUserAction = (data, form) => async (dispatch) => {
 }
 
 // update
-export const updateUserAction = (id, data, form) => async (dispatch) => {
+export const updateProductAction = (id, data, form) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
-        const res = await apiUser.update(id, data);
+        const res = await apiProduct.update(id, data);
         if (res.data.status_code === STATUS_SUCCESS) {
             dispatch(updateAct({ update: res.data.data, id }));
             form.resetFields();
@@ -136,7 +157,6 @@ export const updateUserAction = (id, data, form) => async (dispatch) => {
                     },
                 ]);
             }
-            dispatch(fetchFailAct(false));
         }
     } catch (e) {
         dispatch(fetchFailAct(e));
@@ -144,10 +164,10 @@ export const updateUserAction = (id, data, form) => async (dispatch) => {
 }
 
 // delete
-export const deleteUserAction = (id) => async (dispatch) => {
+export const deleteProductAction = (id) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
-        const res = await apiUser.delete(id);
+        const res = await apiProduct.delete(id);
         if (res.data.status_code === STATUS_SUCCESS) {
             dispatch(deleteAct(id));
             alertSuccess(res.data.message);
@@ -158,10 +178,10 @@ export const deleteUserAction = (id) => async (dispatch) => {
 }
 
 // seach
-export const seachUserAction = (pageSize, keyword) => async (dispatch) => {
+export const seachProductAction = (pageSize, keyword) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
-        const res = await apiUser.seach(pageSize, keyword);
+        const res = await apiProduct.seach(pageSize, keyword);
         const result = res.data.data;
         const payload = {
             data: result.data,
@@ -174,13 +194,36 @@ export const seachUserAction = (pageSize, keyword) => async (dispatch) => {
     }
 }
 
-// update status
-
-export const updateStatusAction = (id, isBool) => async (dispatch) => {
+// create variant
+export const createVariantAction = (id, data, form, file, [image, setImage]) => async (dispatch) => {
+    // createVariantAct
     try {
         dispatch(loadingAct(true));
-        const res = await apiUser.updatStatus(id, isBool);
-        dispatch(updateStatusAct(res.data.data));
+        const res = await apiProduct.createVariant(id, data);
+        if (res.data.status_code === STATUS_SUCCESS) {
+            let result = res.data.data;
+            let data = {
+                id,
+                variant: result.variant,
+                sku: result.sku
+            }
+            dispatch(createVariantAct(data));
+            alertSuccess('Create success');
+            form.resetFields();
+            file.current = {};
+            setImage({ ...image, fileList: [] });
+        } else {
+            const message = {};
+            for (const [key, value] of Object.entries(res.data.message)) {
+                form.setFields([
+                    {
+                        name: key,
+                        errors: value,
+                    },
+                ]);
+            }
+            dispatch(fetchFailAct(false));
+        }
     } catch (e) {
         dispatch(fetchFailAct(e));
     }

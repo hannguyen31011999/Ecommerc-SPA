@@ -108,5 +108,35 @@ export const apiUser = {
     },
     seach(pageSize, keyword) {
         return callApiAdmin(`user/seach?keyword=${keyword}&pageSize=${pageSize}`);
+    },
+    updatStatus(id, status) {
+        return callApiAdmin(`user/status/${id}?status=${status}`, 'patch');
+    }
+}
+
+export const apiProduct = {
+    fetchApi(pageSize = 10) {
+        return callApiAdmin(`product/list?pageSize=${pageSize}`);
+    },
+    changePagination(currentPage, pageSize = 10) {
+        return callApiAdmin(`product/list?page=${currentPage}&pageSize=${pageSize}`);
+    },
+    create(form) {
+        return callApiAdmin('product/create', 'post', form);
+    },
+    edit(id) {
+        return callApiAdmin(`product/edit/${id}`);
+    },
+    update(id, form) {
+        return callApiAdmin(`product/update/${id}`, 'put', form);
+    },
+    delete(id) {
+        return callApiAdmin(`product/delete/${id}`, 'delete');
+    },
+    seach(pageSize, keyword) {
+        return callApiAdmin(`product/seach?keyword=${keyword}&pageSize=${pageSize}`);
+    },
+    createVariant(id, form) {
+        return callApiAdmin(`product/variant/${id}`, 'post', form);
     }
 }
