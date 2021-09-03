@@ -10,10 +10,10 @@ export default function HeaderComponent(props) {
     return (
         <div className="header">
             <div className="row align-items-center">
-                <div className="header__left col-12 col-md-6 col-lg-4 d-none d-md-block">
+                <div className="header__left col-12 col-md-6 col-lg-3 d-none d-md-block">
                     <SeachComponent />
                 </div>
-                <div className="header__right col-12 col-md-6 col-lg-8">
+                <div className="header__right col-12 col-md-6 col-lg-9">
                     <InfoComponent />
                 </div>
             </div>

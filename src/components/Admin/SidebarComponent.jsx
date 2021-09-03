@@ -60,11 +60,7 @@ export default function SidebarComponent(props) {
             <div className="sidebar__logo text-center">
                 <div className="sidebar__image">
                     <NavLink to="/admin/dashboard">
-                        {
-                            props.match.path.split('/').length > 3 ?
-                                <img src="../../img/admin.png" alt="*" /> :
-                                <img src="../img/admin.png" alt="*" />
-                        }
+                        <img src={process.env.PUBLIC_URL + '/img/admin.png'} alt="*" />
                     </NavLink>
                 </div>
             </div>

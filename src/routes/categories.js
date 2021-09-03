@@ -26,6 +26,11 @@ const categories = [
         icon: renderIcon(<i className="fab fa-product-hunt" />)
     },
     {
+        name: 'Inventory',
+        url: '/admin/inventory',
+        icon: renderIcon(<i className="fa fa-university" />)
+    },
+    {
         name: 'User',
         url: '/admin/user',
         icon: renderIcon(<i className="fa fa-user" />)

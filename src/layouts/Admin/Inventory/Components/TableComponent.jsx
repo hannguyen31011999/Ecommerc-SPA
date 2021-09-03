@@ -1,15 +1,17 @@
 import React, { useEffect, useState, useRef, memo, useCallback } from 'react'
-import { Table, Button, Input, Space, Popconfirm } from 'antd';
+import { Table, Button, Input, Space, Select } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux'
-import * as trans from '../modules/Action';
-import ModalEdit from '../Modals/ModalEdit';
+import * as trans from '../modules/Actions';
+import { formatCurrency } from '../../../../utils/getImage';
+// import ModalEdit from '../Modals/ModalEdit';
+const { Option } = Select;
 
-function TableComponent(props) {
-    let categories = useSelector(state => state.CategoriesReducer.data);
-    let pagination = useSelector(state => state.CategoriesReducer.pagination);
-    let loading = useSelector(state => state.CategoriesReducer.loading);
+export default function TableComponent() {
+    let inventory = useSelector(state => state.InventoryReducer.data);
+    let pagination = useSelector(state => state.InventoryReducer.pagination);
+    let loading = useSelector(state => state.InventoryReducer.loading);
     let [seach, setSeach] = useState({
         searchText: '',
         searchedColumn: '',
@@ -17,7 +19,7 @@ function TableComponent(props) {
     let searchInput = useRef(null);
     const dispatch = useDispatch();
     useEffect(() => {
-        if (Array.isArray(categories) && !categories.length > 0) {
+        if (Array.isArray(inventory) && !inventory.length > 0) {
             dispatch(trans.transAction(pagination.pageSize));
         } else {
             trans.loadingAct(false);
@@ -105,9 +107,6 @@ function TableComponent(props) {
     const handleEdit = (id) => {
         dispatch(trans.editAct(id));
     }
-    const handleDetele = (id) => {
-        dispatch(trans.deleteCategoriesAction(id));
-    }
     const columns = [
         {
             title: 'ID',
@@ -118,17 +117,79 @@ function TableComponent(props) {
             sortDirections: ['descend', 'ascend']
         },
         {
-            title: 'Categories Name',
-            dataIndex: 'categories_name',
-            key: 'categories_name',
-            ...getColumnSearchProps('categories_name'),
-            sorter: (a, b) => a.categories_name.length - b.categories_name.length,
+            title: 'Product name',
+            dataIndex: 'variant_id',
+            key: 'variant_id',
+            ...getColumnSearchProps('variant_id'),
+            sorter: (a, b) => a.variant_id - b.variant_id,
+            sortDirections: ['descend', 'ascend'],
+            render: (text, data) => {
+                return (
+                    <span>{data.product_variants?.product_variant_name}</span>
+                )
+            }
+        },
+        {
+            title: 'Color',
+            dataIndex: 'sku_id',
+            key: 'sku_id',
+            ...getColumnSearchProps('sku_id'),
+            sorter: (a, b) => a.sku_id - b.sku_id,
+            sortDirections: ['descend', 'ascend'],
+            render: (text, data) => {
+                return (
+                    <span>{data.product_skus?.color}</span>
+                )
+            }
+        },
+        {
+            title: 'Quantity',
+            dataIndex: 'qty',
+            key: 'qty',
+            ...getColumnSearchProps('qty'),
+            sorter: (a, b) => a.variant_id - b.variant_id,
             sortDirections: ['descend', 'ascend']
         },
         {
-            title: 'Description',
-            dataIndex: 'categories_desc',
-            key: 'categories_desc',
+            title: 'Price unit',
+            dataIndex: 'unit_price',
+            key: 'unit_price',
+            ...getColumnSearchProps('unit_price'),
+            sorter: (a, b) => a.unit_price - b.unit_price,
+            sortDirections: ['descend', 'ascend'],
+            render: (text, data) => {
+                return (
+                    <span>{formatCurrency(data.unit_price)}</span>
+                )
+            }
+        },
+        {
+            title: 'Price promotion',
+            dataIndex: 'promotion_price',
+            key: 'promotion_price',
+            ...getColumnSearchProps('promotion_price'),
+            sorter: (a, b) => a.promotion_price - b.promotion_price,
+            sortDirections: ['descend', 'ascend'],
+            render: (text, data) => {
+                return (
+                    <span>{formatCurrency(data.promotion_price)}</span>
+                )
+            }
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            ...getColumnSearchProps('status'),
+            render: (text, data) => {
+                return (
+                    <Select value={data.status}>
+                        <Option value={0}>Pending</Option>
+                        <Option value={1}>Success</Option>
+                        <Option value={2}>Update</Option>
+                    </Select>
+                )
+            }
         },
         {
             title: 'Action',
@@ -136,16 +197,7 @@ function TableComponent(props) {
             render: (text) => {
                 return (
                     <Space size="middle">
-                        <Button onClick={() => { handleEdit(text.id) }}><i className="fa fa-edit"></i></Button>
-                        <Popconfirm
-                            placement="bottomRight"
-                            title="You want to delete?"
-                            onConfirm={() => { handleDetele(text.id) }}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <Button><i className="fa fa-trash"></i></Button>
-                        </Popconfirm>
+                        <Button title="Edit" onClick={() => { handleEdit(text.id) }}><i className="fa fa-edit"></i></Button>
                     </Space>
                 )
             }
@@ -153,11 +205,11 @@ function TableComponent(props) {
     ];
     return (
         <>
-            {categories.length > 0 ? <ModalEdit /> : ''}
+            {/* {inventory.length > 0 ? <ModalEdit /> : ''} */}
             <div className="col-12">
                 < Table
                     columns={columns}
-                    dataSource={categories}
+                    dataSource={inventory}
                     pagination={pagination}
                     onChange={onChange}
                     loading={loading}
@@ -167,5 +219,3 @@ function TableComponent(props) {
         </>
     )
 }
-
-export default memo(TableComponent);

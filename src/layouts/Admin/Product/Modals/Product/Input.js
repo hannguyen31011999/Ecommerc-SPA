@@ -177,23 +177,6 @@ export const steps = [
                     >
                         <Input type="number" placeholder="Example 128GB" />
                     </Form.Item>
-                    <Form.Item
-                        name="product_variant_price"
-                        label="Price"
-                        style={styled}
-                        rules={[
-                            {
-                                required: true,
-                                message: "Price is empty!"
-                            },
-                            {
-                                max: 10,
-                                message: "Maximum 4 number!"
-                            }
-                        ]}
-                    >
-                        <Input type="number" placeholder="Example 17.000.000" />
-                    </Form.Item>
                 </>
             )
         }
@@ -439,23 +422,6 @@ export const createVariant = [
                         ]}
                     >
                         <Input type="number" placeholder="Example 128GB" />
-                    </Form.Item>
-                    <Form.Item
-                        name="product_variant_price"
-                        label="Price"
-                        style={styled}
-                        rules={[
-                            {
-                                required: true,
-                                message: "Price is empty!"
-                            },
-                            {
-                                max: 10,
-                                message: "Maximum 4 number!"
-                            }
-                        ]}
-                    >
-                        <Input type="number" placeholder="Example 17.000.000" />
                     </Form.Item>
                 </>
             )

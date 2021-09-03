@@ -1,32 +1,29 @@
 import React, { useEffect, useState, useRef, memo, useCallback } from 'react'
+import { useParams, useHistory } from "react-router-dom";
 import { Table, Button, Input, Space, Popconfirm } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
-import { useSelector, useDispatch } from 'react-redux'
-import * as trans from '../modules/Action';
+import { useSelector, useDispatch } from 'react-redux';
+import { formatCurrency } from '../../../../utils/getImage';
+import * as trans from '../modules/Actions';
+import { STORAGE } from '../../../../settings/configUrl';
 import ModalEdit from '../Modals/ModalEdit';
 
-function TableComponent(props) {
-    let categories = useSelector(state => state.CategoriesReducer.data);
-    let pagination = useSelector(state => state.CategoriesReducer.pagination);
-    let loading = useSelector(state => state.CategoriesReducer.loading);
+
+export default function TableComponent(props) {
+    let variant = useSelector(state => state.ProductVariantReducer.data);
+    let pagination = useSelector(state => state.ProductVariantReducer.pagination);
+    let loading = useSelector(state => state.ProductVariantReducer.loading);
+    const dispatch = useDispatch();
+    let searchInput = useRef(null);
     let [seach, setSeach] = useState({
         searchText: '',
         searchedColumn: '',
     });
-    let searchInput = useRef(null);
-    const dispatch = useDispatch();
+    const { id } = useParams();
     useEffect(() => {
-        if (Array.isArray(categories) && !categories.length > 0) {
-            dispatch(trans.transAction(pagination.pageSize));
-        } else {
-            trans.loadingAct(false);
-        }
-    }, []);
-    const onChange = (pagination) => {
-        const { current, pageSize } = pagination;
-        dispatch(trans.paginationAction(current, pageSize));
-    }
+        dispatch(trans.transAction(id, pagination.pageSize));
+    }, [id]);
     const getColumnSearchProps = dataIndex => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
             <div style={{ padding: 8 }}>
@@ -106,7 +103,10 @@ function TableComponent(props) {
         dispatch(trans.editAct(id));
     }
     const handleDetele = (id) => {
-        dispatch(trans.deleteCategoriesAction(id));
+        dispatch(trans.deleteSkuAction(id));
+    }
+    const onReviewImage = (url) => {
+        window.open(url);
     }
     const columns = [
         {
@@ -118,17 +118,64 @@ function TableComponent(props) {
             sortDirections: ['descend', 'ascend']
         },
         {
-            title: 'Categories Name',
-            dataIndex: 'categories_name',
-            key: 'categories_name',
-            ...getColumnSearchProps('categories_name'),
-            sorter: (a, b) => a.categories_name.length - b.categories_name.length,
+            title: 'Product_id',
+            dataIndex: 'product_id',
+            key: 'product_id',
+            ...getColumnSearchProps('product_id'),
+            sorter: (a, b) => a.id - b.id,
             sortDirections: ['descend', 'ascend']
         },
         {
-            title: 'Description',
-            dataIndex: 'categories_desc',
-            key: 'categories_desc',
+            title: 'Variant_id',
+            dataIndex: 'product_variant_id',
+            key: 'product_variant_id',
+            ...getColumnSearchProps('product_variant_id'),
+            sorter: (a, b) => a.id - b.id,
+            sortDirections: ['descend', 'ascend']
+        },
+        {
+            title: 'Price unit',
+            dataIndex: 'sku_unit_price',
+            key: 'sku_unit_price',
+            ...getColumnSearchProps('categories_name'),
+            sorter: (a, b) => a.categories_name.length - b.categories_name.length,
+            sortDirections: ['descend', 'ascend'],
+            render: (text, data) => {
+                return (
+                    <span>{formatCurrency(data.sku_unit_price)}</span>
+                )
+            }
+        },
+        {
+            title: 'Price unit',
+            dataIndex: 'sku_promotion_price',
+            key: 'sku_promotion_price',
+            ...getColumnSearchProps('categories_name'),
+            sorter: (a, b) => a.categories_name.length - b.categories_name.length,
+            sortDirections: ['descend', 'ascend'],
+            render: (text, data) => {
+                return (
+                    <span>{formatCurrency(data.sku_promotion_price)}</span>
+                )
+            }
+        },
+        {
+            title: 'Quantity',
+            dataIndex: 'sku_qty',
+            key: 'sku_qty',
+        },
+        {
+            title: 'Color',
+            dataIndex: 'color',
+            key: 'color',
+        },
+        {
+            title: 'Image',
+            dataIndex: 'sku_image',
+            key: 'sku_image',
+            render: (text, data) => {
+                return <img src={`${STORAGE}/products/${data.sku_image}`} height={45} width={45} onClick={() => onReviewImage(`${STORAGE}/products/${data.sku_image}`)} style={{ cursor: "pointer" }} />
+            }
         },
         {
             title: 'Action',
@@ -136,7 +183,7 @@ function TableComponent(props) {
             render: (text) => {
                 return (
                     <Space size="middle">
-                        <Button onClick={() => { handleEdit(text.id) }}><i className="fa fa-edit"></i></Button>
+                        <Button title="Edit" onClick={() => { handleEdit(text.id) }}><i className="fa fa-edit"></i></Button>
                         <Popconfirm
                             placement="bottomRight"
                             title="You want to delete?"
@@ -144,7 +191,7 @@ function TableComponent(props) {
                             okText="Yes"
                             cancelText="No"
                         >
-                            <Button><i className="fa fa-trash"></i></Button>
+                            <Button title="Delete"><i className="fa fa-trash"></i></Button>
                         </Popconfirm>
                     </Space>
                 )
@@ -153,13 +200,12 @@ function TableComponent(props) {
     ];
     return (
         <>
-            {categories.length > 0 ? <ModalEdit /> : ''}
+            {variant.length > 0 ? <ModalEdit /> : ''}
             <div className="col-12">
                 < Table
                     columns={columns}
-                    dataSource={categories}
+                    dataSource={variant}
                     pagination={pagination}
-                    onChange={onChange}
                     loading={loading}
                     rowKey="id"
                 />
@@ -167,5 +213,3 @@ function TableComponent(props) {
         </>
     )
 }
-
-export default memo(TableComponent);

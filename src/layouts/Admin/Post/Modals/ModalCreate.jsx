@@ -134,7 +134,6 @@ export default function ModalCreate(props) {
                         />
                     </Form.Item>
                     <label htmlFor="" style={styled}><span style={{ color: "red" }}>*</span>&nbsp;Image</label>
-                    {/* data.current.image = file; */}
                     <Upload
                         listType="picture-card"
                         fileList={image.fileList}
@@ -153,7 +152,6 @@ export default function ModalCreate(props) {
                     </Upload>
                     <span style={{ color: "red", display: "block", marginBottom: "12px" }}>{errors ? errors.image : ''}</span>
                     <span style={{ color: "red", display: "block", marginBottom: "12px" }}>{messageErrors.image ? messageErrors.image : ''}</span>
-
                     <Modal
                         visible={image.previewVisible}
                         title={image.previewTitle}

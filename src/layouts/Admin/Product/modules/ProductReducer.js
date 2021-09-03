@@ -12,6 +12,7 @@ const initialState = {
     modalContent: false,
     modalOption: false,
     modalVariant: false,
+    modalEditVariant: false,
     relationship: {
     }
 }
@@ -94,9 +95,31 @@ const ProductReducer = (state = initialState, { type, payload }) => {
         case contants.createVariantConstant: {
             let temp = [...state.data];
             let index = state.data.findIndex(item => item.id === payload.id);
-            state.data[index].product_variants.push(payload.variant);
-            state.data[index].product_skus.push(payload.sku);
+            temp[index].product_variants.push(payload.variant);
+            temp[index].product_skus.push(payload.sku);
             return { ...state, data: temp, loading: false, dataVariant: {}, disabled: false }
+        }
+        case contants.editVariantConstant: {
+            if (payload.id) {
+                const data = state.data.filter(item => item.id == payload.product_id);
+                const dataVariantEdit = data[0].product_variants.filter(item => item.id == payload.id);
+                return { ...state, modalEditVariant: payload, dataVariantEdit }
+            }
+            return { ...state, modalEditVariant: payload.isBool }
+        }
+        case contants.updateVariantConstant: {
+            let temp = [...state.data];
+            const index = temp.findIndex(item => item.id == payload.product_id);
+            const index1 = temp[index].product_variants.findIndex(item => item.id == payload.id);
+            temp[index].product_variants[index1] = payload;
+            return { ...state, data: temp, loading: false, modalEditVariant: false, disabled: false };
+        }
+        case contants.deleteVariantConstant: {
+            let temp = [...state.data];
+            const index = temp.findIndex(item => item.id == payload.product_id);
+            const index1 = temp[index].product_variants.findIndex(item => item.id == payload.id);
+            temp[index].product_variants.splice(index1, 1);
+            return { ...state, data: temp, loading: false, modalEditVariant: false, disabled: false };
         }
         default:
             return state

@@ -49,3 +49,10 @@ export const init = {
     },
     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
 }
+
+
+export const formatCurrency = (currency) => {
+    if (currency) {
+        return currency.toLocaleString('vi', { style: 'currency', currency: 'VND' });
+    }
+}

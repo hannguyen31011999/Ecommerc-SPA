@@ -37,11 +37,10 @@ function InfoComponent(props) {
                 <li className="nav-item dropdown">
                     <NavLink className="nav-link" to="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <span className="d-none d-sm-inline-block">{name}</span>
-                        {
-                            path.split('/').length > 3 ?
-                                <img src="../../img/man.png" alt="*" height={25} width={25} /> :
-                                <img src="../img/man.png" alt="*" height={25} width={25} />
-                        }
+                        <img src={process.env.PUBLIC_URL + '/img/man.png'}
+                            alt="*"
+                            height={25}
+                            width={25} />
                     </NavLink>
                     <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li>

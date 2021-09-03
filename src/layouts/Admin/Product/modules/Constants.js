@@ -12,3 +12,6 @@ export const modalContentContants = "MODAL_PRODUCT_CONTENT";
 export const modalOptionContants = "MODAL_PRODUCT_OPTION";
 export const modalVariantConstant = "MODAL_CREATE_VARIANT";
 export const createVariantConstant = "CREATE_VARIANT_PRODUCT";
+export const editVariantConstant = "EDIT_VARIANT_PRODUCT";
+export const updateVariantConstant = "UPDATE_VARIANT_PRODUCT";
+export const deleteVariantConstant = "DELETE_VARIANT_PRODUCT";

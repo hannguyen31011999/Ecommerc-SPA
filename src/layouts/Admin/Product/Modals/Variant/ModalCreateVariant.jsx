@@ -6,7 +6,7 @@ import {
     Steps,
     Upload
 } from 'antd';
-import { FolderAddOutlined, PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux'
 import * as trans from '../../modules/Actions';
 import { createVariant } from '../Product/Input';
@@ -41,9 +41,9 @@ export default function ModalCreateVariant() {
     };
     const handleSubmit = (values) => {
         let formData = form.getFieldsValue(true);
-        if (image.fileList.length > 0) {
+        let formCreate = new FormData();
+        if (image.fileList.length > 0 && file.current) {
             formData = { ...formData, image: file.current };
-            let formCreate = new FormData();
             for (const key in formData) {
                 formCreate.append(key, formData[key]);
             }

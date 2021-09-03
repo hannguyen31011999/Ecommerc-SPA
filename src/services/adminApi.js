@@ -138,5 +138,56 @@ export const apiProduct = {
     },
     createVariant(id, form) {
         return callApiAdmin(`product/variant/${id}`, 'post', form);
+    },
+    updateVariant(id, form) {
+        return callApiAdmin(`product/variant/${id}`, 'put', form);
+    },
+    deleteVariant(id) {
+        return callApiAdmin(`product/variant/${id}`, 'delete');
+    },
+}
+
+export const apiProductSku = {
+    fetchApi(id, pageSize = 10) {
+        return callApiAdmin(`product/sku/list/${id}?pageSize=${pageSize}`);
+    },
+    changePagination(id, currentPage, pageSize = 10) {
+        return callApiAdmin(`product/sku/list/${id}?page=${currentPage}&pageSize=${pageSize}`);
+    },
+    create(id, form) {
+        return callApiAdmin(`product/sku/create/${id}`, 'post', form);
+    },
+    edit(id) {
+        return callApiAdmin(`product/sku/edit/${id}`);
+    },
+    update(id, form) {
+        return callApiAdmin(`product/sku/update/${id}`, 'post', form);
+    },
+    delete(id) {
+        return callApiAdmin(`product/sku/delete/${id}`, 'delete');
+    }
+}
+
+export const apiInventory = {
+    fetchApi(pageSize = 10) {
+        return callApiAdmin(`inventory/list?pageSize=${pageSize}`);
+    },
+    changePagination(currentPage, pageSize = 10) {
+        return callApiAdmin(`inventory/list?page=${currentPage}&pageSize=${pageSize}`);
+    },
+    create(form) {
+        return callApiAdmin('inventory/create', 'post', form);
+    },
+    edit(id) {
+        return callApiAdmin(`inventory/edit/${id}`);
+    },
+    update(id, form) {
+        return callApiAdmin(`inventory/update/${id}`, 'put', form);
+    },
+    seach(pageSize, keyword) {
+        return callApiAdmin(`inventory/seach?keyword=${keyword}&pageSize=${pageSize}`);
+    },
+    getListProduct() {
+        return callApiAdmin(`inventory/product`);
     }
 }

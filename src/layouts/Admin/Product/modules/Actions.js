@@ -68,11 +68,25 @@ export const createVariantAct = (payload) => ({
     payload
 });
 
+export const updateVariantAct = (payload) => ({
+    type: contants.updateVariantConstant,
+    payload
+});
+
+export const deleteVariantAct = (payload) => ({
+    type: contants.deleteVariantConstant,
+    payload
+});
+
 export const modalVariantAct = (payload) => ({
     type: contants.modalVariantConstant,
     payload
-})
+});
 
+export const modalEditVariantAct = (payload) => ({
+    type: contants.editVariantConstant,
+    payload
+});
 
 // fetch data
 export const transAction = (pageSize) => async (dispatch) => {
@@ -223,6 +237,47 @@ export const createVariantAction = (id, data, form, file, [image, setImage]) => 
                 ]);
             }
             dispatch(fetchFailAct(false));
+        }
+    } catch (e) {
+        dispatch(fetchFailAct(e));
+    }
+}
+
+export const updateVariantProductAction = (product_id, id, data, form) => async (dispatch) => {
+    try {
+        dispatch(loadingAct(true));
+        const res = await apiProduct.updateVariant(id, data);
+        if (res.data.status_code === STATUS_SUCCESS) {
+            dispatch(updateVariantAct(res.data.data));
+            alertSuccess('Update success');
+            form.resetFields();
+        } else {
+            const message = {};
+            for (const [key, value] of Object.entries(res.data.message)) {
+                form.setFields([
+                    {
+                        name: key,
+                        errors: value,
+                    },
+                ]);
+            }
+            dispatch(fetchFailAct(false));
+        }
+    } catch (e) {
+        dispatch(fetchFailAct(e));
+    }
+}
+
+export const deleteVariantAction = (product_id, id) => async (dispatch) => {
+    try {
+        dispatch(loadingAct(true));
+        const res = await apiProduct.deleteVariant(id);
+        if (res.data.status_code === STATUS_SUCCESS) {
+            dispatch(deleteVariantAct({
+                product_id,
+                id
+            }));
+            alertSuccess(res.data.message);
         }
     } catch (e) {
         dispatch(fetchFailAct(e));

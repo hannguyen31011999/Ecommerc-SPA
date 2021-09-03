@@ -113,6 +113,9 @@ export default function TableComponent() {
     const handleDetele = (id) => {
         dispatch(trans.deletePostAction(id));
     }
+    const onReviewImage = (url) => {
+        window.open(url);
+    }
     const columns = [
         {
             title: 'ID',
@@ -152,7 +155,7 @@ export default function TableComponent() {
             dataIndex: 'image',
             key: 'image',
             render: (text, data) => {
-                return <img src={`${STORAGE}/posts/${data.image}`} height={45} width={45} />
+                return <img src={`${STORAGE}/posts/${data.image}`} height={45} width={45} onClick={() => onReviewImage(`${STORAGE}/posts/${data.image}`)} style={{ cursor: "pointer" }} />
             }
         },
         {

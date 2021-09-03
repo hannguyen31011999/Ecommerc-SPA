@@ -10,7 +10,7 @@ import ModalContent from '../Modals/Product/ModalContent';
 import ModalOption from '../Modals/Product/ModalOption';
 import ModalEdit from '../Modals/Product/ModalEdit';
 import ModalCreateVariant from '../Modals/Variant/ModalCreateVariant';
-// import ModalEdit from '../Modals/ModalEdit';
+import ModalEditVariant from '../Modals/Variant/ModalEditVariant';
 const { TreeNode } = TreeSelect;
 
 export default function TableComponent(props) {
@@ -24,6 +24,8 @@ export default function TableComponent(props) {
     });
     let searchInput = useRef(null);
     const dispatch = useDispatch();
+    const [treeLine, setTreeLine] = useState(true);
+    const [showLeafIcon, setShowLeafIcon] = useState(false);
     useEffect(() => {
         if (Array.isArray(product) && !product.length > 0) {
             dispatch(trans.transAction(pagination.pageSize));
@@ -120,7 +122,9 @@ export default function TableComponent(props) {
         if (values) {
             let temp = values.split('-');
             if (temp[1] !== 'values') {
-                history.push(`/admin/variant/${temp[1]}`);
+                dispatch(trans.modalEditVariantAct({ product_id: temp[2], id: temp[1], isBool: true }));
+            } else {
+                history.push(`/admin/variant/${temp[3]}/sku`);
             }
         }
     };
@@ -129,7 +133,6 @@ export default function TableComponent(props) {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
-            width: '5%',
             ...getColumnSearchProps('id'),
             sorter: (a, b) => a.id - b.id,
             sortDirections: ['descend', 'ascend']
@@ -138,19 +141,16 @@ export default function TableComponent(props) {
             title: 'Categories_id',
             dataIndex: 'categories_id',
             key: 'categories_id',
-            width: '10%'
         },
         {
             title: 'Discount id',
             dataIndex: 'discount_id',
             key: 'discount_id',
-            width: '10%',
         },
         {
             title: 'Product name',
             dataIndex: 'product_name',
             key: 'product_name',
-            width: "20%",
             ...getColumnSearchProps('product_name'),
             sorter: (a, b) => a.product_name.length - b.product_name.length,
             sortDirections: ['descend', 'ascend']
@@ -159,7 +159,6 @@ export default function TableComponent(props) {
             title: 'Variant Product',
             dataIndex: 'name',
             key: 'name',
-            width: "25%",
             render: (text, data) => {
                 return (
                     <TreeSelect
@@ -167,26 +166,34 @@ export default function TableComponent(props) {
                         style={{ width: '100%' }}
                         dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                         placeholder="Select variant product"
-                        allowClear
+                        allowClear={true}
                         treeDefaultExpandAll
-                        onChange={handleChangeVariant}
+                        onSelect={handleChangeVariant}
+                        treeLine={
+                            treeLine && {
+                                showLeafIcon,
+                            }
+                        }
+                        style={{
+                            width: 300,
+                        }}
                         key={data.id}
                     >
                         {
                             data.product_variants?.map(item => {
                                 return (
                                     <TreeNode
-                                        value={`variant-${item.id}`}
+                                        value={`variant-${item.id}-${data.id}`}
                                         title={item.product_variant_name}
-                                        key={`variant-${item.id}`}>
+                                        key={`variant-${item.id}-${data.id}`}>
                                         {
                                             data.product_skus?.map(values => {
                                                 if (values.product_variant_id == item.id) {
                                                     return (
                                                         <TreeNode
-                                                            value={`variant-values-${values.id}`}
+                                                            value={`variant-values-${values.id}-${item.id}`}
                                                             title={values.color}
-                                                            key={`variant-values-${values.id}`}>
+                                                            key={`variant-values-${values.id}-${item.id}`}>
                                                         </TreeNode>
                                                     )
                                                 }
@@ -204,7 +211,6 @@ export default function TableComponent(props) {
             title: 'Option',
             dataIndex: 'option',
             key: 'option',
-            width: "5%",
             render: (text, data) => {
                 return (
                     <Button onClick={() => { dispatch(trans.modalOptionAct(data.id)) }} title="Product option"><i className="fa fa-search-plus"></i></Button>
@@ -215,7 +221,6 @@ export default function TableComponent(props) {
             title: 'Description',
             dataIndex: 'product_desc',
             key: 'product_desc',
-            width: "10%",
             render: (text, data) => {
                 return (
                     <Button onClick={() => {
@@ -227,7 +232,6 @@ export default function TableComponent(props) {
         {
             title: 'Action',
             key: 'action',
-            width: "10%",
             render: (tetext, data) => {
                 return (
                     <Space size="middle">
@@ -257,6 +261,7 @@ export default function TableComponent(props) {
             {product.length > 0 ? <ModalContent /> : ''}
             {product.length > 0 ? <ModalOption /> : ''}
             {product.length > 0 ? <ModalCreateVariant /> : ''}
+            {product.length > 0 ? <ModalEditVariant /> : ''}
             <div className="col-12">
                 < Table
                     columns={columns}
