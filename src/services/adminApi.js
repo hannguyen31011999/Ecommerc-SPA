@@ -189,5 +189,8 @@ export const apiInventory = {
     },
     getListProduct() {
         return callApiAdmin(`inventory/product`);
+    },
+    updateStatus(id, form) {
+        return callApiAdmin(`inventory/status/${id}`, 'patch', form);
     }
 }

@@ -142,6 +142,7 @@ export const updateInventoryAction = (id, data, form) => async (dispatch) => {
     }
 }
 
+// seach
 export const seachInventoryAction = (pageSize, keyword) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
@@ -158,6 +159,7 @@ export const seachInventoryAction = (pageSize, keyword) => async (dispatch) => {
     }
 }
 
+// get product
 export const getListProductAction = (isBool) => async (dispatch) => {
     try {
         const res = await apiInventory.getListProduct();
@@ -166,6 +168,20 @@ export const getListProductAction = (isBool) => async (dispatch) => {
             isBool,
             result
         }));
+    } catch (e) {
+        dispatch(fetchFailAct(e));
+    }
+}
+
+// update status
+export const updateStatusAction = (id, data) => async (dispatch) => {
+    try {
+        dispatch(loadingAct(true));
+        const res = await apiInventory.updateStatus(id, data);
+        if (res.data.status_code === STATUS_SUCCESS) {
+            dispatch(updateAct({ update: res.data.data, id }));
+            alertSuccess('Update status success');
+        }
     } catch (e) {
         dispatch(fetchFailAct(e));
     }

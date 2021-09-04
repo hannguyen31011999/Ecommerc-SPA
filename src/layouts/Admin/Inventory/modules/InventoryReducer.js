@@ -67,7 +67,39 @@ const InventoryReducer = (state = initialState, { type, payload }) => {
         }
         case contants.seachContants: {
             const { data, total, lastPage } = payload;
-            const temp = { ...state };
+            let temp = [];
+            if (!data[0]?.product_variants) {
+                data.forEach(item => {
+                    const product_variants = {
+                        id: item.variant_id,
+                        product_variant_name: item.product_variant_name,
+                        product_variant_rom: item.product_variant_rom
+                    }
+                    const product_skus = {
+                        id: item.sku_id,
+                        product_variant_id: item.product_variant_id,
+                        sku_unit_price: item.sku_unit_price,
+                        sku_promotion_price: item.sku_promotion_price,
+                        sku_qty: item.sku_qty,
+                        color: item.color
+                    }
+                    temp.push({
+                        id: item.id,
+                        product_id: item.id,
+                        variant_id: item.variant_id,
+                        sku_id: item.sku_id,
+                        unit_price: item.unit_price,
+                        promotion_price: item.promotion_price,
+                        qty: item.qty,
+                        status: item.status,
+                        created_at: item.created_at,
+                        updated_at: item.updated_at,
+                        product_variants,
+                        product_skus
+                    });
+                });
+                return { ...state, data: temp, pagination: { ...state.pagination, total, lastPage, pageSize: 15 }, loading: false }
+            }
             return { ...state, data, pagination: { ...state.pagination, total, lastPage, pageSize: 15 }, loading: false }
         }
         case contants.updateStatusContants: {

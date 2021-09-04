@@ -149,9 +149,9 @@ export default function TableComponent(props) {
             ...getColumnSearchProps('discount_start'),
             sorter: (a, b) => a.discount_start.length - b.discount_start.length,
             sortDirections: ['descend', 'ascend'],
-            render: (text) => {
+            render: (text, data) => {
                 return (
-                    <span> {moment(text.discount_start).format('DD-M-YYYY HH:mm:ss')}</span >
+                    <span> {moment(data.discount_start).format('DD-M-YYYY HH:mm:ss')}</span >
                 )
             }
         },
@@ -162,9 +162,9 @@ export default function TableComponent(props) {
             ...getColumnSearchProps('discount_end'),
             sorter: (a, b) => a.discount_end.length - b.discount_end.length,
             sortDirections: ['descend', 'ascend'],
-            render: (text) => {
+            render: (text, data) => {
                 return (
-                    <span> {moment(text.discount_end).format('DD-M-YYYY HH:mm:ss')}</span >
+                    <span> {moment(data.discount_end).format('DD-M-YYYY HH:mm:ss')}</span >
                 )
             }
         },

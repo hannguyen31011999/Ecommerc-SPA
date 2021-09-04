@@ -72,7 +72,6 @@ const ProductReducer = (state = initialState, { type, payload }) => {
         }
         case contants.seachContants: {
             const { data, total, lastPage } = payload;
-            const temp = { ...state };
             return { ...state, data, pagination: { ...state.pagination, total, lastPage, pageSize: 15 }, loading: false }
         }
         case contants.modalContentContants: {

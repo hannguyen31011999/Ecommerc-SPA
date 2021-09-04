@@ -1,4 +1,4 @@
-import React, { useState, memo, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import {
     Form,
     Input,
@@ -14,7 +14,7 @@ let styled = {
     marginBottom: "12px",
 }
 
-export default function ModalCreate() {
+function ModalCreate() {
     let visiable = useSelector(state => state.InventoryReducer.visiable);
     let disabled = useSelector(state => state.InventoryReducer.disabled);
     let data = useSelector(state => state.InventoryReducer?.product);
@@ -143,3 +143,5 @@ export default function ModalCreate() {
         </>
     )
 }
+
+export default memo(ModalCreate);

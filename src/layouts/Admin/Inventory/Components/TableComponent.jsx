@@ -5,6 +5,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux'
 import * as trans from '../modules/Actions';
 import { formatCurrency } from '../../../../utils/getImage';
+import ModalEdit from '../Modals/ModalEdit';
 // import ModalEdit from '../Modals/ModalEdit';
 const { Option } = Select;
 
@@ -107,6 +108,9 @@ export default function TableComponent() {
     const handleEdit = (id) => {
         dispatch(trans.editAct(id));
     }
+    const handleChangeStatus = (status, id) => {
+        dispatch(trans.updateStatusAction(id, { status }));
+    }
     const columns = [
         {
             title: 'ID',
@@ -183,7 +187,7 @@ export default function TableComponent() {
             ...getColumnSearchProps('status'),
             render: (text, data) => {
                 return (
-                    <Select value={data.status}>
+                    <Select value={data.status} onChange={(e) => { handleChangeStatus(e, data.id) }}>
                         <Option value={0}>Pending</Option>
                         <Option value={1}>Success</Option>
                         <Option value={2}>Update</Option>
@@ -205,7 +209,7 @@ export default function TableComponent() {
     ];
     return (
         <>
-            {/* {inventory.length > 0 ? <ModalEdit /> : ''} */}
+            {inventory.length > 0 ? <ModalEdit /> : ''}
             <div className="col-12">
                 < Table
                     columns={columns}
