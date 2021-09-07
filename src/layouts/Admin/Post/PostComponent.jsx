@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import ModalCreate from './Modals/ModalCreate';
 import TableComponent from './Components/TableComponent';
 
-function PostComponent() {
+export default function PostComponent() {
     const dispatch = useDispatch();
     const handleSeachInput = (e) => {
         const { value } = e.target;
@@ -29,4 +29,4 @@ function PostComponent() {
     )
 }
 
-export default checkLoginAdmin(PostComponent);
+// export default checkLoginAdmin(PostComponent);

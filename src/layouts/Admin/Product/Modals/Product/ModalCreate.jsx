@@ -104,6 +104,7 @@ export default function ModalCreate(props) {
                 okText={<span>Create</span>}
                 width={600}
                 okButtonProps={{ disabled: disabled }}
+                getContainer={false}
             >
                 <Steps current={current}>
                     {steps.map(item => (

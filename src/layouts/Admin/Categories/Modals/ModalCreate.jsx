@@ -38,6 +38,7 @@ function ModalCreate() {
                 okText={<span>Create</span>}
                 width={500}
                 okButtonProps={{ disabled: disabled }}
+                getContainer={false}
             >
                 <Form form={form} name="control-ref"
                     onFinish={handleSubmit}

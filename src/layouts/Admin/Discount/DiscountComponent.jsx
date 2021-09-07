@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import TableComponent from './Components/TableComponent';
 import ModalCreate from './Modals/ModalCreate';
 
-function DiscountComponent() {
+export default function DiscountComponent() {
     const dispatch = useDispatch();
     const handleSeachInput = (e) => {
         const { value } = e.target;
@@ -29,4 +29,4 @@ function DiscountComponent() {
     )
 }
 
-export default checkLoginAdmin(DiscountComponent);
+// export default checkLoginAdmin(DiscountComponent);

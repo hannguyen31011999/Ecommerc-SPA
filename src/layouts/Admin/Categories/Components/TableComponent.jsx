@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef, memo, useCallback } from 'react'
+import React, { useEffect, useState, useRef, memo } from 'react'
 import { Table, Button, Input, Space, Popconfirm } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux'
 import * as trans from '../modules/Action';
 import ModalEdit from '../Modals/ModalEdit';
+
 
 function TableComponent(props) {
     let categories = useSelector(state => state.CategoriesReducer.data);

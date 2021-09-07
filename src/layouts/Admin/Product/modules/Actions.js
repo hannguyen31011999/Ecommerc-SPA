@@ -153,13 +153,13 @@ export const createProductAction = (data, form, file, description, [image, setIm
 }
 
 // update
-export const updateProductAction = (id, data, form) => async (dispatch) => {
+export const updateProductAction = (id, data, form, [current, setCurrent]) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
         const res = await apiProduct.update(id, data);
         if (res.data.status_code === STATUS_SUCCESS) {
             dispatch(updateAct({ update: res.data.data, id }));
-            form.resetFields();
+            setCurrent(0)
             alertSuccess('Update success');
         } else {
             const message = {};

@@ -64,6 +64,7 @@ export default function ModalEditVariant(props) {
                         <Button title="Delete Variant" key={3} ><DeleteOutlined /></Button>
                     </Popconfirm>
                 ]}
+                getContainer={false}
             >
                 <Form form={form} name="control-ref"
                     onFinish={handleSubmit}

@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import ModalCreate from './Modals/ModalCreate';
 import TableComponent from './Components/TableComponent';
 
-function InventoryManagement() {
+export default function InventoryManagement() {
     const dispatch = useDispatch();
     const handleSeachInput = (e) => {
         const { value } = e.target;
@@ -29,4 +29,4 @@ function InventoryManagement() {
     )
 }
 
-export default checkLoginAdmin(InventoryManagement);
+// export default checkLoginAdmin(InventoryManagement);

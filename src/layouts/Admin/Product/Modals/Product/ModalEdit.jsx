@@ -16,7 +16,7 @@ const { Step } = Steps;
 
 export default function ModalEdit() {
     let visiable = useSelector(state => state.ProductReducer.modal);
-    let disabled = useSelector(state => state.ProductReducer.loading);
+    let disabled = useSelector(state => state.ProductReducer.disabled);
     let dataEdit = useSelector(state => state.ProductReducer.dataEdit);
     let data = useSelector(state => state.ProductReducer.relationship);
     const [form] = Form.useForm();
@@ -34,7 +34,7 @@ export default function ModalEdit() {
     };
     const handleSubmit = (values) => {
         let dataUpdate = form.getFieldsValue(true);
-        dispatch(trans.updateProductAction(dataEdit.id, dataUpdate));
+        dispatch(trans.updateProductAction(dataEdit.id, dataUpdate, form, [current, setCurrent]));
     }
     const handleEditor = (values) => {
         if (values) {
@@ -73,6 +73,7 @@ export default function ModalEdit() {
                 okText={<span>Update</span>}
                 width={775}
                 okButtonProps={{ disabled: disabled }}
+                getContainer={false}
             >
                 <Steps current={current}>
                     {editSteps.map(item => (

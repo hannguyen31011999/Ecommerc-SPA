@@ -1,7 +1,7 @@
 import React from 'react'
 import checkLoginAdmin from '../../../hoc/checkLoginAdmin'
 
-function OrderDetailComponent() {
+export default function OrderDetailComponent() {
     return (
         <div>
 
@@ -9,4 +9,4 @@ function OrderDetailComponent() {
     )
 }
 
-export default checkLoginAdmin(OrderDetailComponent);
+// export default checkLoginAdmin(OrderDetailComponent);

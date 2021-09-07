@@ -1,6 +1,7 @@
 import * as contants from './Constants';
 import { apiCategories } from '../../../../services/adminApi';
 import { alertSuccess, STATUS_SUCCESS } from '../../../../settings/config';
+import { browserHistory } from 'react-router';
 
 export const loadingAct = (loading) => ({
     type: contants.loadingContants,
@@ -58,13 +59,15 @@ export const transAction = (pageSize) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
         const res = await apiCategories.fetchApiCategories(pageSize);
-        const result = res.data.data;
-        const payload = {
-            data: result.data,
-            total: result.total,
-            lastPage: result.last_page
+        if (res.data.status_code === STATUS_SUCCESS) {
+            const result = res.data.data;
+            const payload = {
+                data: result.data,
+                total: result.total,
+                lastPage: result.last_page
+            }
+            dispatch(fetchSuccessAct(payload));
         }
-        dispatch(fetchSuccessAct(payload));
     } catch (e) {
         dispatch(fetchFailAct(e));
     }

@@ -10,11 +10,11 @@ import AnalyticsComponent from '../layouts/Admin/Analytics/AnalyticsComponent';
 import DiscountComponent from '../layouts/Admin/Discount/DiscountComponent';
 import PostComponent from '../layouts/Admin/Post/PostComponent';
 import ReviewComponent from '../layouts/Admin/Review/ReviewComponent';
-import LoginAdminComponent from "../layouts/Admin/Login/LoginAdminComponent";
 import InventoryManagement from '../layouts/Admin/Inventory/InventoryManagement';
+// Client
+import HomeComponent from '../layouts/Client/Home/HomeComponent';
 
-const routes = [
-    // Admin
+export const adminRoutes = [
     {
         path: '/admin/dashboard',
         component: DashboardComponent,
@@ -33,7 +33,7 @@ const routes = [
         component: ProductComponent,
     },
     {
-        path: '/admin/variant/:id/sku',
+        path: '/admin/product/variant/:id/sku',
         component: ProductVariant,
     },
     {
@@ -68,12 +68,13 @@ const routes = [
     {
         path: '/admin/discount',
         component: DiscountComponent,
-    },
-    {
-        path: '/admin',
-        component: LoginAdminComponent,
-        exact: true
-    },
+    }
 ];
 
-export default routes;
+export const clientRoutes = [
+    {
+        path: '/',
+        component: HomeComponent,
+        exact: true
+    },
+]

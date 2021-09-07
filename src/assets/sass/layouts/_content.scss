@@ -3,7 +3,7 @@
     .header {
         min-height: 60px;
         max-height: 80px;
-        padding: 0 $pd-2;
+        padding: 0 $pd-2 - 5;
     }
 }
 
@@ -137,7 +137,7 @@
 }
 
 .header__left {
-    padding: $pd-1 $pd-4;
+    padding: 0;
     .input-group {
         .form-control {
             border: none;
@@ -182,13 +182,21 @@
 }
 
 .bread-crumb {
-    padding: $pd-2 0 $pd-2 $pd-3;
+    padding: $pd-2 0 $pd-2 $pd-2;
+    span {
+        font-size: $fs-0 - 1;
+    }
+    .ant-breadcrumb-link {
+        a {
+            text-decoration: none;
+        }
+    }
 }
 
 .main__content {
     .list-card {
         margin: 0;
-        padding: 0 $pd-1;
+        padding: 0;
     }
 }
 
@@ -196,7 +204,7 @@
     width: 100%;
     .content__item {
         position: relative;
-        padding: $pd-3 - 10 $pd-2;
+        padding: $pd-3 - 10;
         background-color: $white;
         box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 16px;
         border-radius: 12px;
@@ -205,11 +213,11 @@
             width: 65%;
             flex-shrink: 0;
             p {
-                @include styleText($fs-default,rgba($gray,0.8),0,0,$fw-3);
+                @include styleText($fs-0 - 2,rgba($gray,0.8),0,0,$fw-3);
                 margin-bottom: $mg-0;
             }
             h5 {
-                @include styleText($fs-1,rgba(#000,0.6),0,0,$fw-4);
+                @include styleText($fs-1 - 2,rgba(#000,0.6),0,0,$fw-4);
             }
         }
         .content__icon {

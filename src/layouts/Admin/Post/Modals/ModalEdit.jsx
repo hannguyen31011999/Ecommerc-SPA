@@ -89,6 +89,7 @@ export default function ModalEdit(props) {
                 okText={<span>Update</span>}
                 width={775}
                 okButtonProps={{ disabled: disabled }}
+                getContainer={false}
             >
                 <Form form={form} name="control-ref"
                     onFinish={handleSubmit}

@@ -50,6 +50,7 @@ export default function ModalComponent() {
                 okText={<span>Create</span>}
                 width={550}
                 okButtonProps={{ disabled: disabled }}
+                getContainer={false}
             >
                 <Form form={form} name="control-ref"
                     onFinish={handleSubmit}

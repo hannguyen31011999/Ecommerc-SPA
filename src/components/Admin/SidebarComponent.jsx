@@ -3,8 +3,8 @@ import { useHistory, NavLink } from 'react-router-dom';
 import categories from '../../routes/categories';
 
 export default function SidebarComponent(props) {
-    let [active, setActive] = useState(props.match.path);
-    let [minisize, setMinisize] = useState(props.location.state);
+    let [active, setActive] = useState(props.match?.path);
+    let [minisize, setMinisize] = useState(props.location?.state);
     const history = useHistory();
     const handleActive = (path) => {
         setActive(path);

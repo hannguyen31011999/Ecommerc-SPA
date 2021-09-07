@@ -1,11 +1,11 @@
 import React from 'react'
 import checkLoginAdmin from '../../../hoc/checkLoginAdmin'
 
-function OrderComponent(props) {
+export default function OrderComponent(props) {
     return (
         <div>
         </div>
     )
 }
 
-export default checkLoginAdmin(OrderComponent);
+// export default checkLoginAdmin(OrderComponent);

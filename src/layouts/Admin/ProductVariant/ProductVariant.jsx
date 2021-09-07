@@ -8,7 +8,7 @@ import TableComponent from './Components/TableComponent';
 import ModalCreate from './Modals/ModalCreate';
 
 
-function ProductVariant(props) {
+export default function ProductVariant(props) {
     const dispatch = useDispatch();
     const handleSeachInput = (e) => {
         const { value } = e.target;
@@ -30,4 +30,4 @@ function ProductVariant(props) {
     )
 }
 
-export default checkLoginAdmin(ProductVariant);
+// export default checkLoginAdmin(ProductVariant);

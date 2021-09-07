@@ -15,6 +15,7 @@ export default function TableComponent(props) {
     let pagination = useSelector(state => state.ProductVariantReducer.pagination);
     let loading = useSelector(state => state.ProductVariantReducer.loading);
     const dispatch = useDispatch();
+    const history = useHistory();
     let searchInput = useRef(null);
     let [seach, setSeach] = useState({
         searchText: '',

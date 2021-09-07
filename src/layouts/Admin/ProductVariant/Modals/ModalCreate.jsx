@@ -45,6 +45,9 @@ export default function ModalCreate() {
         imgWindow.document.write(image.outerHTML);
     };
     const handleSubmit = (values) => {
+        if (!values.sku_promotion_price) {
+            values.sku_promotion_price = 0;
+        }
         if (fileList.length > 0 && file.current) {
             const data = { ...values, image: file.current }
             let formData = new FormData();
@@ -73,6 +76,7 @@ export default function ModalCreate() {
                 okText={<span>Create</span>}
                 width={500}
                 okButtonProps={{ disabled: disabled }}
+                getContainer={false}
             >
                 <Form form={form} name="control-ref"
                     onFinish={handleSubmit}

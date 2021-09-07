@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useRef, memo, useCallback } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Table, Button, Input, Space, Popconfirm, TreeSelect } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux'
 import * as trans from '../modules/Actions';
-import moment from 'moment';
 import { useHistory } from 'react-router-dom';
 import ModalContent from '../Modals/Product/ModalContent';
 import ModalOption from '../Modals/Product/ModalOption';
@@ -22,6 +21,7 @@ export default function TableComponent(props) {
         searchText: '',
         searchedColumn: '',
     });
+    const [locationKeys, setLocationKeys] = useState();
     let searchInput = useRef(null);
     const dispatch = useDispatch();
     const [treeLine, setTreeLine] = useState(true);
@@ -33,6 +33,11 @@ export default function TableComponent(props) {
             trans.loadingAct(false);
         }
     }, []);
+    useEffect(() => {
+        window.onpopstate = (e) => {
+            dispatch(trans.transAction(pagination.pageSize));
+        }
+    }, [locationKeys]);
     const onChange = (pagination) => {
         const { current, pageSize } = pagination;
         dispatch(trans.paginationAction(current, pageSize));
@@ -124,7 +129,11 @@ export default function TableComponent(props) {
             if (temp[1] !== 'values') {
                 dispatch(trans.modalEditVariantAct({ product_id: temp[2], id: temp[1], isBool: true }));
             } else {
-                history.push(`/admin/variant/${temp[3]}/sku`);
+                const location = {
+                    pathname: `/admin/product/variant/${temp[3]}/sku`,
+                    state: { fromProduct: true }
+                }
+                history.push(location);
             }
         }
     };

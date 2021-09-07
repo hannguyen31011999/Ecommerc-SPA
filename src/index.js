@@ -6,14 +6,21 @@ import reportWebVitals from './reportWebVitals';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/js/bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'jquery/dist/jquery.slim';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import 'font-awesome/css/font-awesome.min.css';
 import { Provider } from 'react-redux';
-import store from './redux';
+import { PersistGate } from 'redux-persist/lib/integration/react';
+import { persistor, store } from './redux';
+
 ReactDOM.render(
   // <React.StrictMode>
   // </React.StrictMode>,
   <Provider store={store}>
-    <App />
+    <PersistGate persistor={persistor}>
+      <App />
+    </PersistGate>
   </Provider>,
   document.getElementById('root')
 );

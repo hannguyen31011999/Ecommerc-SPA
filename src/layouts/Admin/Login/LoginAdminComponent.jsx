@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import * as infoAct from '../../../redux/Actions/Admin/infoAction';
 import { Form, Input, Button, Checkbox } from 'antd';
 import './login.scss';
 import { apiAdmin } from '../../../services/adminApi';
@@ -9,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useHistory } from 'react-router-dom';
 import { handleExpired } from '../../../utils/expired';
 import { alertErrors, STATUS_FAIL } from '../../../settings/config';
-import { INFO } from '../../../settings/configUrl';
+import { authAction } from '../../../redux/Actions/Admin/authActions';
 
 export default function LoginAdminComponent(props) {
     let [isCheck, setCheckBox] = useState(false);
@@ -26,12 +25,15 @@ export default function LoginAdminComponent(props) {
             if (res.data.status_code === STATUS_FAIL) {
                 alertErrors(res.data.message);
             } else {
+                let timestamp = new Date(res.data.timestamp.time);
+                let miliseconds = timestamp.getTime();
+                handleExpired(res.data.timestamp.expired, miliseconds, res.data.token);
                 if (res.data.user.role === 2) {
-                    let timestamp = new Date(res.data.timestamp.time);
-                    let miliseconds = timestamp.getTime();
-                    handleExpired(res.data.timestamp.expired, miliseconds, res.data.token);
-                    localStorage.setItem(INFO, res.data.user.name);
+                    dispatch(authAction(res.data.user));
                     history.push('/admin/dashboard');
+                } else {
+                    dispatch(authAction(res.data.user));
+                    history.push('/');
                 }
             }
         }).catch(e => {
