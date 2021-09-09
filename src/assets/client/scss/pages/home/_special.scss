@@ -62,6 +62,7 @@
         .special__image {
             position: relative;
             overflow: hidden;
+            padding: $pd-2 + 10;
             img {
                 width: 100%;
                 transition: $tran-2;
@@ -142,6 +143,11 @@
                 .special__price--promotion {
                     @include styleText($fs-0 - 1,$color-gray-1,0,0,$fw-2);
                     text-decoration: line-through;
+                }
+            }
+            .special__discount {
+                span {
+                    @include styleText($fs-default,$color-gray-1,0,0,$fw-2);
                 }
             }
         }

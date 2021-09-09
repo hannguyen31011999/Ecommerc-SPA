@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom';
 import CartComponent from './CartComponent';
 import HeaderSeach from './HeaderSeach';
 
@@ -8,9 +9,9 @@ export default function HeaderContent() {
             <div className="container">
                 <div className="row align-items-center header__middle--content">
                     <div className="col-lg-3 col-md-4 col-6  header__middle--left">
-                        <a href="#" className="navbar-brand">
+                        <NavLink to="/" className="navbar-brand">
                             <img src="./assets/img/logo.svg" alt="*" />
-                        </a>
+                        </NavLink>
                     </div>
                     <HeaderSeach />
                     <CartComponent />

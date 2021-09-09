@@ -4,21 +4,23 @@ import { NavLink } from 'react-router-dom';
 
 export default function HeaderCategory() {
     let categories = useSelector(state => state.HomeReducer.categories);
+    let slugs = useSelector(state => state.HomeReducer.slugsProduct);
     const renderCategories = () => {
         return categories?.map(item => {
             if (item.products.length > 0) {
                 return (
                     <li key={item.id}>
-                        <NavLink to="">
+                        <NavLink to={`/categories?q=${item.id}`}>
                             {item.categories_name}
                             <i className="lni lni-chevron-right" />
                         </NavLink>
                         <ul className="header__categories--submenu">
                             {
                                 item.products.map(product => {
+                                    const slug = slugs.filter(slg => slg.product_id === product.id);
                                     return (
                                         <li key={product.id}>
-                                            <NavLink to="">{product.product_name}</NavLink>
+                                            <NavLink to={slug[0].slug_url}>{product.product_name}</NavLink>
                                         </li>
                                     )
                                 })

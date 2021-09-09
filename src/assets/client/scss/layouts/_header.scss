@@ -277,9 +277,11 @@ header {
                 }
                 .header__cart--action {
                     width: 10%;
+                    text-align: center;
+                    padding-top: 4px;
                     flex-shrink: 0;
                     a {
-                        font-size: $fs-default;
+                        font-size: $fs-default - 2;
                     }
                 }
             }

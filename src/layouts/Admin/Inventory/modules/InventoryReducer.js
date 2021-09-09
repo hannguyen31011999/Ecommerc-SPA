@@ -105,7 +105,7 @@ const InventoryReducer = (state = initialState, { type, payload }) => {
         case contants.updateStatusContants: {
             let temp = [...state.data];
             const index = temp.findIndex((item) => item.id === payload.id);
-            temp[index] = payload;
+            temp[index].status = payload.update;
             return { ...state, data: temp, loading: false }
         }
         case contants.fetchProductContants: {

@@ -52,6 +52,7 @@
                         padding: $pd-1 0;
                         font-size: $fs-0;
                         transition: $tran-1;
+                        border: none;
                         &:hover {
                             background-color: $bg-dark-blue;
                         }
@@ -148,7 +149,7 @@
 .banner__content {
     .banner__item {
         position: relative;
-        margin-bottom: $mg-1 - 5;
+        margin-bottom: $mg-1 - 2;
         figure {
             margin-bottom: 0;
             img {

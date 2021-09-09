@@ -9,9 +9,9 @@ export default function PageErrors(props) {
             <Result
                 status="404"
                 title="404"
-                subTitle="Xin lỗi, trang bạn đã truy cập không tồn tại."
+                subTitle="Sorry, The page you visited does not exist."
                 extra={
-                    <Button type="primary" onClick={() => { history.push('/') }}>Quay về trang chủ</Button>
+                    <Button type="primary" onClick={() => { history.push('/') }}>Back Home</Button>
                 }
             />
         </>

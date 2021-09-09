@@ -16,7 +16,7 @@ import ProductVariantReducer from '../layouts/Admin/ProductVariant/modules/Produ
 import InventoryReducer from '../layouts/Admin/Inventory/modules/InventoryReducer';
 import authReducer from './Reducers/Admin/authReducer';
 // Reducer client
-import HomeReducer from '../layouts/Client/Modules/HomeReducer';
+import HomeReducer from '../layouts/Client/Home/Modules/HomeReducer';
 
 const rootReducer = combineReducers({
     // admin

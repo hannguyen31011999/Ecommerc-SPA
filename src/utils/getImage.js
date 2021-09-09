@@ -53,6 +53,6 @@ export const init = {
 
 export const formatCurrency = (currency) => {
     if (currency) {
-        return currency.toLocaleString('vi', { style: 'currency', currency: 'VND' });
+        return currency.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     }
 }

@@ -1,8 +1,65 @@
-import React from 'react'
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import SpecialSale from './SpecialSale'
 import SpecialBanner from './SpecialBanner';
+import * as trans from '../Modules/Actions';
+import { NavLink } from 'react-router-dom';
+import { STORAGE } from '../../../../settings/configUrl';
 
 export default function MainSpecial() {
+    const { product, productDiscount } = useSelector(state => state.HomeReducer.special);
+    const discount = useSelector(state => state.HomeReducer.discount);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(trans.fetchProductDiscountAction());
+    }, []);
+    const renderProduct = () => {
+        return product?.map(item => {
+            const gift = discount.filter(gift => gift.id === item.product_id)[0];
+            const sku = item.product_skus[0];
+            return (
+                <div className="col-md-4 col-12" key={item.id}>
+                    <div className="special__item">
+                        <div className="special__image">
+                            <img src={`${STORAGE}/products/${sku.sku_image}`} alt="*" />
+                            <div className="special__btn">
+                                <a href="">
+                                    <i className="lni lni-cart" />
+                                    Add to Cart
+                                </a>
+                            </div>
+                        </div>
+                        <div className="special__info">
+                            <p className="special__category">Smartphone</p>
+                            <h4 className="special__name">
+                                <NavLink to="">
+                                    {item.product_variant_name}
+                                </NavLink>
+                            </h4>
+                            <ul className="special__review">
+                                <li><i className="lni lni-star-filled" /></li>
+                                <li><i className="lni lni-star-filled" /></li>
+                                <li><i className="lni lni-star-filled" /></li>
+                                <li><i className="lni lni-star-filled" /></li>
+                                <li><span>4.0 Review(s)</span></li>
+                            </ul>
+                            <div className="special__price">
+                                <span className="special__price--unit">
+                                    ${sku.sku_unit_price}
+                                </span>
+                                <span className="special__price--promotion">
+                                    ${sku.sku_promotion_price}
+                                </span>
+                            </div>
+                            <div className="special__discount">
+                                <span>Gift ${gift.discount_value}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )
+        })
+    }
     return (
         <section className="special">
             <div className="container">
@@ -15,90 +72,7 @@ export default function MainSpecial() {
                     <div className="row">
                         <div className="col-lg-8 col-12 special__left">
                             <div className="special__list row">
-                                <div className="col-md-4 col-12">
-                                    <div className="special__item">
-                                        <div className="special__image">
-                                            <img src="./assets/img/product-1.jpg" alt="*" />
-                                            <div className="special__btn">
-                                                <a href="">
-                                                    <i className="lni lni-cart" />
-                                                    Add to Cart
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div className="special__info">
-                                            <p className="special__category">Headphones</p>
-                                            <h4 className="special__name"><a href="#">Wireless Headphone</a></h4>
-                                            <ul className="special__review">
-                                                <li><i className="lni lni-star-filled" /></li>
-                                                <li><i className="lni lni-star-filled" /></li>
-                                                <li><i className="lni lni-star-filled" /></li>
-                                                <li><i className="lni lni-star-filled" /></li>
-                                                <li><span>4.0 Review(s)</span></li>
-                                            </ul>
-                                            <div className="special__price">
-                                                <span className="special__price--unit">$350.00</span>
-                                                <span className="special__price--promotion">$335.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-md-4 col-12">
-                                    <div className="special__item">
-                                        <div className="special__image">
-                                            <img src="./assets/img/product-1.jpg" alt="*" />
-                                            <div className="special__btn">
-                                                <a href="">
-                                                    <i className="lni lni-cart" />
-                                                    Add to Cart
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div className="special__info">
-                                            <p className="special__category">Headphones</p>
-                                            <h4 className="special__name"><a href="#">Wireless Headphone</a></h4>
-                                            <ul className="special__review">
-                                                <li><i className="lni lni-star-filled" /></li>
-                                                <li><i className="lni lni-star-filled" /></li>
-                                                <li><i className="lni lni-star-filled" /></li>
-                                                <li><i className="lni lni-star-filled" /></li>
-                                                <li><span>4.0 Review(s)</span></li>
-                                            </ul>
-                                            <div className="special__price">
-                                                <span className="special__price--unit">$350.00</span>
-                                                <span className="special__price--promotion">$335.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-md-4 col-12">
-                                    <div className="special__item">
-                                        <div className="special__image">
-                                            <img src="./assets/img/product-1.jpg" alt="*" />
-                                            <div className="special__btn">
-                                                <a href="">
-                                                    <i className="lni lni-cart" />
-                                                    Add to Cart
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div className="special__info">
-                                            <p className="special__category">Headphones</p>
-                                            <h4 className="special__name"><a href="#">Wireless Headphone</a></h4>
-                                            <ul className="special__review">
-                                                <li><i className="lni lni-star-filled" /></li>
-                                                <li><i className="lni lni-star-filled" /></li>
-                                                <li><i className="lni lni-star-filled" /></li>
-                                                <li><i className="lni lni-star-filled" /></li>
-                                                <li><span>4.0 Review(s)</span></li>
-                                            </ul>
-                                            <div className="special__price">
-                                                <span className="special__price--unit">$350.00</span>
-                                                <span className="special__price--promotion">$335.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {product ? renderProduct() : ''}
                             </div>
                             <SpecialBanner />
                         </div>

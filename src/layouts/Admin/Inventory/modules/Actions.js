@@ -37,6 +37,11 @@ export const updateAct = (payload) => ({
     payload
 })
 
+export const updateStatusAct = (payload) => ({
+    type: contants.updateStatusContants,
+    payload
+})
+
 
 export const deleteAct = (payload) => ({
     type: contants.deleteContants,
@@ -179,7 +184,7 @@ export const updateStatusAction = (id, data) => async (dispatch) => {
         dispatch(loadingAct(true));
         const res = await apiInventory.updateStatus(id, data);
         if (res.data.status_code === STATUS_SUCCESS) {
-            dispatch(updateAct({ update: res.data.data, id }));
+            dispatch(updateStatusAct({ update: data.status, id }));
             alertSuccess('Update status success');
         }
     } catch (e) {
