@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import { STORAGE } from '../../../../settings/configUrl';
 import * as trans from '../Modules/Actions';
 
@@ -22,6 +23,7 @@ export default function ProductList() {
         return product.data?.map((item, index) => {
             const sku = item?.first_product_skus[0];
             const gift = discount.filter(gift => gift.id === item.product_id)[0];
+            const slug = item.slugs[0];
             return (
                 <div className="col-lg-3 col-md-6 col-12" key={item.id}>
                     <div className="product__item">
@@ -36,7 +38,11 @@ export default function ProductList() {
                         </div>
                         <div className="product__info">
                             <p className="product__category">Smartphone</p>
-                            <h4 className="product__name"><a href="">{item.product_variant_name}</a></h4>
+                            <h4 className="product__name">
+                                <NavLink to={slug.slug_url}>
+                                    {item.product_variant_name}
+                                </NavLink>
+                            </h4>
                             <ul className="product__review">
                                 <li><i className="lni lni-star-filled" /></li>
                                 <li><i className="lni lni-star-filled" /></li>
@@ -45,11 +51,16 @@ export default function ProductList() {
                                 <li><span>4.0 Review(s)</span></li>
                             </ul>
                             <div className="product__price">
-                                <span className="product__price--unit">${sku.sku_unit_price}</span>
+                                <span className="product__price--unit">
+                                    ${
+                                        sku.sku_promotion_price ?
+                                            sku.sku_promotion_price : sku.sku_unit_price
+                                    }
+                                </span>
                                 {
                                     sku.sku_promotion_price ?
                                         <span className="product__price--promotion">
-                                            ${sku.sku_promotion_price}
+                                            ${sku.sku_unit_price}
                                         </span> : ''
 
                                 }

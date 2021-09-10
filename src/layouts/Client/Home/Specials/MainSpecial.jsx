@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import SpecialSale from './SpecialSale'
 import SpecialBanner from './SpecialBanner';
@@ -17,6 +17,7 @@ export default function MainSpecial() {
         return product?.map(item => {
             const gift = discount.filter(gift => gift.id === item.product_id)[0];
             const sku = item.product_skus[0];
+            const slug = item.slugs[0];
             return (
                 <div className="col-md-4 col-12" key={item.id}>
                     <div className="special__item">
@@ -32,7 +33,7 @@ export default function MainSpecial() {
                         <div className="special__info">
                             <p className="special__category">Smartphone</p>
                             <h4 className="special__name">
-                                <NavLink to="">
+                                <NavLink to={slug.slug_url}>
                                     {item.product_variant_name}
                                 </NavLink>
                             </h4>
@@ -45,10 +46,10 @@ export default function MainSpecial() {
                             </ul>
                             <div className="special__price">
                                 <span className="special__price--unit">
-                                    ${sku.sku_unit_price}
+                                    ${sku.sku_promotion_price}
                                 </span>
                                 <span className="special__price--promotion">
-                                    ${sku.sku_promotion_price}
+                                    ${sku.sku_unit_price}
                                 </span>
                             </div>
                             <div className="special__discount">
@@ -77,7 +78,7 @@ export default function MainSpecial() {
                             <SpecialBanner />
                         </div>
                         <div className="col-lg-4 col-12 special__right">
-                            <SpecialSale />
+                            <SpecialSale productDiscount={productDiscount} />
                         </div>
                     </div>
                 </div>

@@ -185,6 +185,7 @@
     figure {
         margin-bottom: 0;
         img {
+            max-height: 251px;
             border-radius: 4px;
             width: 100%;
             @include responsive('medium'){
@@ -253,6 +254,7 @@
         border-radius: 4px;
         .special__image {
             overflow: hidden;
+            padding: 40px;
             img {
                 width: 100%;
                 transition: $tran-2;
@@ -305,8 +307,8 @@
             border: 1px solid #eee;
             display: flex;
             align-items: center;
-            padding: $pd-1 $pd-1;
-            margin-bottom: 4px;
+            padding: 17px $pd-1;
+            margin-bottom: 10px;
             .special__box {
                 width: 25%;
                 text-align: center;
