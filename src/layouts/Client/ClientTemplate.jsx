@@ -5,10 +5,12 @@ import withLayout from '../../hoc/withLayouts';
 import MainHeader from './Header/MainHeader';
 import MainFooter from './Footer/MainFooter';
 import { Spin, Space } from 'antd';
+import { ToastContainer } from 'react-toastify';
 function ClientTemplate(props) {
     const loading = useSelector(state => state.HomeReducer.loading);
     return (
         <>
+            <ToastContainer />
             <MainHeader />
             {props.children}
             <MainFooter />

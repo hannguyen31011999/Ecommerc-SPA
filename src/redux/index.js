@@ -17,6 +17,7 @@ import InventoryReducer from '../layouts/Admin/Inventory/modules/InventoryReduce
 import authReducer from './Reducers/Admin/authReducer';
 // Reducer client
 import HomeReducer from '../layouts/Client/Home/Modules/HomeReducer';
+import CartReducer from './Reducers/User/CartReducer';
 
 const rootReducer = combineReducers({
     // admin
@@ -30,7 +31,8 @@ const rootReducer = combineReducers({
     InventoryReducer,
     authReducer,
     // client
-    HomeReducer
+    HomeReducer,
+    CartReducer
 });
 
 const persistConfig = {

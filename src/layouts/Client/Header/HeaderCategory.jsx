@@ -17,7 +17,7 @@ export default function HeaderCategory() {
                         <ul className="header__categories--submenu">
                             {
                                 item.products.map(product => {
-                                    const slug = slugs.filter(slg => slg.product_id === product.id);
+                                    const slug = slugs.filter(slg => slg.product_id == product.id);
                                     return (
                                         <li key={product.id}>
                                             <NavLink to={slug[0].slug_url}>{product.product_name}</NavLink>
@@ -41,7 +41,7 @@ export default function HeaderCategory() {
                 All categories
             </span>
             <ul className="header__categories--menu">
-                {categories ? renderCategories() : ''}
+                {categories.length > 0 ? renderCategories() : ''}
             </ul>
         </div>
     )

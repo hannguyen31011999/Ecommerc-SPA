@@ -265,6 +265,7 @@ header {
                         overflow: hidden;
                         text-overflow: ellipsis;
                         word-break: break-word;
+                        margin-bottom: 0;
                         a {
                             @include styleText($fs-0 - 1,$color-black-0,0,0,$fw-3);
                             text-decoration: none;
@@ -273,6 +274,17 @@ header {
                                 color: $bg-blue;
                             }
                         }
+                    }
+                    p {
+                        margin-bottom: 0;
+                        @include styleText(13px,$color-gray-1,0,0,$fw-2);
+                    }
+                    .header__cart--gift {
+                        margin-top: 5px;
+                        @include styleText($fs-default,$color-gray-1,0,0,$fw-2);
+                    }
+                    .header__cart--color {
+                        @include styleText($fs-default,$color-gray-1,0,0,$fw-2);
                     }
                 }
                 .header__cart--action {
@@ -285,6 +297,9 @@ header {
                     }
                 }
             }
+        }
+        .empty {
+            font-size: $fs-0;
         }
     }
     .header__cart--footer {

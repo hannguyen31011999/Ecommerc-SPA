@@ -16,7 +16,6 @@ import ClientTemplate from './layouts/Client/ClientTemplate';
 import PageErrors from './layouts/Pages/PageErrors';
 import { useSelector } from 'react-redux';
 import { ACCESS_TOKEN } from './settings/configUrl';
-import { BackTop } from 'antd';
 
 function App() {
   const user = useSelector(state => state.authReducer.currentUser);
@@ -27,7 +26,7 @@ function App() {
     });
   }
   const authenticated = () => {
-    if (user.role === 2 && isLogin && localStorage.getItem(ACCESS_TOKEN))
+    if (user.role == 2 && isLogin && localStorage.getItem(ACCESS_TOKEN))
       return true;
   }
   return (

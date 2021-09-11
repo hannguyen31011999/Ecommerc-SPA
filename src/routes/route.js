@@ -23,34 +23,42 @@ export const adminRoutes = [
     {
         path: '/admin/categories',
         component: CategoriesComponent,
+        exact: true
     },
     {
         path: '/admin/categories',
         component: CategoriesComponent,
+        exact: true
     },
     {
         path: '/admin/product',
         component: ProductComponent,
+        exact: true
     },
     {
         path: '/admin/product/variant/:id/sku',
         component: ProductVariant,
+        exact: true
     },
     {
         path: '/admin/inventory',
         component: InventoryManagement,
+        exact: true
     },
     {
         path: '/admin/post',
         component: PostComponent,
+        exact: true
     },
     {
         path: '/admin/user',
         component: UserComponent,
+        exact: true
     },
     {
         path: '/admin/review',
         component: ReviewComponent,
+        exact: true
     },
     {
         path: '/admin/order',
@@ -60,14 +68,17 @@ export const adminRoutes = [
     {
         path: '/admin/order/detail',
         component: OrderDetailComponent,
+        exact: true
     },
     {
         path: '/admin/analytics',
         component: AnalyticsComponent,
+        exact: true
     },
     {
         path: '/admin/discount',
         component: DiscountComponent,
+        exact: true
     }
 ];
 

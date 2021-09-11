@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { STORAGE } from '../../../../settings/configUrl';
 import SpecialTimer from './SpecialTimer';
 
@@ -8,10 +9,10 @@ export default function SpecialSale(props) {
         <>
             <div className="special__offer" >
                 <div className="special__image">
-                    <img src={`${STORAGE}/products/${data?.sku_image}`} alt="*" />
+                    <img src={data.sku_image ? `${STORAGE}/products/${data.sku_image}` : ''} alt="*" />
                 </div>
                 <div className="special__text">
-                    <h2><a href="#">{data?.product_variant_name}</a></h2>
+                    <h2><NavLink to={data.slug_url ? data.slug_url : ''}>{data?.product_variant_name}</NavLink></h2>
                     <ul className="special__offer--review">
                         <li><i className="lni lni-star-filled" /></li>
                         <li><i className="lni lni-star-filled" /></li>

@@ -1,4 +1,10 @@
+import { ACCESS_TOKEN } from '../settings/configUrl';
 import { apiRefreshToken, callApi, callApiAdmin } from '../utils/callApi';
+
+const getToken = () => {
+    return localStorage.getItem(ACCESS_TOKEN);
+}
+
 
 export const apiAdmin = {
     fetchApiLogin(data) {
@@ -18,41 +24,53 @@ export const apiAdmin = {
 
 export const apiCategories = {
     fetchApiCategories(pageSize = 10) {
+        // return callApiAdmin(`categories/list?pageSize=${pageSize}&token=${getToken()}`);
         return callApiAdmin(`categories/list?pageSize=${pageSize}`);
     },
     changePagination(currentPage, pageSize = 10) {
+        // return callApiAdmin(`categories/list?page=${currentPage}&pageSize=${pageSize}&token=${getToken()}`);
         return callApiAdmin(`categories/list?page=${currentPage}&pageSize=${pageSize}`);
     },
     createCategories(form) {
+        // return callApiAdmin(`categories/create?token=${getToken()}`, 'post', form);
         return callApiAdmin('categories/create', 'post', form);
     },
     editCategories(id) {
+        // return callApiAdmin(`categories/edit/${id}?token=${getToken()}`);
         return callApiAdmin(`categories/edit/${id}`);
     },
     updateCategories(id, form) {
+        // return callApiAdmin(`categories/update/${id}?token=${getToken()}`, 'put', form);
         return callApiAdmin(`categories/update/${id}`, 'put', form);
     },
     deleteCategories(id) {
+        // return callApiAdmin(`categories/delete/${id}?token=${getToken()}`, 'delete');
         return callApiAdmin(`categories/delete/${id}`, 'delete');
     },
     seachCategories(pageSize, keyword) {
+        // return callApiAdmin(`categories/seach?keyword=${keyword}&pageSize=${pageSize}&token=${getToken()}`);
         return callApiAdmin(`categories/seach?keyword=${keyword}&pageSize=${pageSize}`);
     }
 }
 export const apiPost = {
     fetchApi(pageSize = 10) {
+        // return callApiAdmin(`post/list?pageSize=${pageSize}&token=${getToken()}`);
         return callApiAdmin(`post/list?pageSize=${pageSize}`);
     },
     change(currentPage, pageSize = 10) {
+        // return callApiAdmin(`post/list?page=${currentPage}&pageSize=${pageSize}&token${getToken()}`);
         return callApiAdmin(`post/list?page=${currentPage}&pageSize=${pageSize}`);
     },
     create(form) {
+        // return callApiAdmin(`post/create?token=${getToken()}`, 'post', form);
         return callApiAdmin('post/create', 'post', form);
     },
     edit(id) {
+        // return callApiAdmin(`post/edit/${id}?token=${getToken()}`);
         return callApiAdmin(`post/edit/${id}`);
     },
     update(id, form) {
+        // return callApiAdmin(`post/update/${id}?token=${getToken()}`, 'post', form);
         return callApiAdmin(`post/update/${id}`, 'post', form);
     },
     delete(id) {

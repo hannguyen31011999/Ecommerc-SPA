@@ -27,7 +27,7 @@ export default function MenuMobile(props) {
                         <ul className={visiable === cate.categories_name ? "mobile__submenu menu-active" : "mobile__submenu"}>
                             {
                                 cate.products.map(product => {
-                                    const slug = slugs.filter(slg => slg.product_id === product.id);
+                                    const slug = slugs.filter(slg => slg.product_id == product.id);
                                     return (
                                         <li key={product.id}>
                                             <NavLink to={slug[0].slug_url}>{product.product_name}</NavLink>
@@ -49,7 +49,7 @@ export default function MenuMobile(props) {
     return (
         <div className={props.menu ? 'header__mobile toggle__menu' : 'header__mobile'} >
             <ul className="mobile__menu">
-                {categories ? renderMenu() : ''}
+                {categories.length > 0 ? renderMenu() : ''}
             </ul>
         </div>
     )

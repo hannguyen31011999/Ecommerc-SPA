@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import { alertErrors, alertSuccess } from '../../../../settings/config';
 import { STORAGE } from '../../../../settings/configUrl';
+import { makeid } from '../../../../utils/helper';
 import * as trans from '../Modules/Actions';
+import * as cart from '../../../../redux/Actions/User/CartActions';
 
 const calculator = (unit, promotion) => {
     const sum = (unit - promotion) / unit * 100;
@@ -18,11 +21,32 @@ export default function ProductList() {
             dispatch(trans.fetchProductAction());
         }
     }, []);
+    const addToCart = (e, item, gift = null) => {
+        e.preventDefault();
+        const { first_product_skus, inventory_managements, slugs } = item;
+        if (first_product_skus[0].sku_qty > 0 && inventory_managements[0].status !== 0) {
+            const data = {
+                sku_id: first_product_skus[0].id,
+                name: item.product_variant_name,
+                unit_price: first_product_skus[0].sku_unit_price,
+                promotion_price: first_product_skus[0].promotion_price ? first_product_skus[0].promotion_price : 0,
+                color: first_product_skus[0].color,
+                slug: slugs[0].slug_url,
+                discount: gift ? gift : 0,
+                image: first_product_skus[0].sku_image,
+                qty: 1
+            }
+            dispatch(cart.addCartAct(data));
+            alertSuccess('Add product success')
+        } else {
+            alertErrors('Sorry, Product is out of stock!');
+        }
 
+    }
     const renderListProduct = () => {
         return product.data?.map((item, index) => {
             const sku = item?.first_product_skus[0];
-            const gift = discount.filter(gift => gift.id === item.product_id)[0];
+            const gift = discount.filter(gift => gift.id == item.product_id)[0];
             const slug = item.slugs[0];
             return (
                 <div className="col-lg-3 col-md-6 col-12" key={item.id}>
@@ -30,7 +54,7 @@ export default function ProductList() {
                         <div className="product__image">
                             <img src={`${STORAGE}/products/${sku.sku_image}`} alt="*" />
                             <div className="product__btn">
-                                <a href="">
+                                <a href="" onClick={(e) => { addToCart(e, item, gift?.discount_value) }}>
                                     <i className="lni lni-cart" />
                                     Add to Cart
                                 </a>

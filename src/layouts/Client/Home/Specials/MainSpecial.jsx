@@ -15,7 +15,7 @@ export default function MainSpecial() {
     }, []);
     const renderProduct = () => {
         return product?.map(item => {
-            const gift = discount.filter(gift => gift.id === item.product_id)[0];
+            const gift = discount.filter(gift => gift.id == item.product_id)[0];
             const sku = item.product_skus[0];
             const slug = item.slugs[0];
             return (
@@ -53,7 +53,7 @@ export default function MainSpecial() {
                                 </span>
                             </div>
                             <div className="special__discount">
-                                <span>Gift ${gift.discount_value}</span>
+                                <span>Gift ${gift?.discount_value}</span>
                             </div>
                         </div>
                     </div>
@@ -73,7 +73,7 @@ export default function MainSpecial() {
                     <div className="row">
                         <div className="col-lg-8 col-12 special__left">
                             <div className="special__list row">
-                                {product ? renderProduct() : ''}
+                                {product.length > 0 ? renderProduct() : ''}
                             </div>
                             <SpecialBanner />
                         </div>
