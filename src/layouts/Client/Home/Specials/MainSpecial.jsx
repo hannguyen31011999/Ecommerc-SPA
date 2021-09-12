@@ -5,14 +5,49 @@ import SpecialBanner from './SpecialBanner';
 import * as trans from '../Modules/Actions';
 import { NavLink } from 'react-router-dom';
 import { STORAGE } from '../../../../settings/configUrl';
+import { alertErrors } from '../../../../settings/config';
+import * as actions from '../../../../redux/Actions/User/CartActions';
+import publicIp from 'public-ip';
 
 export default function MainSpecial() {
     const { product, productDiscount } = useSelector(state => state.HomeReducer.special);
     const discount = useSelector(state => state.HomeReducer.discount);
+    const cart = useSelector(state => state.CartReducer.cart);
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(trans.fetchProductDiscountAction());
     }, []);
+    const addToCart = async (e, item, gift = null) => {
+        e.preventDefault();
+        const { product_skus, slugs } = item;
+        const ip = await publicIp.v4();
+        const temp = cart?.filter(cart => cart.sku_id == product_skus[0].id)[0];
+        if (product_skus[0].sku_qty > 0) {
+            const data = {
+                sku_id: product_skus[0].id,
+                name: item.product_variant_name,
+                unit_price: product_skus[0].sku_unit_price,
+                promotion_price: product_skus[0].sku_promotion_price ? product_skus[0].sku_promotion_price : 0,
+                color: product_skus[0].color,
+                slug: slugs[0].slug_url,
+                discount: gift ? gift : 0,
+                image: product_skus[0].sku_image,
+                qty: 1,
+                address_ip: ip
+            }
+            if (temp) {
+                if (temp.qty >= product_skus[0].sku_qty) {
+                    alertErrors('Sorry, Product is out of stock!');
+                } else {
+                    dispatch(actions.createCartAction(data));
+                }
+            } else {
+                dispatch(actions.createCartAction(data));
+            }
+        } else {
+            alertErrors('Sorry, Product is out of stock!');
+        }
+    }
     const renderProduct = () => {
         return product?.map(item => {
             const gift = discount.filter(gift => gift.id == item.product_id)[0];
@@ -24,7 +59,7 @@ export default function MainSpecial() {
                         <div className="special__image">
                             <img src={`${STORAGE}/products/${sku.sku_image}`} alt="*" />
                             <div className="special__btn">
-                                <a href="">
+                                <a href="" onClick={(e) => { addToCart(e, item, gift?.discount_value) }}>
                                     <i className="lni lni-cart" />
                                     Add to Cart
                                 </a>

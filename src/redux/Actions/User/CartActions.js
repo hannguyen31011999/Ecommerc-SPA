@@ -61,9 +61,13 @@ export const createCartAction = (data) => async (dispatch) => {
 
 export const deleteCartAction = (id) => async (dispatch) => {
     try {
-        alertSuccess('Delete cart item success');
-        dispatch(deleteCartAct(id));
-        await apiCart.deleteCart(id);
+        const uid = id;
+        dispatch(loadingCartAct(true));
+        setTimeout(() => {
+            dispatch(deleteCartAct(id));
+            alertSuccess('Delete cart item success');
+        }, 300);
+        await apiCart.deleteCart(uid);
     } catch (e) {
         dispatch(fetchFailAct(false));
     }

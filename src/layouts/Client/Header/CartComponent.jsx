@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 import { STORAGE, TOTAL_CART } from '../../../settings/configUrl';
 import * as action from '../../../redux/Actions/User/CartActions';
 import publicIp from 'public-ip';
-import { Popconfirm, message } from 'antd';
 
 export default function CartComponent(props) {
     const cart = useSelector(state => state.CartReducer.cart);
@@ -16,8 +15,18 @@ export default function CartComponent(props) {
     useEffect(() => {
         dispatch(action.fetchCartAction(getIp()));
     }, []);
-    const removeCartItem = (id) => {
+    const removeCartItem = (e, id) => {
+        e.preventDefault();
         dispatch(action.deleteCartAction(id));
+    }
+    const calculatorCart = () => {
+        return cart?.reduce((total, cart) => {
+            if (cart.promotion_price) {
+                return total += parseFloat(cart.qty * cart.promotion_price) - parseFloat(cart.discount);
+            } else {
+                return total += parseFloat(cart.qty * cart.unit_price) - parseFloat(cart.discount);
+            }
+        }, 0);
     }
     const renderCart = () => {
         return cart?.map(cart => {
@@ -51,29 +60,15 @@ export default function CartComponent(props) {
                         }
                     </div>
                     <div className="header__cart--action">
-                        <Popconfirm placement="bottomRight" title="remove" onConfirm={() => {
-                            removeCartItem(cart.id)
-                        }} okText="Yes" cancelText="No">
-                            <a href="" title="Remove">
-                                <i className="lni lni-close" />
-                            </a>
-                        </Popconfirm>
-
+                        <a href="" title="Remove" onClick={(e) => {
+                            removeCartItem(e, cart.id)
+                        }}>
+                            <i className="lni lni-close" />
+                        </a>
                     </div>
                 </li>
             )
         })
-    }
-    const renderSubTotal = () => {
-        <div className="header__cart--footer">
-            <div className="header__cart--total">
-                <span>Total</span>
-                <span className="header__cart--totalAmount">$198.00</span>
-            </div>
-            <div className="header__cart--btn">
-                <button className="btn btn-primary">Checkout</button>
-            </div>
-        </div>
     }
     return (
         <div className="col-lg-4 col-md-2 col-6 header__middle--right d-flex">
@@ -105,7 +100,17 @@ export default function CartComponent(props) {
                                 {cart.length > 0 ? renderCart() : <h5 className="text-center empty">Cart empty</h5>}
                             </ul>
                         </div>
-                        {cart.length > 0 ? renderSubTotal() : ''}
+                        <div className="header__cart--footer">
+                            <div className="header__cart--total">
+                                <span>Total</span>
+                                <span className="header__cart--totalAmount">
+                                    ${cart.length > 0 ? calculatorCart() : 0}
+                                </span>
+                            </div>
+                            <div className="header__cart--btn">
+                                <NavLink to="/checkout" className="btn btn-primary">Checkout</NavLink>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

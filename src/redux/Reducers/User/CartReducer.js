@@ -34,7 +34,7 @@ const CartReducer = (state = initialState, { type, payload }) => {
             const index = cart.findIndex(cart => cart.id == payload.id);
             cart.splice(index, 1);
             localStorage.setItem(TOTAL_CART, cart.length);
-            return { ...state, cart }
+            return { ...state, cart, loading: false }
         }
         default:
             return state
