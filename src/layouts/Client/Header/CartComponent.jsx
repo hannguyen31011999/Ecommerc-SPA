@@ -1,10 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { STORAGE } from '../../../settings/configUrl';
+import { STORAGE, TOTAL_CART } from '../../../settings/configUrl';
+import * as action from '../../../redux/Actions/User/CartActions';
+import publicIp from 'public-ip';
+import { Popconfirm, message } from 'antd';
 
 export default function CartComponent(props) {
     const cart = useSelector(state => state.CartReducer.cart);
+    const dispatch = useDispatch();
+    const getIp = async () => {
+        const ip = await publicIp.v4();
+        return ip;
+    }
+    useEffect(() => {
+        dispatch(action.fetchCartAction(getIp()));
+    }, []);
+    const removeCartItem = (id) => {
+        dispatch(action.deleteCartAction(id));
+    }
     const renderCart = () => {
         return cart?.map(cart => {
             return (
@@ -37,9 +51,14 @@ export default function CartComponent(props) {
                         }
                     </div>
                     <div className="header__cart--action">
-                        <a href="" title="Remove">
-                            <i className="lni lni-close" />
-                        </a>
+                        <Popconfirm placement="bottomRight" title="remove" onConfirm={() => {
+                            removeCartItem(cart.id)
+                        }} okText="Yes" cancelText="No">
+                            <a href="" title="Remove">
+                                <i className="lni lni-close" />
+                            </a>
+                        </Popconfirm>
+
                     </div>
                 </li>
             )
@@ -74,7 +93,7 @@ export default function CartComponent(props) {
                 <div className="header__middle--item">
                     <a href="#" className="header__middle--navlink">
                         <i className="lni lni-cart" />
-                        <span className="header__middle--total">{cart.length > 0 ? cart.length : 0}</span>
+                        <span className="header__middle--total">{cart.length > 0 ? cart.length : localStorage.getItem(TOTAL_CART) ? localStorage.getItem(TOTAL_CART) : 0}</span>
                     </a>
                     <div className="header__middle--shopping">
                         <div className="header__cart--header">

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { alertErrors, alertSuccess } from '../../../../settings/config';
+import { alertErrors } from '../../../../settings/config';
 import { STORAGE } from '../../../../settings/configUrl';
-import { makeid } from '../../../../utils/helper';
+import publicIp from "public-ip";
 import * as trans from '../Modules/Actions';
-import * as cart from '../../../../redux/Actions/User/CartActions';
+import * as actions from '../../../../redux/Actions/User/CartActions';
 
 const calculator = (unit, promotion) => {
     const sum = (unit - promotion) / unit * 100;
@@ -15,15 +15,18 @@ const calculator = (unit, promotion) => {
 export default function ProductList() {
     const product = useSelector(state => state.HomeReducer.product);
     const discount = useSelector(state => state.HomeReducer.discount);
+    const cart = useSelector(state => state.CartReducer.cart);
     const dispatch = useDispatch();
     useEffect(() => {
         if (!(Array.isArray(product.data) && product.data.length > 0)) {
             dispatch(trans.fetchProductAction());
         }
     }, []);
-    const addToCart = (e, item, gift = null) => {
+    const addToCart = async (e, item, gift = null) => {
         e.preventDefault();
         const { first_product_skus, inventory_managements, slugs } = item;
+        const ip = await publicIp.v4();
+        const temp = cart?.filter(cart => cart.sku_id == first_product_skus[0].id)[0];
         if (first_product_skus[0].sku_qty > 0 && inventory_managements[0].status !== 0) {
             const data = {
                 sku_id: first_product_skus[0].id,
@@ -34,10 +37,18 @@ export default function ProductList() {
                 slug: slugs[0].slug_url,
                 discount: gift ? gift : 0,
                 image: first_product_skus[0].sku_image,
-                qty: 1
+                qty: 1,
+                address_ip: ip
             }
-            dispatch(cart.addCartAct(data));
-            alertSuccess('Add product success')
+            if (temp) {
+                if (temp.qty >= inventory_managements[0].qty) {
+                    alertErrors('Sorry, Product is out of stock!');
+                } else {
+                    dispatch(actions.createCartAction(data));
+                }
+            } else {
+                dispatch(actions.createCartAction(data));
+            }
         } else {
             alertErrors('Sorry, Product is out of stock!');
         }

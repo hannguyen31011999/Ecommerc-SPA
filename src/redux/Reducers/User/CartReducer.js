@@ -1,20 +1,39 @@
-import { CART } from '../../../settings/configUrl';
+import { CART, TOTAL_CART } from '../../../settings/configUrl';
 import * as constants from '../../Contants/User/CartConstants';
 
 const initialState = {
-    cart: []
+    cart: [],
+    loading: false
 }
 
 const CartReducer = (state = initialState, { type, payload }) => {
     switch (type) {
-        case constants.addCart: {
-            const cart = [...state.cart];
-            const index = cart.findIndex(item => item.id === payload.id);
-            if (index === -1) {
-                cart.push(payload);
+        case constants.cartLoading: {
+            return { ...state, loading: payload };
+        }
+        case constants.fetchCartFail: {
+            return { ...state, loading: payload };
+        }
+        case constants.fetchCartSuccess: {
+            return { ...state, cart: payload };
+        }
+        case constants.createCart: {
+            localStorage.removeItem(TOTAL_CART);
+            let cart = [...state.cart];
+            let index = cart.findIndex(cart => cart.id == payload.id);
+            if (index !== -1) {
+                cart[index].qty += 1;
             } else {
-                cart[index].qty++;
+                cart.push(payload);
             }
+            localStorage.setItem(TOTAL_CART, JSON.stringify(cart.length));
+            return { ...state, cart, loading: false }
+        }
+        case constants.deleteCart: {
+            let cart = [...state.cart];
+            const index = cart.findIndex(cart => cart.id == payload.id);
+            cart.splice(index, 1);
+            localStorage.setItem(TOTAL_CART, cart.length);
             return { ...state, cart }
         }
         default:

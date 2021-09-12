@@ -1,7 +1,25 @@
+import { apiCart } from '../../../services/clientApi';
+import { alertSuccess, STATUS_SUCCESS } from '../../../settings/config';
+import { TOTAL_CART } from '../../../settings/configUrl';
 import * as constants from '../../Contants/User/CartConstants';
 
-export const addCartAct = payload => ({
-    type: constants.addCart,
+export const loadingCartAct = payload => ({
+    type: constants.cartLoading,
+    payload
+});
+
+export const fetchSuccessAct = payload => ({
+    type: constants.fetchCartSuccess,
+    payload
+});
+
+export const fetchFailAct = payload => ({
+    type: constants.fetchCartFail,
+    payload
+});
+
+export const createCartAct = payload => ({
+    type: constants.createCart,
     payload
 });
 
@@ -10,7 +28,43 @@ export const updateCartAct = payload => ({
     payload
 });
 
+
 export const deleteCartAct = payload => ({
     type: constants.deleteCart,
     payload
 });
+
+export const fetchCartAction = (ip) => async (dispatch) => {
+    try {
+        const res = await apiCart.fetchCart(ip);
+        if (res.data.status_code == STATUS_SUCCESS) {
+            dispatch(fetchSuccessAct(res.data.data));
+        }
+    } catch (e) {
+        dispatch(fetchFailAct(false));
+    }
+}
+
+export const createCartAction = (data) => async (dispatch) => {
+    dispatch(loadingCartAct(true));
+    setTimeout(() => {
+        alertSuccess('Add product success');
+        dispatch(loadingCartAct(false));
+    }, 500);
+    try {
+        const res = await apiCart.createCart(data);
+        dispatch(createCartAct(res.data.data));
+    } catch (e) {
+        dispatch(fetchFailAct(false));
+    }
+}
+
+export const deleteCartAction = (id) => async (dispatch) => {
+    try {
+        alertSuccess('Delete cart item success');
+        dispatch(deleteCartAct(id));
+        await apiCart.deleteCart(id);
+    } catch (e) {
+        dispatch(fetchFailAct(false));
+    }
+}
