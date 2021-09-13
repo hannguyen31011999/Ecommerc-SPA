@@ -13,6 +13,9 @@ import ReviewComponent from '../layouts/Admin/Review/ReviewComponent';
 import InventoryManagement from '../layouts/Admin/Inventory/InventoryManagement';
 // Client
 import HomeComponent from '../layouts/Client/Home/HomeComponent';
+import LoginComponent from '../layouts/Client/Login/LoginComponent';
+import RegisterComponent from '../layouts/Client/Register/RegisterComponent';
+import ProductDetail from '../layouts/Client/Detail/ProductDetail';
 
 export const adminRoutes = [
     {
@@ -86,6 +89,21 @@ export const clientRoutes = [
     {
         path: '/',
         component: HomeComponent,
+        exact: true
+    },
+    {
+        path: '/login',
+        component: LoginComponent,
+        exact: true
+    },
+    {
+        path: '/register',
+        component: RegisterComponent,
+        exact: true
+    },
+    {
+        path: '/:slug',
+        component: ProductDetail,
         exact: true
     },
 ]

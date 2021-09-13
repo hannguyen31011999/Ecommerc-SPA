@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 export default function HeaderTop() {
     return (
@@ -14,8 +15,8 @@ export default function HeaderTop() {
                                 <span>Username</span>
                             </div>
                             <ul className="header__topbar--login">
-                                <li><a href="#">Sign In</a></li>
-                                <li><a href="#">Resgister</a></li>
+                                <li><NavLink to="/login">Sign In</NavLink></li>
+                                <li><NavLink to="/register">Resgister</NavLink></li>
                             </ul>
                         </div>
                     </div>

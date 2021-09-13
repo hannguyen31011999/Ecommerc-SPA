@@ -13,6 +13,7 @@
 @import './layouts/header';
 @import './layouts/menuMobile';
 @import './layouts/footer';
+@import './layouts/breadcrumb';
 
 // page
 // home
@@ -23,4 +24,10 @@
 @import './pages/home/brand';
 @import './pages/home/blog';
 @import './pages/home/shipping';
+// single product
+@import './pages/detail/product';
+// register
+@import './pages/register/register';
+// login
+@import './pages/login/login';
 
