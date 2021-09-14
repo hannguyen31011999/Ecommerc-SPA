@@ -5,7 +5,7 @@
         .register__form {
             display: flex;
             flex-wrap: wrap;
-            width: 50%;
+            width: 55%;
             margin: 0 auto;
             padding: $pd-2 + 10;
             border: 1px solid #e6e6e6;
@@ -50,6 +50,9 @@
                 }
                 .register__required {
                     color: $bg-red;
+                }
+                .register__error {
+                    @include styleText($fs-default + 1,$bg-red,0,0,$fw-2);
                 }
                 @media screen and(max-width:499px) {
                     & {

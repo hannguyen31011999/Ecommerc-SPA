@@ -9,6 +9,6 @@ export const makeid = (length, id) => {
     return result += id;
 }
 
-export const calculatorCart = (cart) => {
-
+export const capitalize = (str) => {
+    return str[0].toUpperCase() + str.slice(1);
 }

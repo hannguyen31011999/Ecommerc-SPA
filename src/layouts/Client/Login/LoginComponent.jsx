@@ -1,25 +1,49 @@
-import React from 'react'
+import React, { useState } from 'react'
+import BreadCrumb from '../Breadcrumb/BreadCrumb'
+import { NavLink, useHistory } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from 'yup';
+import { Space, Spin } from 'antd';
+import { apiLogin } from '../../../services/clientApi';
+import { handleExpired } from '../../../utils/expired';
+import { INFO } from '../../../settings/configUrl';
 
-export default function LoginComponent() {
+const schema = yup.object().shape({
+    email: yup.string().max(100).email().required(),
+    password: yup.string().min(6).max(254).required()
+});
+
+export default function LoginComponent(props) {
+    const [loading, setLoading] = useState(false);
+    const [messageError, setMessageError] = useState('');
+    const history = useHistory();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm({
+        mode: 'onChange',
+        resolver: yupResolver(schema),
+    });
+    const onSubmitHandler = async (data) => {
+        setLoading(true);
+        const res = await apiLogin.login(data);
+        if (res.data.status_code === 200) {
+            let timestamp = new Date(res.data.timestamp.time);
+            let miliseconds = timestamp.getTime();
+            handleExpired(res.data.timestamp.expired, miliseconds, res.data.token);
+            localStorage.setItem(INFO, JSON.stringify(res.data.user));
+            history.push('/');
+        } else {
+            setMessageError(res.data.message);
+            setLoading(false);
+        }
+    };
     return (
         <>
-            <section className="breadcrumb">
-                <div className="container">
-                    <div className="breadcrumb__content">
-                        <ul className="breadcrumb__list">
-                            <li className="breadcrumb__item">
-                                <a className="breadcrumb__navlink" href="">
-                                    <i className="lni lni-home" />
-                                    Home
-                                </a>
-                            </li>
-                            <li className="breadcrumb__item">
-                                Single Product
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+            <div className={loading ? "loading" : "loading active-loading"}>
+                <Space size="middle">
+                    <Spin size="large" />
+                </Space>
+            </div>
+            <BreadCrumb />
             <section className="login">
                 <div className="container">
                     <div className="login__content">
@@ -50,14 +74,23 @@ export default function LoginComponent() {
                         <div className="login__option">
                             <span>Or</span>
                         </div>
-                        <form action="*" className="login__form">
+                        <form onSubmit={handleSubmit(onSubmitHandler)} className="login__form">
                             <div className="login__group">
-                                <label htmlFor="name" className="col-form-label">Email</label>
-                                <input type="email" name="email" className="form-control" />
+                                <label htmlFor="email" className="col-form-label">Email</label>
+                                <input type="email" {...register("email")} name="email" className="form-control" />
+                                {errors.email &&
+                                    <span className="login__error">{errors.email.message}</span>
+                                }
                             </div>
                             <div className="login__group">
                                 <label htmlFor="password" className="col-form-label">Password</label>
-                                <input type="password" name="password" className="form-control" />
+                                <input type="password" {...register("password")} name="password" className="form-control" />
+                                {errors.password &&
+                                    <span className="login__error">{errors.password.message}</span>
+                                }
+                                {
+                                    messageError && <span className="login__error">{messageError}</span>
+                                }
                             </div>
                             <div className="login__remember">
                                 <div className="form-check">
@@ -72,7 +105,7 @@ export default function LoginComponent() {
                                 <button>Login</button>
                             </div>
                             <div className="login__outer">
-                                <p>Don't have an account? <a href="">Register here </a></p>
+                                <p>Don't have an account? <NavLink to="/register">Register here </NavLink></p>
                             </div>
                         </form>
                     </div>

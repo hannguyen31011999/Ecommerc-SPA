@@ -74,7 +74,7 @@ export default function ProductList() {
                         <div className="product__info">
                             <p className="product__category">Smartphone</p>
                             <h4 className="product__name">
-                                <NavLink to={slug.slug_url}>
+                                <NavLink to={`product/detail/${slug.slug_url}`}>
                                     {item.product_variant_name}
                                 </NavLink>
                             </h4>

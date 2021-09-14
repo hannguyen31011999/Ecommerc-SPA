@@ -102,7 +102,7 @@ export const clientRoutes = [
         exact: true
     },
     {
-        path: '/:slug',
+        path: '/product/detail/:slug',
         component: ProductDetail,
         exact: true
     },

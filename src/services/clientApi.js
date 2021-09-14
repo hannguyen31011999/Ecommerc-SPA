@@ -1,5 +1,9 @@
-import { deleteCart } from '../redux/Contants/User/CartConstants';
 import { callApi } from '../utils/callApi';
+import { ACCESS_TOKEN } from '../settings/configUrl';
+
+const getToken = () => {
+    return localStorage.getItem(ACCESS_TOKEN);
+}
 
 export const apiHome = {
     fetchCategories() {
@@ -28,5 +32,29 @@ export const apiCart = {
     },
     deleteCart(id) {
         return callApi(`api/cart/delete/${id}`, 'delete');
+    }
+}
+
+export const apiRegister = {
+    register(data) {
+        return callApi(`api/register/create`, 'post', data);
+    }
+}
+
+export const apiLogin = {
+    login(data) {
+        return callApi(`api/login`, 'post', data);
+    },
+    logout() {
+        return callApi(`api/logout?token=${getToken()}`);
+    },
+    refreshToken() {
+        return callApi(`api/token/refresh?token=${getToken()}`);
+    }
+}
+
+export const apiProductDetail = {
+    getProduct(slug) {
+        return callApi(`api/detail/${slug}`);
     }
 }

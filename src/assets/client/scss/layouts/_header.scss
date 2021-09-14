@@ -9,10 +9,45 @@ header {
     background-color: $bg-dark-blue;
     .header__topbar--right {
         .header__topbar--user {
+            position: relative;
             @include styleText($fs-0 - 2,$color-white,0,0,$fw-2);
             i {
                 font-size: $fs-1 - 3;
                 padding-right: $pd-0;
+            }
+            a {
+                @include styleText($fs-0 - 2,$color-white,0,0,$fw-2);
+                text-decoration: none;
+            }
+            .topbar__user {
+                position: absolute;
+                top: 34px;
+                left: 0;
+                list-style: none;
+                width: 130px;
+                background-color: $color-white;
+                box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 24px;
+                z-index: 9999;
+                margin-bottom: 0;
+                padding: $pd-0 0;
+                border: 1px solid #e6e6e6;
+                opacity: 0;
+                visibility: hidden;
+                transition: $tran-2;
+                li {
+                    padding: $pd-0 0 $pd-0 $pd-2;
+                    a {
+                        transition: $tran-1;
+                        color: #081828;
+                        &:hover {
+                            color: $color-yellow-0;
+                        }
+                    }
+                }
+            }
+            &:hover .topbar__user {
+                opacity: 1;
+                visibility: visible;
             }
         }
         .header__topbar--login {
@@ -207,7 +242,7 @@ header {
     width: 300px;
     background: #fff;
     padding: 20px 25px;
-    transition: $tran-2;
+    transition: all 1s;
     z-index: $z-index-4;
     border-radius: $bd-radius-0 - 2;
     box-shadow: rgba(149, 157, 165, 0.4) 0px 0px 5px;
@@ -314,6 +349,9 @@ header {
             .btn {
                 width: 100%;
                 transition: $tran-1;
+                &:focus {
+                    box-shadow: none;
+                }
                 &:hover {
                     background-color: #081828;
                 }

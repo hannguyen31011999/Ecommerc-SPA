@@ -30,7 +30,7 @@ export default function MenuMobile(props) {
                                     const slug = slugs.filter(slg => slg.product_id == product.id);
                                     return (
                                         <li key={product.id}>
-                                            <NavLink to={slug[0].slug_url}>{product.product_name}</NavLink>
+                                            <NavLink to={`product/${slug[0].slug_url}`}>{product.product_name}</NavLink>
                                         </li>
                                     )
                                 })

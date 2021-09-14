@@ -1,7 +1,21 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useHistory } from 'react-router-dom'
+import { apiLogin } from '../../../services/clientApi'
+import { ACCESS_TOKEN, INFO } from '../../../settings/configUrl'
 
-export default function HeaderTop() {
+export default function HeaderTop(props) {
+    const history = useHistory();
+    const handleLogout = async (e) => {
+        e.preventDefault();
+        try {
+            const res = apiLogin.logout();
+            localStorage.removeItem(INFO);
+            localStorage.removeItem(ACCESS_TOKEN);
+            history.push('/login');
+        } catch (e) {
+
+        }
+    }
     return (
         <div className="header__topbar">
             <div className="container">
@@ -11,13 +25,32 @@ export default function HeaderTop() {
                     <div className="col-lg-4 col-12 d-flex justify-content-end align-items-center ">
                         <div className="header__topbar--right d-flex align-items-center">
                             <div className="header__topbar--user">
-                                <i className="lni lni-user" />
-                                <span>Username</span>
+                                {
+                                    localStorage.getItem(INFO) &&
+                                    <a href="">
+                                        <i className="lni lni-user" />{JSON.parse(localStorage.getItem(INFO)).name}
+                                    </a>
+                                }
+                                <ul className="topbar__user">
+                                    <li>
+                                        <NavLink to="">Account</NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to="">Purchase Order</NavLink>
+                                    </li>
+                                    <li>
+                                        <a href="" onClick={(e) => handleLogout(e)}>Logout</a>
+                                    </li>
+                                </ul>
                             </div>
-                            <ul className="header__topbar--login">
-                                <li><NavLink to="/login">Sign In</NavLink></li>
-                                <li><NavLink to="/register">Resgister</NavLink></li>
-                            </ul>
+                            {
+                                localStorage.getItem(INFO) ?
+                                    '' :
+                                    <ul className="header__topbar--login">
+                                        <li><NavLink to="/login">Sign In</NavLink></li>
+                                        <li><NavLink to="/register">Resgister</NavLink></li>
+                                    </ul>
+                            }
                         </div>
                     </div>
                 </div>

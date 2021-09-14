@@ -10,7 +10,7 @@ export default function HeaderContent() {
                 <div className="row align-items-center header__middle--content">
                     <div className="col-lg-3 col-md-4 col-6  header__middle--left">
                         <NavLink to="/" className="navbar-brand">
-                            <img src="./assets/img/logo.svg" alt="*" />
+                            <img src={process.env.PUBLIC_URL + "/assets/img/logo.svg"} alt="*" />
                         </NavLink>
                     </div>
                     <HeaderSeach />

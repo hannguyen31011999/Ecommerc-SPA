@@ -18,6 +18,8 @@ import authReducer from './Reducers/Admin/authReducer';
 // Reducer client
 import HomeReducer from '../layouts/Client/Home/Modules/HomeReducer';
 import CartReducer from './Reducers/User/CartReducer';
+import RegisterReducer from './Reducers/User/RegisterReducer';
+import ProductDetailReducer from '../layouts/Client/Detail/Modules/ProductDetailReducer';
 
 const rootReducer = combineReducers({
     // admin
@@ -32,7 +34,9 @@ const rootReducer = combineReducers({
     authReducer,
     // client
     HomeReducer,
-    CartReducer
+    CartReducer,
+    RegisterReducer,
+    ProductDetailReducer
 });
 
 const persistConfig = {

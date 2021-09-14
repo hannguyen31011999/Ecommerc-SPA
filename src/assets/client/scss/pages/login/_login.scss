@@ -106,6 +106,9 @@
                 .col-form-label {
                     font-size: 13px;
                 }
+                .login__error {
+                    @include styleText($fs-default + 1,$bg-red,0,0,$fw-2);
+                }
             }
             .login__remember {
                 width: 100%;
