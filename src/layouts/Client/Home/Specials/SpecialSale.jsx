@@ -12,7 +12,7 @@ export default function SpecialSale(props) {
                     <img src={data.sku_image ? `${STORAGE}/products/${data.sku_image}` : ''} alt="*" />
                 </div>
                 <div className="special__text">
-                    <h2><NavLink to={data.slug_url ? `product/detail/${data.slug_url}` : ''}>{data?.product_variant_name}</NavLink></h2>
+                    <h2><NavLink to={data.slug_url ? `/detail/${data.slug_url}` : ''}>{data?.product_variant_name}</NavLink></h2>
                     <ul className="special__offer--review">
                         <li><i className="lni lni-star-filled" /></li>
                         <li><i className="lni lni-star-filled" /></li>

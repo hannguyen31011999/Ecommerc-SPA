@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import {
     Form,
     Button,
@@ -53,7 +53,7 @@ export default function ModalCreate(props) {
             for (const key in formData) {
                 formCreate.append(key, formData[key]);
             }
-            dispatch(trans.createProductAction(formCreate, form, file, description, [image, setImage]));
+            dispatch(trans.createProductAction(formCreate, form, file, description, [image, setImage], setCurrent));
         } else {
             setErrors({ ...errors, image: 'Image is empty!' });
         }
@@ -65,7 +65,6 @@ export default function ModalCreate(props) {
         }
     }
     const handleCancel = () => setImage({ ...image, previewVisible: false });
-
     const onPreview = async file => {
         let src = file.url;
         if (!src) {
@@ -100,6 +99,7 @@ export default function ModalCreate(props) {
                     setImage({ ...image, fileList: [] });
                     setErrors({ image: '' });
                     setCurrent(0);
+                    description.current = '';
                 }}
                 okText={<span>Create</span>}
                 width={600}
@@ -125,6 +125,7 @@ export default function ModalCreate(props) {
                                         onEditorChange={handleEditor}
                                         apiKey="evhje833ytxlbsyda8yt3n6tqick01tx42fpkdao7qw3u5gt"
                                         init={init}
+                                        initialValue={description.current ? description.current : ''}
                                     />
                                 </>
                                 : steps[current]?.content(data?.categories, data?.discount)

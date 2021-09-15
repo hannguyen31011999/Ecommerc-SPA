@@ -2,15 +2,17 @@ import {
     Form,
     Input,
     Select,
-    Upload
 } from 'antd';
 import React from 'react';
-import { init } from '../../../../../utils/getImage';
-import { Editor } from '@tinymce/tinymce-react';
 const { Option } = Select;
-const { TextArea } = Input;
 let styled = {
     marginBottom: "12px",
+}
+
+let styleErrors = {
+    fontSize: "14px",
+    color: "#f73232",
+    margin: 0
 }
 
 export const steps = [
@@ -28,8 +30,7 @@ export const steps = [
                                 required: true,
                                 message: "Categories is empty!"
                             }
-                        ]}
-                    >
+                        ]}>
                         <Select
                             showSearch
                             optionFilterProp="children"
@@ -48,8 +49,7 @@ export const steps = [
                     <Form.Item
                         name="discount_id"
                         label="Discount"
-                        style={styled}
-                    >
+                        style={styled}>
                         <Select
                             showSearch
                             optionFilterProp="children"
@@ -121,16 +121,16 @@ export const steps = [
                         <Input placeholder="Example Apple GPU 4 nhân" />
                     </Form.Item>
                     <Form.Item
-                        name="ram"
-                        label="Ram"
+                        name="camera_fe"
+                        label="Front Camera"
                         style={styled}>
-                        <Input type="number" placeholder="Example 4gb" />
+                        <Input placeholder="Example 3 camera 12 MP" />
                     </Form.Item>
                     <Form.Item
-                        name="camera"
-                        label="Camera"
+                        name="camera_be"
+                        label="Rear Camera"
                         style={styled}>
-                        <Input placeholder="Example 2 camera 12 MP" />
+                        <Input placeholder="Example 1 camera 12 MP" />
                     </Form.Item>
                     <Form.Item
                         name="pin"
@@ -144,7 +144,7 @@ export const steps = [
     },
     {
         title: 'Variant',
-        content: () => {
+        content: (categories, discount) => {
             return (
                 <>
                     <Form.Item
@@ -153,12 +153,31 @@ export const steps = [
                         style={styled}
                         rules={[
                             {
+                                required: true,
+                                message: "Product variant name is empty!"
+                            },
+                            {
                                 max: 254,
-                                message: "Maximum 254 character!"
+                                message: "Maximum 254 number!"
                             }
-                        ]}
-                    >
+                        ]}>
                         <Input placeholder="Example Iphone 8 plus 64gb" />
+                    </Form.Item>
+                    <Form.Item
+                        name="product_variant_ram"
+                        label="Ram"
+                        style={styled}
+                        rules={[
+                            {
+                                required: true,
+                                message: "Ram is empty!"
+                            },
+                            {
+                                max: 4,
+                                message: "Maximum 4 number!"
+                            }
+                        ]}>
+                        <Input type="number" placeholder="Example 4gb" />
                     </Form.Item>
                     <Form.Item
                         name="product_variant_rom"
@@ -183,7 +202,7 @@ export const steps = [
     },
     {
         title: 'Sku',
-        content: () => {
+        content: (categories, discount) => {
             return (
                 <>
                     <Form.Item
@@ -364,16 +383,16 @@ export const editSteps = [
                         <Input placeholder="Example Apple GPU 4 nhân" />
                     </Form.Item>
                     <Form.Item
-                        name="ram"
-                        label="Ram"
-                        style={styled}>
-                        <Input type="number" placeholder="Example 4gb" />
-                    </Form.Item>
-                    <Form.Item
-                        name="camera"
-                        label="Camera"
+                        name="camera_fe"
+                        label="Front Camera"
                         style={styled}>
                         <Input placeholder="Example 2 camera 12 MP" />
+                    </Form.Item>
+                    <Form.Item
+                        name="camera_be"
+                        label="Rear Camera"
+                        style={styled}>
+                        <Input placeholder="Example 1 camera 12 MP" />
                     </Form.Item>
                     <Form.Item
                         name="pin"
@@ -405,6 +424,23 @@ export const createVariant = [
                         ]}
                     >
                         <Input placeholder="Example Iphone 8 plus 64gb" />
+                    </Form.Item>
+                    <Form.Item
+                        name="product_variant_ram"
+                        label="Ram"
+                        style={styled}
+                        rules={[
+                            {
+                                required: true,
+                                message: "Ram is empty!"
+                            },
+                            {
+                                max: 4,
+                                message: "Ram 4 number!"
+                            }
+                        ]}
+                    >
+                        <Input type="number" placeholder="Example 6GB" />
                     </Form.Item>
                     <Form.Item
                         name="product_variant_rom"

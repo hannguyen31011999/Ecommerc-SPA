@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { alertErrors } from '../../../../settings/config';
-import { STORAGE } from '../../../../settings/configUrl';
-import publicIp from "public-ip";
+import { STORAGE, INFO, ACCESS_TOKEN } from '../../../../settings/configUrl';
 import * as trans from '../Modules/Actions';
 import * as actions from '../../../../redux/Actions/User/CartActions';
 
@@ -17,6 +16,7 @@ export default function ProductList() {
     const discount = useSelector(state => state.HomeReducer.discount);
     const cart = useSelector(state => state.CartReducer.cart);
     const dispatch = useDispatch();
+    const history = useHistory();
     useEffect(() => {
         if (!(Array.isArray(product.data) && product.data.length > 0)) {
             dispatch(trans.fetchProductAction());
@@ -24,35 +24,39 @@ export default function ProductList() {
     }, []);
     const addToCart = async (e, item, gift = null) => {
         e.preventDefault();
-        const { first_product_skus, inventory_managements, slugs } = item;
-        const ip = await publicIp.v4();
-        const temp = cart?.filter(cart => cart.sku_id == first_product_skus[0].id)[0];
-        if (first_product_skus[0].sku_qty > 0 && inventory_managements[0].status !== 0) {
-            const data = {
-                sku_id: first_product_skus[0].id,
-                name: item.product_variant_name,
-                unit_price: first_product_skus[0].sku_unit_price,
-                promotion_price: first_product_skus[0].promotion_price ? first_product_skus[0].promotion_price : 0,
-                color: first_product_skus[0].color,
-                slug: slugs[0].slug_url,
-                discount: gift ? gift : 0,
-                image: first_product_skus[0].sku_image,
-                qty: 1,
-                address_ip: ip
-            }
-            if (temp) {
-                if (temp.qty >= inventory_managements[0].qty) {
-                    alertErrors('Sorry, Product is out of stock!');
+        const user = JSON.parse(localStorage.getItem(INFO));
+        const token = localStorage.getItem(ACCESS_TOKEN);
+        if (token && user) {
+            const { first_product_skus, inventory_managements, slugs } = item;
+            const temp = cart?.filter(cart => cart.sku_id == first_product_skus[0].id)[0];
+            if (first_product_skus[0].sku_qty > 0 && inventory_managements[0].status !== 0) {
+                let data = {
+                    sku_id: first_product_skus[0].id,
+                    name: item.product_variant_name,
+                    unit_price: first_product_skus[0].sku_unit_price,
+                    promotion_price: first_product_skus[0].promotion_price ? first_product_skus[0].promotion_price : 0,
+                    color: first_product_skus[0].color,
+                    slug: slugs[0].slug_url,
+                    discount: gift ? gift : 0,
+                    image: first_product_skus[0].sku_image,
+                    qty: 1,
+                    user_id: user.id
+                }
+                if (temp) {
+                    if (temp.qty >= inventory_managements[0].qty) {
+                        alertErrors('Sorry, Product is out of stock!');
+                    } else {
+                        dispatch(actions.createCartAction(data));
+                    }
                 } else {
                     dispatch(actions.createCartAction(data));
                 }
             } else {
-                dispatch(actions.createCartAction(data));
+                alertErrors('Sorry, Product is out of stock!');
             }
         } else {
-            alertErrors('Sorry, Product is out of stock!');
+            history.push('/login');
         }
-
     }
     const renderListProduct = () => {
         return product.data?.map((item, index) => {
@@ -74,7 +78,7 @@ export default function ProductList() {
                         <div className="product__info">
                             <p className="product__category">Smartphone</p>
                             <h4 className="product__name">
-                                <NavLink to={`product/detail/${slug.slug_url}`}>
+                                <NavLink to={`/detail/${slug.slug_url}`}>
                                     {item.product_variant_name}
                                 </NavLink>
                             </h4>

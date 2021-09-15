@@ -1,6 +1,8 @@
 import React from 'react'
-
-export default function ProductInfo() {
+import { useSelector } from 'react-redux';
+export default function ProductInfo(props) {
+    let option = useSelector(state => state.ProductDetailReducer.option);
+    const categories = useSelector(state => state.ProductDetailReducer.categories);
     return (
         <>
             <div className="product__middle">
@@ -16,10 +18,10 @@ export default function ProductInfo() {
                         <div className="product__middle--feature">
                             <h4>Features</h4>
                             <ul>
-                                <li>Capture 4K30 Video and 12MP Photos</li>
-                                <li>Game-Style Controller with Touchscreen</li>
-                                <li>View Live Camera Feed</li>
-                                <li>Full Control of HERO6 Black</li>
+                                <li>Screen Resolution {option?.screen_resolution}</li>
+                                <li>Screen {option?.screen}</li>
+                                <li>Camera Front {option?.camera_fr}</li>
+                                <li>Camera Rear {option?.camera_be}</li>
                                 <li>Use App for Dedicated Camera Operation</li>
                             </ul>
                         </div>
@@ -28,11 +30,11 @@ export default function ProductInfo() {
                         <div className="product__specification">
                             <h4>Specifications</h4>
                             <ul>
-                                <li>Weight: <span>35.5oz (1006g)</span></li>
-                                <li>Maximum <span>Speed: 35 mph (15 m/s)</span></li>
-                                <li>Maximum Distance: <span>Up to 9,840ft (3,000m)</span></li>
-                                <li>Operating Frequency: <span>2.4GHz</span></li>
-                                <li>Manufacturer: <span>GoPro, USA</span></li>
+                                <li>Operating System: <span>{option?.operating_system}</span></li>
+                                <li>Pin:<span> {option?.pin}</span></li>
+                                <li>GPU: <span>{option?.gpu}</span></li>
+                                <li>CPU: <span>{option?.cpu}</span></li>
+                                <li>Manufacturer: <span>{categories.categories_name}, {categories.categories_desc}</span></li>
                             </ul>
                         </div>
                         <div className="product__shipping">

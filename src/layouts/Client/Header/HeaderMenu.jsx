@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import HeaderCategory from './HeaderCategory';
 import MenuMobile from './MenuMobile';
 

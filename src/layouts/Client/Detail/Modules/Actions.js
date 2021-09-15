@@ -16,6 +16,11 @@ export const fetchProductFailAct = payload => ({
     payload
 });
 
+export const changeImageAct = payload => ({
+    type: constants.changeImage,
+    payload
+});
+
 export const fetchProductAction = (slug) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));

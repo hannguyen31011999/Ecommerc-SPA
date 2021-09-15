@@ -3,6 +3,7 @@ export const fetchSuccessContants = "FETCH_PRODUCT_SUCCESS";
 export const fetchFailContants = "FETCH_PRODUCT_FAIL";
 export const paginationContants = "PAGINATION_PRODUCT";
 export const createContants = "CREATE_PRODUCT";
+export const createValidateContants = "CREATE_PRODUCT_VALIDATE";
 export const editContants = "EDIT_PRODUCT";
 export const updateContants = "UPDATE_PRODUCT";
 export const deleteContants = "DELETE_PRODUCT";

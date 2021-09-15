@@ -21,8 +21,8 @@ export const apiHome = {
 }
 
 export const apiCart = {
-    fetchCart(ip) {
-        return callApi(`api/cart/list`, 'get', ip);
+    fetchCart(id) {
+        return callApi(`api/cart/list?query=${id}`, 'get');
     },
     createCart(data) {
         return callApi(`api/cart/create`, 'post', data);

@@ -302,6 +302,12 @@ header {
                         word-break: break-word;
                         margin-bottom: 0;
                         a {
+                            display:-webkit-box;
+                            -webkit-line-clamp:1;
+                            -webkit-box-orient: vertical;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            word-break: break-word;
                             @include styleText($fs-0 - 1,$color-black-0,0,0,$fw-3);
                             text-decoration: none;
                             transition: $tran-1;

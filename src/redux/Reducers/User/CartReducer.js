@@ -30,11 +30,11 @@ const CartReducer = (state = initialState, { type, payload }) => {
             return { ...state, cart, loading: false }
         }
         case constants.deleteCart: {
-            let cart = [...state.cart];
-            const index = cart.findIndex(cart => cart.id == payload.id);
-            cart.splice(index, 1);
-            localStorage.setItem(TOTAL_CART, cart.length);
-            return { ...state, cart, loading: false }
+            let temp = [...state.cart];
+            const index = temp.findIndex(cart => cart.id === payload);
+            temp.splice(index, 1);
+            localStorage.setItem(TOTAL_CART, temp.length);
+            return { ...state, cart: temp, loading: false }
         }
         default:
             return state

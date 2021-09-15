@@ -1,6 +1,6 @@
 import * as contants from './Constants';
 import { apiProduct } from '../../../../services/adminApi';
-import { alertSuccess, STATUS_SUCCESS } from '../../../../settings/config';
+import { alertErrors, alertSuccess, STATUS_SUCCESS } from '../../../../settings/config';
 
 export const loadingAct = (loading) => ({
     type: contants.loadingContants,
@@ -21,6 +21,11 @@ export const createAct = (payload) => ({
     type: contants.createContants,
     payload
 });
+
+export const validateAct = (payload) => ({
+    type: contants.createValidateContants,
+    payload
+})
 
 export const modalAct = (payload) => ({
     type: contants.modalContants,
@@ -50,6 +55,11 @@ export const seachAct = (payload) => ({
 
 export const fetchFailAct = (payload) => ({
     type: contants.fetchFailContants,
+    payload
+});
+
+export const fetchValidateAct = (payload) => ({
+    type: contants.createValidateContants,
     payload
 });
 
@@ -124,7 +134,7 @@ export const paginationAction = (current, pageSize) => async (dispatch) => {
 }
 
 // create
-export const createProductAction = (data, form, file, description, [image, setImage]) => async (dispatch) => {
+export const createProductAction = (data, form, file, description, [image, setImage], setCurrent) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
         const res = await apiProduct.create(data);
@@ -135,8 +145,8 @@ export const createProductAction = (data, form, file, description, [image, setIm
             file.current = {};
             description.current = '';
             setImage({ ...image, fileList: [] });
+            setCurrent(0);
         } else {
-            const message = {};
             for (const [key, value] of Object.entries(res.data.message)) {
                 form.setFields([
                     {
@@ -144,6 +154,7 @@ export const createProductAction = (data, form, file, description, [image, setIm
                         errors: value,
                     },
                 ]);
+                alertErrors(value[0], 6000);
             }
             dispatch(fetchFailAct(false));
         }
@@ -170,6 +181,7 @@ export const updateProductAction = (id, data, form, [current, setCurrent]) => as
                         errors: value,
                     },
                 ]);
+                alertErrors(value[0], 6000);
             }
         }
     } catch (e) {
@@ -235,8 +247,8 @@ export const createVariantAction = (id, data, form, file, [image, setImage]) => 
                         errors: value,
                     },
                 ]);
+                alertErrors(value[0], 6000);
             }
-            dispatch(fetchFailAct(false));
         }
     } catch (e) {
         dispatch(fetchFailAct(e));
@@ -260,6 +272,7 @@ export const updateVariantProductAction = (product_id, id, data, form) => async 
                         errors: value,
                     },
                 ]);
+                alertErrors(value[0], 6000);
             }
             dispatch(fetchFailAct(false));
         }

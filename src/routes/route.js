@@ -16,6 +16,7 @@ import HomeComponent from '../layouts/Client/Home/HomeComponent';
 import LoginComponent from '../layouts/Client/Login/LoginComponent';
 import RegisterComponent from '../layouts/Client/Register/RegisterComponent';
 import ProductDetail from '../layouts/Client/Detail/ProductDetail';
+import MainProduct from '../layouts/Client/Products/MainProduct';
 
 export const adminRoutes = [
     {
@@ -102,8 +103,13 @@ export const clientRoutes = [
         exact: true
     },
     {
-        path: '/product/detail/:slug',
+        path: '/detail/:slug',
         component: ProductDetail,
         exact: true
     },
+    {
+        path: '/product/:slug',
+        component: MainProduct,
+        exact: true
+    }
 ]

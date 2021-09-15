@@ -1,6 +1,10 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom'
+import * as actions from './Modules/Actions';
+import publicIp from "public-ip";
 import moment from 'moment';
+import { INFO, ACCESS_TOKEN } from '../../../settings/configUrl';
 
 export default function ProductSku() {
     const categories = useSelector(state => state.ProductDetailReducer.categories);
@@ -8,39 +12,78 @@ export default function ProductSku() {
     const discount = useSelector(state => state.ProductDetailReducer.discount);
     const variant = useSelector(state => state.ProductDetailReducer.variants);
     const product_sku = useSelector(state => state.ProductDetailReducer.product_sku);
+    const slugs = useSelector(state => state.ProductDetailReducer.slug);
+    const image = useSelector(state => state.ProductDetailReducer.image);
+    const history = useHistory();
+    const params = useParams();
+    const dispatch = useDispatch();
+    const redirectSlug = (slug) => {
+        history.push(slug);
+    }
+    useEffect(() => {
+        dispatch(actions.fetchProductAction(params.slug));
+    }, [params])
     const renderRom = () => {
         return variant?.map((item, index) => {
-            if (index < 1) {
+            const url = slugs.filter(slug => slug.product_variant_id == item.id)[0];
+            if (item.id == product.id) {
                 return (
-                    <div className="product__rom--item rom-active" key={item.id}>
+                    <div className="product__rom--item rom-active" key={item.id} onClick={() => { redirectSlug(url.slug_url) }}>
                         <span>{item.product_variant_rom}GB</span>
                     </div>
                 )
             } else {
                 return (
-                    <div className="product__rom--item" key={item.id}>
+                    <div className="product__rom--item" key={item.id} onClick={() => { redirectSlug(url.slug_url) }}>
                         <span>{item.product_variant_rom}GB</span>
                     </div>
                 )
             }
         });
     }
+    const changeImage = (sku) => {
+        dispatch(actions.changeImageAct(sku));
+    }
     const renderColor = () => {
         return product_sku?.map((item, index) => {
-            if (index < 1) {
+            if (image.id == item.id) {
                 return (
-                    <div className="product__color--item color-active" key={item.id}>
+                    <div className="product__color--item color-active" key={item.id}
+                        onClick={() => changeImage(item)}>
                         <span>{item.color}</span>
                     </div>
                 )
             } else {
                 return (
-                    <div className="product__color--item" key={item.id}>
+                    <div className="product__color--item" key={item.id}
+                        onClick={() => changeImage(item)}>
                         <span>{item.color}</span>
                     </div>
                 )
             }
         })
+    }
+    const addToCart = async (e) => {
+        e.preventDefault();
+        const ip = await publicIp.v4();
+        const user = JSON.parse(localStorage.getItem(INFO));
+        const token = localStorage.getItem(ACCESS_TOKEN);
+        if (token && user) {
+            const data = {
+                sku_id: image.id,
+                name: product.product_variant_name,
+                unit_price: image.sku_unit_price,
+                promotion_price: image.sku_promotion_price ? image.sku_promotion_price : 0,
+                color: image.color,
+                slug: slugs.filter(slug => slug.product_sku_id == image.id),
+                discount: discount.discount_value,
+                image: image.sku_image,
+                qty: e.target[0].value,
+                user_id: user.id
+            }
+        } else {
+            history.push('/login');
+        }
     }
     return (
         <>
@@ -56,8 +99,8 @@ export default function ProductSku() {
                         </h4>
                     </div>
                     <div className="product__price">
-                        <span className="product__price--promotion">${product_sku.length > 0 ? product_sku[0].sku_promotion_price ? product_sku[0].sku_promotion_price : product_sku[0].sku_unit_price : 0}</span>
-                        <span className="product__price--unit">${product_sku.length > 0 ? product_sku[0].sku_promotion_price ? product_sku[0].sku_unit_price : 0 : 0}</span>
+                        <span className="product__price--promotion">${product_sku.length > 0 ? image.sku_promotion_price ? image.sku_promotion_price : image.sku_unit_price : 0}</span>
+                        <span className="product__price--unit">{product_sku.length > 0 && image.sku_promotion_price ? `$ ${image.sku_unit_price}` : ''}</span>
                     </div>
                     <div className="product__rom">
                         {
@@ -80,9 +123,9 @@ export default function ProductSku() {
                                 </div> : ''
                         }
                     </div>
-                    <div className="product__action">
+                    <form onSubmit={addToCart} className="product__action">
                         <div className="product__action--quantity">
-                            <input type="number" className="form-control" defaultValue={1} min={1} max={20} />
+                            <input type="number" className="form-control" defaultValue={1} min={1} max={5} />
                         </div>
                         <div className="product__action--item">
                             <button className="product__btn--add">Add To Cart</button>
@@ -99,7 +142,7 @@ export default function ProductSku() {
                                 To Wishlist
                             </button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </>

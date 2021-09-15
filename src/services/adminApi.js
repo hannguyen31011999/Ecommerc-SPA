@@ -8,7 +8,7 @@ const getToken = () => {
 
 export const apiAdmin = {
     fetchApiLogin(data) {
-        return callApi("api/login", "post", data);
+        return callApi("api/admin/login", "post", data);
     },
     fetchApiLogout() {
         return callApiAdmin('logout');

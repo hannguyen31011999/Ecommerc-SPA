@@ -14,7 +14,10 @@ const initialState = {
     inventory: {},
     discount: {},
     variants: [],
-    slug: []
+    slug: [],
+    image: {
+
+    }
 }
 
 const ProductDetailReducer = (state = initialState, { type, payload }) => {
@@ -23,10 +26,13 @@ const ProductDetailReducer = (state = initialState, { type, payload }) => {
             return { ...state, loading: payload }
         case constants.fetchSuccess: {
             const { categories, product, option, product_sku, review, inventory, discount, variants, slug } = payload;
-            return { ...state, categories, product, product_sku, review, inventory, discount, variants, slug, loading: false };
+            return { ...state, categories, product, option, product_sku, review, inventory, discount, variants, slug, image: product_sku[0], loading: false };
         }
         case constants.fetchFail:
             return { ...state, loading: payload }
+        case constants.changeImage: {
+            return { ...state, image: payload };
+        }
         default:
             return state
     }

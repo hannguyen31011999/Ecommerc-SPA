@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { STORAGE, TOTAL_CART } from '../../../settings/configUrl';
+import { INFO, STORAGE, TOTAL_CART } from '../../../settings/configUrl';
 import * as action from '../../../redux/Actions/User/CartActions';
-import publicIp from 'public-ip';
 
 export default function CartComponent(props) {
     const cart = useSelector(state => state.CartReducer.cart);
     const dispatch = useDispatch();
-    const getIp = async () => {
-        const ip = await publicIp.v4();
-        return ip;
-    }
     useEffect(() => {
-        dispatch(action.fetchCartAction(getIp()));
+        const user = JSON.parse(localStorage.getItem(INFO));
+        if (user) {
+            if (Array.isArray(cart) && !cart.length > 0) {
+                dispatch(action.fetchCartAction(user.id));
+            }
+        }
     }, []);
     const removeCartItem = (e, id) => {
         e.preventDefault();
@@ -39,7 +39,7 @@ export default function CartComponent(props) {
                     </div>
                     <div className="header__cart--content">
                         <h4>
-                            <NavLink to={cart.slug}>{cart.name}</NavLink>
+                            <NavLink to={`/detail/${cart.slug}`}>{cart.name}</NavLink>
                         </h4>
                         <p>
                             <span className="header__cart--quantity">{cart.qty}x</span>

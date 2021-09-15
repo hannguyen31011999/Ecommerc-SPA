@@ -7,7 +7,7 @@ export default function MainFooter() {
             <div className="container">
                 <div className="footer__top row">
                     <div className="col-lg-3 col-12 footer__top--logo">
-                        <a href=""><img src="./assets/img/white-logo.svg" alt="*" /></a>
+                        <a href=""><img src={process.env.PUBLIC_URL + "/assets/img/white-logo.svg"} alt="*" /></a>
                     </div>
                     <div className="col-lg-9 col-12 footer__form">
                         <div className="footer__title">
@@ -106,7 +106,7 @@ export default function MainFooter() {
                     <div className="col-lg-4 col-12 p-0">
                         <div className="footer__payment">
                             <span>We Accept:</span>
-                            <img src="./assets/img/credit-cards-footer.png" alt="*" />
+                            <img src={process.env.PUBLIC_URL + "/assets/img/credit-cards-footer.png"} alt="*" />
                         </div>
                     </div>
                     <div className="col-lg-4 col-12 p-0">

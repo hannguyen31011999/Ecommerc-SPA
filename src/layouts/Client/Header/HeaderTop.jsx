@@ -1,16 +1,21 @@
 import React from 'react'
 import { NavLink, useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
 import { apiLogin } from '../../../services/clientApi'
-import { ACCESS_TOKEN, INFO } from '../../../settings/configUrl'
-
+import { ACCESS_TOKEN, INFO, TIMESTAMP, TOTAL_CART } from '../../../settings/configUrl'
+import * as action from '../../../redux/Actions/User/CartActions';
 export default function HeaderTop(props) {
     const history = useHistory();
+    const dispatch = useDispatch();
     const handleLogout = async (e) => {
         e.preventDefault();
         try {
             const res = apiLogin.logout();
             localStorage.removeItem(INFO);
             localStorage.removeItem(ACCESS_TOKEN);
+            localStorage.removeItem(TOTAL_CART);
+            localStorage.removeItem(TIMESTAMP);
+            dispatch(action.fetchSuccessAct([]));
             history.push('/login');
         } catch (e) {
 

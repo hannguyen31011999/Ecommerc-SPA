@@ -6,6 +6,7 @@ const initialState = {
         current: 1,
         pageSize: 15
     },
+    errorsValidate: {},
     loading: false,
     disabled: false,
     modal: false,
