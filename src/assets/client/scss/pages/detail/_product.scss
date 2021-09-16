@@ -457,14 +457,19 @@
             .review__start--list {
                 list-style: none;
                 padding: 0;
+                margin-bottom: $mg-0;
                 li {
                     display: inline;
+                    margin-right: 2px;
                     i {
                         color: rgb(255, 160, 0);
                     }
                 }
             }
             .review__content {
+                p {
+                    margin-bottom: 0;
+                }
                 @include responsive('small'){
                     & {
                         p {
@@ -495,12 +500,11 @@
     }
 }
 
-.modal-content {
-    padding: 0 $pd-1;
-}
-
 .modal-dialog {
-    max-width: 600px;
+    .modal-content {
+        width: 600px;
+        padding: 0 $pd-1;
+    }
     .modal-title {
         color: $bg-dark-blue;
     }
@@ -522,6 +526,13 @@
         border: 1px solid #eee;
     }
     .col-form-label {
-        font-size: 13px;
+        font-size: 14px;
+        span {
+            color:$bg-red;
+        }
     }
+}
+
+.review__error {
+    @include styleText($fs-default + 1,$bg-red,0,0,$fw-2);
 }

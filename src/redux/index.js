@@ -20,6 +20,7 @@ import HomeReducer from '../layouts/Client/Home/Modules/HomeReducer';
 import CartReducer from './Reducers/User/CartReducer';
 import RegisterReducer from './Reducers/User/RegisterReducer';
 import ProductDetailReducer from '../layouts/Client/Detail/Modules/ProductDetailReducer';
+import ReviewReducer from '../layouts/Admin/Review/modules/ReviewReducer';
 
 const rootReducer = combineReducers({
     // admin
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
     ProductReducer,
     ProductVariantReducer,
     InventoryReducer,
+    ReviewReducer,
     authReducer,
     // client
     HomeReducer,

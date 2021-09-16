@@ -1,6 +1,6 @@
 import * as contants from './Constants';
 import { apiPost } from '../../../../services/adminApi';
-import { alertSuccess, STATUS_SUCCESS } from '../../../../settings/config';
+import { alertErrors, alertSuccess, STATUS_SUCCESS } from '../../../../settings/config';
 
 export const loadingAct = (loading) => ({
     type: contants.loadingContants,
@@ -82,7 +82,10 @@ export const transAction = (pageSize) => async (dispatch) => {
         }
         dispatch(fetchSuccessAct(payload));
     } catch (e) {
-        dispatch(fetchFailAct({ disable: false, errors: e }));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -98,7 +101,10 @@ export const paginationAction = (current, pageSize) => async (dispatch) => {
         }
         dispatch(paginationAct(payload));
     } catch (e) {
-        dispatch(fetchFailAct({ disable: false, errors: e }));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -131,7 +137,10 @@ export const createPostAction = (data, form, [image, setImage], [errors, setErro
             dispatch(fetchFailAct({ disable: false, errors: message }));
         }
     } catch (e) {
-        dispatch(fetchFailAct({ disable: false, errors: e }));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -159,7 +168,10 @@ export const updatePostAction = (id, data, form, content, [fileList, setFileList
             dispatch(fetchFailAct({ disable: false, errors: message }));
         }
     } catch (e) {
-        dispatch(fetchFailAct({ disable: false, errors: e }));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -173,7 +185,10 @@ export const deletePostAction = (id) => async (dispatch) => {
             alertSuccess(res.data.message);
         }
     } catch (e) {
-        dispatch(fetchFailAct({ disable: false, errors: e }));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -189,7 +204,10 @@ export const seachPostAction = (pageSize, keyword) => async (dispatch) => {
         }
         dispatch(seachAct(payload));
     } catch (e) {
-        dispatch(fetchFailAct({ disable: false, errors: e }));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 

@@ -22,7 +22,7 @@ const CartReducer = (state = initialState, { type, payload }) => {
             let cart = [...state.cart];
             let index = cart.findIndex(cart => cart.id == payload.id);
             if (index !== -1) {
-                cart[index].qty += 1;
+                cart[index].qty = parseInt(payload.qty);
             } else {
                 cart.push(payload);
             }

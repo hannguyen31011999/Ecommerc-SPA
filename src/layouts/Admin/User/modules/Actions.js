@@ -1,6 +1,6 @@
 import * as contants from './Constants';
 import { apiUser } from '../../../../services/adminApi';
-import { alertSuccess, STATUS_SUCCESS } from '../../../../settings/config';
+import { alertErrors, alertSuccess, STATUS_SUCCESS } from '../../../../settings/config';
 
 export const loadingAct = (loading) => ({
     type: contants.loadingContants,
@@ -71,7 +71,10 @@ export const transAction = (pageSize) => async (dispatch) => {
         }
         dispatch(fetchSuccessAct(payload));
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -87,7 +90,10 @@ export const paginationAction = (current, pageSize) => async (dispatch) => {
         }
         dispatch(paginationAct(payload));
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -113,7 +119,10 @@ export const createUserAction = (data, form) => async (dispatch) => {
             dispatch(fetchFailAct(false));
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -139,7 +148,10 @@ export const updateUserAction = (id, data, form) => async (dispatch) => {
             dispatch(fetchFailAct(false));
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -153,7 +165,10 @@ export const deleteUserAction = (id) => async (dispatch) => {
             alertSuccess(res.data.message);
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -170,7 +185,10 @@ export const seachUserAction = (pageSize, keyword) => async (dispatch) => {
         }
         dispatch(seachAct(payload));
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -182,6 +200,9 @@ export const updateStatusAction = (id, isBool) => async (dispatch) => {
         const res = await apiUser.updatStatus(id, isBool);
         dispatch(updateStatusAct(res.data.data));
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }

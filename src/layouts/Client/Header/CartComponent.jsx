@@ -22,9 +22,9 @@ export default function CartComponent(props) {
     const calculatorCart = () => {
         return cart?.reduce((total, cart) => {
             if (cart.promotion_price) {
-                return total += parseFloat(cart.qty * cart.promotion_price) - parseFloat(cart.discount);
+                return total += parseFloat(cart.qty * cart.promotion_price) - parseFloat(cart.discount * cart.qty);
             } else {
-                return total += parseFloat(cart.qty * cart.unit_price) - parseFloat(cart.discount);
+                return total += parseFloat(cart.qty * cart.unit_price) - parseFloat(cart.discount * cart.qty);
             }
         }, 0);
     }

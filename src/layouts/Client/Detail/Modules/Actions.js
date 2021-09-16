@@ -1,5 +1,6 @@
 import * as constants from './Constants';
 import { apiProductDetail } from '../../../../services/clientApi';
+import { alertErrors, alertSuccess, STATUS_SUCCESS } from '../../../../settings/config';
 
 export const loadingAct = payload => ({
     type: constants.loading,
@@ -18,6 +19,16 @@ export const fetchProductFailAct = payload => ({
 
 export const changeImageAct = payload => ({
     type: constants.changeImage,
+    payload
+});
+
+export const createReviewAct = payload => ({
+    type: constants.createReview,
+    payload
+});
+
+export const paginationReviewAct = payload => ({
+    type: constants.paginationReview,
     payload
 });
 
@@ -45,6 +56,47 @@ export const fetchProductAction = (slug) => async (dispatch) => {
             dispatch(fetchProductAct(data));
         }
     } catch (e) {
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
+    }
+}
 
+export const createReviewAction = (form, reset) => async (dispatch) => {
+    try {
+        dispatch(loadingAct(true));
+        const res = await apiProductDetail.createReview(form);
+        if (res.data.status_code == STATUS_SUCCESS) {
+            dispatch(createReviewAct(res.data.data));
+            alertSuccess('Create new comment successfully');
+            if (!localStorage.getItem('USER_INFO')) {
+                reset();
+            }
+        }
+    } catch (e) {
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
+    }
+}
+
+export const paginationReviewAction = (slug, page) => async (dispatch) => {
+    try {
+        dispatch(loadingAct(true));
+        const res = await apiProductDetail.getProductPagination(slug, page);
+        if (res.data.status_code == STATUS_SUCCESS) {
+            const result = res.data.data;
+            dispatch(paginationReviewAct({
+                data: result.review.data,
+                currentPage: result.review.current_page
+            }));
+        }
+    } catch (e) {
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }

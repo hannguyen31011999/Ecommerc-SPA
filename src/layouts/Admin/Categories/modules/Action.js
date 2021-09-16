@@ -1,7 +1,6 @@
 import * as contants from './Constants';
 import { apiCategories } from '../../../../services/adminApi';
-import { alertSuccess, STATUS_SUCCESS } from '../../../../settings/config';
-import { browserHistory } from 'react-router';
+import { alertErrors, alertSuccess, STATUS_SUCCESS } from '../../../../settings/config';
 
 export const loadingAct = (loading) => ({
     type: contants.loadingContants,
@@ -69,7 +68,10 @@ export const transAction = (pageSize) => async (dispatch) => {
             dispatch(fetchSuccessAct(payload));
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -85,7 +87,10 @@ export const paginationAction = (current, pageSize) => async (dispatch) => {
         }
         dispatch(paginationAct(payload));
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -111,7 +116,10 @@ export const createCategoriesAction = (data, form) => async (dispatch) => {
             dispatch(fetchFailAct(false));
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -136,7 +144,10 @@ export const updateCategoriesAction = (id, data, form) => async (dispatch) => {
             dispatch(fetchFailAct(false));
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -150,7 +161,10 @@ export const deleteCategoriesAction = (id) => async (dispatch) => {
             alertSuccess(res.data.message);
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -166,6 +180,9 @@ export const seachCategoriesAction = (pageSize, keyword) => async (dispatch) => 
         }
         dispatch(seachAct(payload));
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }

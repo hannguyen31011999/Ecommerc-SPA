@@ -17,10 +17,10 @@ export const alertErrors = (mess, time = null) => {
     });
 }
 
-export const alertSuccess = (mess) => {
+export const alertSuccess = (mess, time = null) => {
     return toast.success(mess, {
         position: "top-right",
-        autoClose: 1500,
+        autoClose: time ? time : 1500,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import { NavLink, useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useEffect } from 'react'
+import { NavLink, useParams, useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
 import ProductImage from './ProductImage'
 import ProductInfo from './ProductInfo'
 import ProductRating from './ProductRating'
@@ -9,11 +9,19 @@ import ProductSku from './ProductSku'
 import * as actions from './Modules/Actions';
 
 export default function ProductDetail(props) {
+    let isData = useSelector(state => state.ProductDetailReducer.isData);
     const dispatch = useDispatch();
-    const path = useParams();
+    const params = useParams();
+    const history = useHistory();
     useEffect(() => {
-        dispatch(actions.fetchProductAction(path.slug));
+        dispatch(actions.fetchProductAction(params.slug));
+    }, [params]);
+    const redirect = useCallback((slug) => {
+        redirectSlug(slug);
     }, []);
+    const redirectSlug = (slug) => {
+        history.push(slug);
+    }
     return (
         <>
             <section className="breadcrumb">
@@ -38,7 +46,7 @@ export default function ProductDetail(props) {
                     <div className="product__top">
                         <div className="product__top--content row">
                             <ProductImage />
-                            <ProductSku />
+                            <ProductSku redirect={redirect} />
                         </div>
                     </div>
                     <ProductInfo />

@@ -56,5 +56,11 @@ export const apiLogin = {
 export const apiProductDetail = {
     getProduct(slug) {
         return callApi(`api/detail/${slug}`);
+    },
+    getProductPagination(slug, page) {
+        return callApi(`api/detail/${slug}?page=${page}`);
+    },
+    createReview(data) {
+        return callApi(`api/detail/review/create`, 'post', data);
     }
 }

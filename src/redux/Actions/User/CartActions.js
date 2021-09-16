@@ -50,7 +50,7 @@ export const createCartAction = (data) => async (dispatch) => {
     setTimeout(() => {
         alertSuccess('Add product success');
         dispatch(loadingCartAct(false));
-    }, 500);
+    }, 300);
     try {
         const res = await apiCart.createCart(data);
         dispatch(createCartAct(res.data.data));

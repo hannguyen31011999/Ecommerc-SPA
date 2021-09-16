@@ -113,7 +113,10 @@ export const transAction = (pageSize) => async (dispatch) => {
         }
         dispatch(fetchSuccessAct(payload));
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -129,7 +132,10 @@ export const paginationAction = (current, pageSize) => async (dispatch) => {
         }
         dispatch(paginationAct(payload));
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -159,7 +165,10 @@ export const createProductAction = (data, form, file, description, [image, setIm
             dispatch(fetchFailAct(false));
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -185,7 +194,10 @@ export const updateProductAction = (id, data, form, [current, setCurrent]) => as
             }
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -199,7 +211,10 @@ export const deleteProductAction = (id) => async (dispatch) => {
             alertSuccess(res.data.message);
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -216,7 +231,10 @@ export const seachProductAction = (pageSize, keyword) => async (dispatch) => {
         }
         dispatch(seachAct(payload));
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -251,7 +269,10 @@ export const createVariantAction = (id, data, form, file, [image, setImage]) => 
             }
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -277,7 +298,10 @@ export const updateVariantProductAction = (product_id, id, data, form) => async 
             dispatch(fetchFailAct(false));
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -293,6 +317,9 @@ export const deleteVariantAction = (product_id, id) => async (dispatch) => {
             alertSuccess(res.data.message);
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }

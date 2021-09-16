@@ -1,6 +1,6 @@
 import * as contants from './Constants';
 import { apiProductSku } from '../../../../services/adminApi';
-import { alertSuccess, STATUS_SUCCESS } from '../../../../settings/config';
+import { alertErrors, alertSuccess, STATUS_SUCCESS } from '../../../../settings/config';
 
 export const loadingAct = (loading) => ({
     type: contants.loadingContants,
@@ -66,7 +66,10 @@ export const transAction = (id, pageSize) => async (dispatch) => {
         }
         dispatch(fetchSuccessAct(payload));
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -82,7 +85,10 @@ export const paginationAction = (current, pageSize) => async (dispatch) => {
         }
         dispatch(paginationAct(payload));
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -110,7 +116,10 @@ export const createSkuAction = (id, data, form, [fileList, setFileList], file) =
             dispatch(fetchFailAct(false));
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -135,7 +144,10 @@ export const updateSkuAction = (id, data, form) => async (dispatch) => {
             dispatch(fetchFailAct(false));
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -149,6 +161,9 @@ export const deleteSkuAction = (id) => async (dispatch) => {
             alertSuccess(res.data.message);
         }
     } catch (e) {
-        dispatch(fetchFailAct(e));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
