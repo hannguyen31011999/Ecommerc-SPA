@@ -15,7 +15,9 @@ export default function MainSpecial() {
     const history = useHistory();
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(trans.fetchProductDiscountAction());
+        if (Array.isArray(discount) && discount.length <= 0) {
+            dispatch(trans.fetchProductDiscountAction());
+        }
     }, []);
     const addToCart = async (e, item, gift = null) => {
         e.preventDefault();

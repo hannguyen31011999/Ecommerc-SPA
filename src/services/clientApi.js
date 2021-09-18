@@ -50,6 +50,15 @@ export const apiLogin = {
     },
     refreshToken() {
         return callApi(`api/token/refresh?token=${getToken()}`);
+    },
+    loginWithFacebook() {
+        return callApi(`api/redirect/facebook`);
+    },
+    redirectFacebook() {
+        return callApi(`api/redirect/facebook`);
+    },
+    loginWithFacebook() {
+        return callApi(`api/callback/facebook`);
     }
 }
 
@@ -62,5 +71,20 @@ export const apiProductDetail = {
     },
     createReview(data) {
         return callApi(`api/detail/review/create`, 'post', data);
+    }
+}
+
+export const apiProduct = {
+    fetch(slug) {
+        return callApi(`api/product/${slug}`);
+    },
+    fetchPagination(slug, page) {
+        return callApi(`api/product/${slug}?page=${page}`);
+    },
+    fetchProductWithCategories(id) {
+        return callApi(`api/categories/${id}`);
+    },
+    paginationProductWithCategories(id, page) {
+        return callApi(`api/categories/${id}?page=${page}`);
     }
 }

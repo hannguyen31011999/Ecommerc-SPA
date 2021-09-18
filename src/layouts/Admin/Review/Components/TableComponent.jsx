@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, memo } from 'react'
-import { Table, Button, Input, Space, Popconfirm } from 'antd';
+import { Table, Button, Input, Space, Popconfirm, Switch } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux'
@@ -17,14 +17,14 @@ function TableComponent() {
     const dispatch = useDispatch();
     useEffect(() => {
         if (Array.isArray(review) && !review.length > 0) {
-            // dispatch(trans.transAction(pagination.pageSize));
+            dispatch(trans.transAction(pagination.pageSize));
         } else {
             trans.loadingAct(false);
         }
     }, []);
     const onChange = (pagination) => {
         const { current, pageSize } = pagination;
-        // dispatch(trans.paginationAction(current, pageSize));
+        dispatch(trans.paginationAction(current, pageSize));
     }
     const getColumnSearchProps = dataIndex => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -101,11 +101,11 @@ function TableComponent() {
         clearFilters();
         setSeach({ ...seach, searchText: '' });
     };
-    const handleEdit = (id) => {
-        // dispatch(trans.editAct(id));
+    const handleUpdate = (id, status) => {
+        dispatch(trans.updateAction(id, { review_status: status }));
     }
     const handleDetele = (id) => {
-        // dispatch(trans.deleteCategoriesAction(id));
+        dispatch(trans.deleteAction(id));
     }
     const columns = [
         {
@@ -166,10 +166,26 @@ function TableComponent() {
         },
         {
             title: 'Content',
-            key: 'review_content',
-            render: (text) => {
+            dataIndex: 'review_content',
+            key: 'review_content'
+        },
+        {
+            title: 'Status',
+            key: 'review_status',
+            render: (text, data) => {
                 return (
-                    <a href="">Detail</a>
+                    data.review_status === 1 ?
+                        <Switch
+                            checkedChildren="Block"
+                            unCheckedChildren="Open"
+                            defaultChecked={true}
+                            onClick={() => handleUpdate(data.id, 2)} />
+                        :
+                        <Switch
+                            checkedChildren="Block"
+                            unCheckedChildren="Open"
+                            defaultChecked={false}
+                            onClick={() => handleUpdate(data.id, 1)} />
                 )
             }
         },
@@ -179,7 +195,6 @@ function TableComponent() {
             render: (text) => {
                 return (
                     <Space size="middle">
-                        <Button onClick={() => { handleEdit(text.id) }}><i className="fa fa-edit"></i></Button>
                         <Popconfirm
                             placement="bottomRight"
                             title="You want to delete?"
@@ -187,7 +202,7 @@ function TableComponent() {
                             okText="Yes"
                             cancelText="No"
                         >
-                            <Button><i className="fa fa-trash"></i></Button>
+                            <Button title="delete"><i className="fa fa-trash"></i></Button>
                         </Popconfirm>
                     </Space>
                 )

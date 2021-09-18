@@ -1,10 +1,10 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom';
-import MainSidebar from '../Sidebar/MainSidebar';
+import MainSidebar from '../Sidebar/MainSidebar'
+import SeachProduct from './SeachProduct'
 import NavsProduct from './NavsProduct';
-import SeachProduct from './SeachProduct';
+import { NavLink } from 'react-router-dom';
 
-export default function MainProduct() {
+export default function MainCategories() {
     return (
         <>
             <section className="breadcrumb">
@@ -18,7 +18,7 @@ export default function MainProduct() {
                                 </NavLink>
                             </li>
                             <li className="breadcrumb__item">
-                                Product
+                                Categories
                             </li>
                         </ul>
                     </div>

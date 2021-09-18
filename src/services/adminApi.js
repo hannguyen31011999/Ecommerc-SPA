@@ -93,6 +93,10 @@ export const apiReview = {
         // return callApiAdmin(`review/list?page=${currentPage}&pageSize=${pageSize}&token=${getToken()}`);
         return callApiAdmin(`review/list?page=${currentPage}&pageSize=${pageSize}`);
     },
+    update(id, data) {
+        // return callApiAdmin(`review/update/${id}?token=${getToken()}`, 'patch', data);
+        return callApiAdmin(`review/update/${id}`, 'put', data);
+    },
     delete(id) {
         // return callApiAdmin(`review/delete/${id}?token=${getToken()}`, 'delete');
         return callApiAdmin(`review/delete/${id}`, 'delete');

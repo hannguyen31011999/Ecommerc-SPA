@@ -9,7 +9,7 @@ export default function ReviewComponent() {
     const dispatch = useDispatch();
     const handleSeachInput = (e) => {
         const { value } = e.target;
-        // dispatch(trans.seachCategoriesAction(15, value));
+        dispatch(trans.seachAction(15, value));
     }
     return (
         <>

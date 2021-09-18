@@ -28,6 +28,12 @@ const ReviewReducer = (state = initialState, { type, payload }) => {
             const { current, pageSize, total, lastPage } = pagination;
             return { ...state, data, pagination: { ...state.pagination, current, pageSize, total, lastPage }, loading: false }
         }
+        case constants.updateContants: {
+            const { status, id } = payload;
+            const index = state.data.findIndex(item => item.id === id);
+            state.data[index].review_status = status;
+            return { ...state, data: [...state.data], loading: false, modal: false }
+        }
         case constants.deleteContants: {
             let dataTemp = [...state.data];
             const index = dataTemp.findIndex((item) => item.id === payload);
@@ -38,6 +44,11 @@ const ReviewReducer = (state = initialState, { type, payload }) => {
                 return { ...state, data, temp: [], loading: false, pagination: { ...state.pagination, total: --total, current: --current, lastPage: --lastPage } };
             }
             return { ...state, data: dataTemp, loading: false };
+        }
+        case constants.seachContants: {
+            const { data, total, lastPage } = payload;
+            const temp = { ...state };
+            return { ...state, data, pagination: { ...state.pagination, total, lastPage, pageSize: 15 }, loading: false }
         }
         default:
             return state

@@ -9,7 +9,7 @@ import ProductSku from './ProductSku'
 import * as actions from './Modules/Actions';
 
 export default function ProductDetail(props) {
-    let isData = useSelector(state => state.ProductDetailReducer.isData);
+    let product = useSelector(state => state.ProductDetailReducer.product);
     const dispatch = useDispatch();
     const params = useParams();
     const history = useHistory();

@@ -6,6 +6,7 @@ export default function LoadingComponent() {
     const loadingCart = useSelector(state => state.CartReducer.loading);
     const loadingRegister = useSelector(state => state.RegisterReducer.loading);
     const loadingProductDetail = useSelector(state => state.ProductDetailReducer.loading);
+    const loadingProduct = useSelector(state => state.ProductClientReducer.loading);
     return (
         <>
             <div className={loading ? "loading" : "loading active-loading"}>
@@ -24,6 +25,11 @@ export default function LoadingComponent() {
                 </Space>
             </div>
             <div className={loadingProductDetail ? "loading" : "loading active-loading"}>
+                <Space size="middle">
+                    <Spin size="large" />
+                </Space>
+            </div>
+            <div className={loadingProduct ? "loading" : "loading active-loading"}>
                 <Space size="middle">
                     <Spin size="large" />
                 </Space>
