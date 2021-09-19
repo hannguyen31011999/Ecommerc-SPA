@@ -64,7 +64,7 @@ export default function NavsProduct() {
                         <div className="product__image">
                             <img src={`${STORAGE}/products/${sku.sku_image}`} alt="*" />
                             <div className="product__btn">
-                                <a href=""
+                                <a href="*"
                                     onClick={(e) => addToCart(e, sku, item, item.slugs[0])}>
                                     <i className="lni lni-cart" />
                                     Add to Cart

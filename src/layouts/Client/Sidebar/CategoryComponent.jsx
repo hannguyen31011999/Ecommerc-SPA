@@ -3,18 +3,19 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 export default function CategoryComponent() {
-    const categories = useSelector(state => state.ProductClientReducer.categories);
+    const categories = useSelector(state => state.HomeReducer.categories);
+    const count = useSelector(state => state.ProductClientReducer.categories);
     const history = useHistory();
     const redirectCategories = (e, id) => {
         e.preventDefault();
         history.push(`/categories?q=${id}`);
     }
     const renderCategories = () => {
-        return categories?.map(cate => {
+        return categories?.map((cate, index) => {
             return (
                 <li key={cate.id}>
                     <a href="" onClick={(e) => redirectCategories(e, cate.id)}>
-                        {cate.categories_name} ({cate.products_count})
+                        {cate.categories_name} ({count[index]?.products_count ? count[index]?.products_count : 0})
                     </a>
                 </li>
             )

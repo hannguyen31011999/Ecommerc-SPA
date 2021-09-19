@@ -95,7 +95,7 @@ export default function MainSpecial() {
                                 </span>
                             </div>
                             <div className="special__discount">
-                                <span>Gift ${gift?.discount_value}</span>
+                                {gift?.discount_value && <span>Gift ${gift.discount_value}</span>}
                             </div>
                         </div>
                     </div>
