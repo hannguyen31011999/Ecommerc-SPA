@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { apiAdmin } from '../services/adminApi';
 import { ACCESS_TOKEN, BASE_URL, BASE_URL_ADMIN, TIMESTAMP } from '../settings/configUrl';
-import { handleCompareTime, handleExpired, handleRefreshToken } from './expired';
+import { TOKEN_GHN } from '../settings/config';
+import { handleCompareTime, handleExpired } from './expired';
 import { Redirect } from 'react-router-dom';
 
 export const apiRefreshToken = (endpoint, method = "get", data = null) => {
@@ -11,6 +12,17 @@ export const apiRefreshToken = (endpoint, method = "get", data = null) => {
         data,
         headers: {
             "Authorization": `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`
+        }
+    });
+}
+
+export const apiTransport = (endpoint, method = "get", data = null) => {
+    return axios({
+        method,
+        url: endpoint,
+        data,
+        headers: {
+            token: TOKEN_GHN
         }
     });
 }

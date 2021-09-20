@@ -15,7 +15,7 @@ import AdminTemplate from './layouts/Admin/AdminTemplate';
 import ClientTemplate from './layouts/Client/ClientTemplate';
 import PageErrors from './layouts/Pages/PageErrors';
 import { useSelector } from 'react-redux';
-import { ACCESS_TOKEN } from './settings/configUrl';
+import { ACCESS_TOKEN, INFO } from './settings/configUrl';
 
 function App() {
   const user = useSelector(state => state.authReducer.currentUser);

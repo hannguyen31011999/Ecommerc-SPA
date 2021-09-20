@@ -27,8 +27,8 @@ export const apiCart = {
     createCart(data) {
         return callApi(`api/cart/create`, 'post', data);
     },
-    updateCart(id) {
-        return callApi(`api/cart/update/${id}`, 'patch');
+    updateCart(id, data) {
+        return callApi(`api/cart/update/${id}`, 'put', data);
     },
     deleteCart(id) {
         return callApi(`api/cart/delete/${id}`, 'delete');

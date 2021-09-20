@@ -355,6 +355,7 @@ header {
             .btn {
                 width: 100%;
                 transition: $tran-1;
+                border: none;
                 &:focus {
                     box-shadow: none;
                 }

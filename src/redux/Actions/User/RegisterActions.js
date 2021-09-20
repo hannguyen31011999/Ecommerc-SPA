@@ -1,6 +1,6 @@
 import { apiRegister } from '../../../services/clientApi';
 import * as constants from '../../Contants/User/RegisterConstants';
-import { alertSuccess, STATUS_SUCCESS } from '../../../settings/config';
+import { alertErrors, alertSuccess, STATUS_SUCCESS } from '../../../settings/config';
 export const loadingAct = payload => ({
     type: constants.loading,
     payload
@@ -31,6 +31,9 @@ export const registerAction = (data, reset) => async (dispatch) => {
             dispatch(registerFailAct(message));
         }
     } catch (e) {
-
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }

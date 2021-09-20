@@ -18,6 +18,8 @@ import RegisterComponent from '../layouts/Client/Register/RegisterComponent';
 import ProductDetail from '../layouts/Client/Detail/ProductDetail';
 import MainProduct from '../layouts/Client/Products/MainProduct';
 import MainCategories from '../layouts/Client/Categories/MainCategories';
+import MainCart from '../layouts/Client/Cart/MainCart';
+import MainCheckout from "../layouts/Client/Checkout/MainCheckout";
 
 export const adminRoutes = [
     {
@@ -116,6 +118,16 @@ export const clientRoutes = [
     {
         path: '/categories',
         component: MainCategories,
+        exact: true
+    },
+    {
+        path: '/cart',
+        component: MainCart,
+        exact: true
+    },
+    {
+        path: '/checkout',
+        component: MainCheckout,
         exact: true
     }
 ]

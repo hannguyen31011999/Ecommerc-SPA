@@ -1,4 +1,5 @@
 import { apiHome } from '../../../../services/clientApi';
+import { alertErrors } from '../../../../settings/config';
 import * as constants from './Constants';
 
 export const loadingAct = (payload) => ({
@@ -44,8 +45,10 @@ export const fetchCategoriesAction = () => async (dispatch) => {
         }
         dispatch(fetchCategoriesAct(data));
     } catch (e) {
-        dispatch(fetchFailAct(false));
-        console.log(e);
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -60,8 +63,10 @@ export const fetchProductAction = () => async (dispatch) => {
         }
         dispatch(fetchProductAct(data));
     } catch (e) {
-        dispatch(fetchFailAct(false));
-        console.log(e);
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -78,8 +83,10 @@ export const loadMoreProductAction = (page) => async (dispatch) => {
             dispatch(loadMoreProductAct(data));
         }
     } catch (e) {
-        dispatch(fetchFailAct(false));
-        console.log(e);
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }
 
@@ -94,7 +101,9 @@ export const fetchProductDiscountAction = () => async (dispatch) => {
         }
         dispatch(fetchProductDiscountAct(data));
     } catch (e) {
-        dispatch(fetchFailAct(false));
-        console.log(e);
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
     }
 }

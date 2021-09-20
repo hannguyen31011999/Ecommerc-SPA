@@ -1,5 +1,5 @@
 import { apiCart } from '../../../services/clientApi';
-import { alertSuccess, STATUS_SUCCESS } from '../../../settings/config';
+import { alertErrors, alertSuccess, STATUS_SUCCESS } from '../../../settings/config';
 import { TOTAL_CART } from '../../../settings/configUrl';
 import * as constants from '../../Contants/User/CartConstants';
 
@@ -55,7 +55,29 @@ export const createCartAction = (data) => async (dispatch) => {
         const res = await apiCart.createCart(data);
         dispatch(createCartAct(res.data.data));
     } catch (e) {
-        dispatch(fetchFailAct(false));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingCartAct(false));
+        }
+    }
+}
+
+export const updateCartAction = (id, data) => async (dispatch) => {
+    dispatch(loadingCartAct(true));
+    try {
+        const res = await apiCart.updateCart(id, data);
+        if (res.data.status_code == STATUS_SUCCESS) {
+            dispatch(updateCartAct(res.data.data));
+            alertSuccess('Update cart item success');
+        } else {
+            dispatch(loadingCartAct(false));
+            alertErrors(res.data.message);
+        }
+    } catch (e) {
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingCartAct(false));
+        }
     }
 }
 
@@ -69,6 +91,9 @@ export const deleteCartAction = (id) => async (dispatch) => {
         }, 200);
         await apiCart.deleteCart(uid);
     } catch (e) {
-        dispatch(fetchFailAct(false));
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingCartAct(false));
+        }
     }
 }

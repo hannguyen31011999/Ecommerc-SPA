@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { INFO, STORAGE, TOTAL_CART } from '../../../settings/configUrl';
+import { ACCESS_TOKEN, INFO, STORAGE, TOTAL_CART } from '../../../settings/configUrl';
 import * as action from '../../../redux/Actions/User/CartActions';
 
 export default function CartComponent(props) {
+    const user = JSON.parse(localStorage.getItem(INFO));
+    const token = localStorage.getItem(ACCESS_TOKEN);
     const cart = useSelector(state => state.CartReducer.cart);
     const dispatch = useDispatch();
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem(INFO));
-        if (user) {
+        if (user && token) {
             if (Array.isArray(cart) && !cart.length > 0) {
                 dispatch(action.fetchCartAction(user.id));
             }
@@ -60,7 +61,7 @@ export default function CartComponent(props) {
                         }
                     </div>
                     <div className="header__cart--action">
-                        <a href="" title="Remove" onClick={(e) => {
+                        <a href="*" title="Remove" onClick={(e) => {
                             removeCartItem(e, cart.id)
                         }}>
                             <i className="lni lni-close" />
@@ -108,7 +109,11 @@ export default function CartComponent(props) {
                                 </span>
                             </div>
                             <div className="header__cart--btn">
-                                <NavLink to="/checkout" className="btn btn-primary">Checkout</NavLink>
+                                {
+                                    user && token ?
+                                        <NavLink to="/cart" className="btn btn-primary">Checkout</NavLink> :
+                                        <NavLink to="/login" className="btn btn-primary">Checkout</NavLink>
+                                }
                             </div>
                         </div>
                     </div>

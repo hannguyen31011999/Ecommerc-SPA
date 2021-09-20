@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 import HeaderCategory from './HeaderCategory';
 import MenuMobile from './MenuMobile';
 
@@ -25,47 +26,47 @@ export default function HeaderMenu() {
                         <div className="header__bot--menu">
                             <ul className="header__bot--submenu">
                                 <li className="header__bot--item">
-                                    <a href="#" className="header__bot--link active">Home</a>
+                                    <a href="*" className="header__bot--link active">Home</a>
                                 </li>
                                 <li className="header__bot--item">
-                                    <a href="#" className="header__bot--link dropdown">Products</a>
+                                    <a href="*" className="header__bot--link dropdown">Products</a>
                                     <ul className="header__bot--parentMenu">
                                         <li>
-                                            <a href="#">About Us</a>
+                                            <a href="*">About Us</a>
                                         </li>
                                         <li>
-                                            <a href="#">Login</a>
+                                            <a href="*">Login</a>
                                         </li>
                                         <li>
-                                            <a href="#">Register</a>
+                                            <a href="*">Register</a>
                                         </li>
                                         <li>
-                                            <a href="#">404 Error</a>
+                                            <a href="*">404 Error</a>
                                         </li>
                                     </ul>
                                 </li>
                                 <li className="header__bot--item">
-                                    <a href="#" className="header__bot--link dropdown">Shops</a>
+                                    <a href="*" className="header__bot--link dropdown">Shops</a>
                                     <ul className="header__bot--parentMenu">
                                         <li>
-                                            <a href="#">Shop Grid</a>
+                                            <a href="*">Shop Grid</a>
                                         </li>
                                         <li>
-                                            <a href="#">Shop List</a>
+                                            <a href="*">Shop List</a>
                                         </li>
                                         <li>
-                                            <a href="#">Shop Single</a>
+                                            <a href="*">Shop Single</a>
                                         </li>
                                         <li>
-                                            <a href="#">Cart</a>
+                                            <NavLink to="/cart">Cart</NavLink>
                                         </li>
                                     </ul>
                                 </li>
                                 <li className="header__bot--item">
-                                    <a href="#" className="header__bot--link">Blogs</a>
+                                    <a href="*" className="header__bot--link">Blogs</a>
                                 </li>
                                 <li className="header__bot--item">
-                                    <a href="#" className="header__bot--link">Contact</a>
+                                    <a href="*" className="header__bot--link">Contact</a>
                                 </li>
                             </ul>
                         </div>
@@ -83,22 +84,22 @@ export default function HeaderMenu() {
                             <h5>Follow Us:</h5>
                             <ul>
                                 <li>
-                                    <a href="#">
+                                    <a href="*">
                                         <i className="lni lni-facebook-filled" />
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a href="*">
                                         <i className="lni lni-twitter-original" />
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a href="*">
                                         <i className="lni lni-instagram" />
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a href="*">
                                         <i className="lni lni-skype" />
                                     </a>
                                 </li>

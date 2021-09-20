@@ -34,7 +34,7 @@ export default function ProductList() {
                     sku_id: first_product_skus[0].id,
                     name: item.product_variant_name,
                     unit_price: first_product_skus[0].sku_unit_price,
-                    promotion_price: first_product_skus[0].promotion_price ? first_product_skus[0].promotion_price : 0,
+                    promotion_price: first_product_skus[0].sku_promotion_price ? first_product_skus[0].sku_promotion_price : 0,
                     color: first_product_skus[0].color,
                     slug: slugs[0].slug_url,
                     discount: gift ? gift : 0,

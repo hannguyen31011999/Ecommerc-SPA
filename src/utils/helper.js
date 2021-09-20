@@ -13,3 +13,6 @@ export const capitalize = (str) => {
     return str[0].toUpperCase() + str.slice(1);
 }
 
+export const formatCurrency = (num) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}

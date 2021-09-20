@@ -29,6 +29,14 @@ const CartReducer = (state = initialState, { type, payload }) => {
             localStorage.setItem(TOTAL_CART, JSON.stringify(cart.length));
             return { ...state, cart, loading: false }
         }
+        case constants.updateCart: {
+            localStorage.removeItem(TOTAL_CART);
+            let temp = [...state.cart];
+            let index = temp.findIndex(cart => cart.id == payload.id);
+            temp[index] = payload;
+            localStorage.setItem(TOTAL_CART, JSON.stringify(temp.length));
+            return { ...state, cart: temp, loading: false }
+        }
         case constants.deleteCart: {
             let temp = [...state.cart];
             const index = temp.findIndex(cart => cart.id === payload);
