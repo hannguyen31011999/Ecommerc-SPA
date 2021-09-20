@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react'
-import axios from 'axios';
 import BreadCrumb from '../Breadcrumb/BreadCrumb';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -7,17 +6,40 @@ import TransportComponent from './TransportComponent';
 import PaymentComponent from './PaymentComponent';
 import CustomerComponent from './CustomerComponent';
 import CouponComponent from './CouponComponent';
-import { alertErrors, TOKEN_GHN, get_service_id, get_price_ship, SHOP_ID, DISTRICT_ID_FROM } from '../../../settings/config';
+import { alertErrors, get_service_id, get_price_ship, SHOP_ID, DISTRICT_ID_FROM } from '../../../settings/config';
 import { apiTransport } from '../../../utils/callApi';
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from 'yup';
 
-export default function MainCheckout() {
-    const [data, setData] = useState({
-        price_ship: 0
-    });
-    const cart = useSelector(state => state.CartReducer.cart);
+const schema = yup.object().shape({
+    firstName: yup.string().max(50, 'Maximum 50 character').required('First name is required'),
+    lastName: yup.string().max(50, 'Maximum 50 character').required('Last name is required'),
+    email: yup.string().max(100, 'Maximum 100 character').email('Email must be a valid email').required('Email is required'),
+    address: yup.string().max(254, 'Maximum 254 character').required('Address is required'),
+    phone: yup.string().required('Number phone is required').matches(new RegExp(/(0)[0-9]{9}/), 'Number phone start 0 and maximum 10 number')
+});
+const fields = Object.keys(schema.fields).reduce((obj, field) => {
+    return { ...obj, [field]: field };
+}, {});
+
+
+export default function MainCheckout(props) {
     const dispatch = useDispatch();
     const history = useHistory();
-    const getTransport = useCallback((values, select) => getPriceShipping(values, select), []);
+    const { register, handleSubmit, formState: { errors }, reset } = useForm({
+        mode: 'onChange',
+        resolver: yupResolver(schema),
+    });
+    const [data, setData] = useState({
+        price_ship: 0,
+        payment: null,
+        paymentOption: "",
+        required: ""
+    });
+    const cart = useSelector(state => state.CartReducer.cart);
+    const getTransport = useCallback((values, select) => getPriceShipping(values, select), [data]);
+    const getPaymentMethod = useCallback((payment, option) => getPayment(payment, option), []);
     const calculatorSubTotalPrice = () => {
         return cart?.reduce((total, cart) => {
             return total += (cart.promotion_price ? cart.promotion_price : cart.unit_price) * cart.qty;
@@ -51,7 +73,11 @@ export default function MainCheckout() {
                 height: 1
             }
             apiTransport(get_price_ship, 'post', data).then(res => {
-                setData({ ...data, price_ship: Math.ceil((res.data.data.total / 22771)) });
+                setData({
+                    ...data,
+                    price_ship: Math.ceil((res.data.data.total / 22771) * 3),
+                    required: ""
+                });
             }).catch(e => {
                 if (e.response) {
                     alertErrors('Sorry, Server errors please try again!');
@@ -63,45 +89,67 @@ export default function MainCheckout() {
             }
         })
     }
+    const getPayment = (payment, option) => {
+        console.log(payment, option);
+        setData({ ...data, payment, paymentOption: option });
+    }
+    const handleSubmitCheckout = (values) => {
+        if (data.price_ship > 0) {
+
+        } else {
+            setData({ ...data, required: "Ward is required" });
+        }
+    }
     return (
         <>
             <BreadCrumb />
             <section className="checkout">
                 <div className="container">
-                    <div className="row">
-                        <div className="col-lg-8 checkout__left">
-                            <form action="*" className="checkout__form">
-                                <CustomerComponent />
-                                <TransportComponent getTransport={getTransport} />
-                                <PaymentComponent />
-                            </form>
-                        </div>
-                        <div className="col-lg-4 checkout__right">
-                            <CouponComponent />
-                            <div className="checkout__total">
-                                <h4 className="checkout__total--title">
-                                    Pricing Table
-                                </h4>
-                                <div className="checkout__subtotal--price">
-                                    <div className="checkout__subtotal--item sub-total">
-                                        Subotal Price: <span>${cart.length > 0 ? calculatorSubTotalPrice() : 0}</span>
-                                    </div>
-                                    <div className="checkout__subtotal--item shipping-total">
-                                        Price Shipping: <span>${data.price_ship}</span>
-                                    </div>
-                                    <div className="checkout__subtotal--item discount-total">
-                                        Total Promotion: <span>${cart.length > 0 ? calculatorTotalDiscount() : 0}</span>
-                                    </div>
-                                    <div className="checkout__subtotal--item total-price">
-                                        Total Price: <span>${cart.length > 0 ? calculatorTotalPrice() : 0}</span>
-                                    </div>
+                    <form onSubmit={handleSubmit(handleSubmitCheckout)}
+                        action="*" className="checkout__form">
+                        <div className="row">
+                            <div className="col-lg-8">
+                                <div className="checkout__left">
+                                    <CustomerComponent
+                                        errors={errors}
+                                        register={register}
+                                        fields={fields} />
+                                    <TransportComponent
+                                        getTransport={getTransport}
+                                        errors={errors}
+                                        register={register}
+                                        fields={fields}
+                                        required={data.required} />
+                                    <PaymentComponent getPaymentMethod={getPaymentMethod} />
                                 </div>
-                                <div className="checkout__total--btn">
-                                    <button>Checkout</button>
+                            </div>
+                            <div className="col-lg-4 checkout__right">
+                                <CouponComponent />
+                                <div className="checkout__total">
+                                    <h4 className="checkout__total--title">
+                                        Pricing Table
+                                    </h4>
+                                    <div className="checkout__subtotal--price">
+                                        <div className="checkout__subtotal--item sub-total">
+                                            Subotal Price: <span>${cart.length > 0 ? calculatorSubTotalPrice() : 0}</span>
+                                        </div>
+                                        <div className="checkout__subtotal--item shipping-total">
+                                            Price Shipping: <span>${data.price_ship}</span>
+                                        </div>
+                                        <div className="checkout__subtotal--item discount-total">
+                                            Total Promotion: <span>${cart.length > 0 ? calculatorTotalDiscount() : 0}</span>
+                                        </div>
+                                        <div className="checkout__subtotal--item total-price">
+                                            Total Price: <span>${cart.length > 0 ? calculatorTotalPrice() : 0}</span>
+                                        </div>
+                                    </div>
+                                    <div className="checkout__total--btn">
+                                        <button type="submit">Checkout</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </section>
         </>

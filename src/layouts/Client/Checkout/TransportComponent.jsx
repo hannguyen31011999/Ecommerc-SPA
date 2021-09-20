@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { Select } from 'antd';
 import { alertErrors, url_get_district, url_get_province, url_get_ward } from '../../../settings/config';
 import { apiTransport } from '../../../utils/callApi';
 const { Option } = Select;
 
-export default function TransportComponent(props) {
+const styled = {
+    fontSize: "13px",
+    fontWeight: "500",
+    color: "#f73232"
+}
+
+function TransportComponent(props) {
+    const { fields, register, errors, required } = props;
     const [data, setData] = useState({
         province: [],
         district: [],
@@ -14,7 +21,8 @@ export default function TransportComponent(props) {
         province_id: null,
         district_id: null,
         ward_code: null
-    })
+    });
+    const [delivery, setDelivery] = useState(0);
     useEffect(() => {
         apiTransport(url_get_province).then(res => {
             if (res.data.code == 200) {
@@ -52,9 +60,9 @@ export default function TransportComponent(props) {
                 <div className="checkout__shipping--title">Shipping Address</div>
                 <div className="checkout__shipping--content">
                     <div className="row">
-                        <div className="col-lg-6 col-12 mt-4">
+                        <div className="col-lg-6 col-12 mt-3">
                             <label htmlFor="province" className="form-label">
-                                Province
+                                <span style={styled}>*</span>Province
                             </label>
                             <Select
                                 size="large"
@@ -64,9 +72,7 @@ export default function TransportComponent(props) {
                                 onChange={changeProvince}
                                 filterOption={(input, option) =>
                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                }
-                                name="province_id"
-                            >
+                                }>
                                 {
                                     data.province?.map(item => {
                                         return (
@@ -78,9 +84,9 @@ export default function TransportComponent(props) {
                                 }
                             </Select>
                         </div>
-                        <div className="col-lg-6 col-12 mt-4">
+                        <div className="col-lg-6 col-12 mt-3">
                             <label htmlFor="district" className="form-label">
-                                District
+                                <span style={styled}>*</span>District
                             </label>
                             <Select
                                 size="large"
@@ -90,9 +96,7 @@ export default function TransportComponent(props) {
                                 onChange={changeDistrict}
                                 filterOption={(input, option) =>
                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                }
-                                name="district_id"
-                            >
+                                }>
                                 {
                                     data.district?.map(item => {
                                         return (
@@ -104,9 +108,9 @@ export default function TransportComponent(props) {
                                 }
                             </Select>
                         </div>
-                        <div className="col-lg-6 col-12 mt-4">
+                        <div className="col-lg-6 col-12 mt-3">
                             <label htmlFor="ward" className="form-label">
-                                Ward
+                                <span style={styled}>*</span>Ward
                             </label>
                             <Select
                                 size="large"
@@ -117,8 +121,7 @@ export default function TransportComponent(props) {
                                 filterOption={(input, option) =>
                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
-                                name="district_id"
-                            >
+                                name="ward_id">
                                 {
                                     data.ward?.map(item => {
                                         return (
@@ -129,28 +132,34 @@ export default function TransportComponent(props) {
                                     })
                                 }
                             </Select>
+                            {required &&
+                                <span style={styled}>{required}</span>
+                            }
                         </div>
-                        <div className="col-lg-6 col-12 my-4">
+                        <div className="col-lg-6 col-12 my-3">
                             <label htmlFor="address" className="form-label">
-                                Address
+                                <span style={styled}>*</span>Address
                             </label>
-                            <input type="phone" className="form-control" placeholder="Your address" />
+                            <input type="text" {...register(fields.address)} name={fields.address} className="form-control" placeholder="Your address" />
+                            {errors.address &&
+                                <span style={styled}>{errors.address.message}</span>
+                            }
                         </div>
                         <div className="checkout__transport">
                             <h4 className="transport__title">Select Delivery Option</h4>
-                            <div className="transport__item active">
+                            <div className={delivery === 0 ? `transport__item active` : "transport__item"} onClick={() => setDelivery(0)}>
                                 <img src="./assets/img/shipping-2.png" alt="*" />
                                 <h5 className="transport__category">DHL Shipping</h5>
                             </div>
-                            <div className="transport__item">
+                            <div className={delivery === 1 ? `transport__item active` : "transport__item"} onClick={() => setDelivery(1)}>
                                 <img src="./assets/img/shipping-3.png" alt="*" />
                                 <h5 className="transport__category">DPD Shipping</h5>
                             </div>
-                            <div className="transport__item">
+                            <div className={delivery === 2 ? `transport__item active` : "transport__item"} onClick={() => setDelivery(2)}>
                                 <img src="./assets/img/shipping-4.png" alt="*" />
                                 <h5 className="transport__category">InPost Shipping</h5>
                             </div>
-                            <div className="transport__item">
+                            <div className={delivery === 3 ? `transport__item active` : "transport__item"} onClick={() => setDelivery(3)}>
                                 <img src="./assets/img/shipping-1.png" alt="*" />
                                 <h5 className="transport__category">GHN Shipping</h5>
                             </div>
@@ -161,3 +170,5 @@ export default function TransportComponent(props) {
         </>
     )
 }
+
+export default memo(TransportComponent);

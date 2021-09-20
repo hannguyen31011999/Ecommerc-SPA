@@ -37,9 +37,13 @@
 }
 
 .checkout__form {
+    border-radius: 4px;
+}
+
+.checkout__left {
     border-top: none;
     border: 1px solid #e6e6e6;
-    border-radius: 4px;
+    padding: 0;
     .checkout__info {
         padding-bottom: $pd-3 - 10;
         .checkout__info--title {
@@ -120,7 +124,7 @@
         }
     }
     .form-control {
-        padding: $pd-0 + 3 $pd-2;
+        padding: $pd-0 + 2 $pd-2;
         border-radius: 4px;
         &:focus {
             box-shadow: none;
@@ -130,26 +134,6 @@
         padding: $pd-1 $pd-2;
         &:focus {
             box-shadow: none;
-        }
-    }
-    .checkout__step {
-        margin-bottom: $mg-1;
-        button {
-            padding: $pd-1 30px;
-            border: none;
-            background-color: $bg-blue;
-            @include styleText($fs-0 - 1,$color-white,0,0,$fw-2);
-            border-radius: 4px;
-            transition: $tran-1;
-            &:hover {
-                background-color: $bg-dark-blue;
-            }
-        }
-        .btn__continue {
-            background-color: $bg-dark-blue;
-            &:hover {
-                background-color: $bg-blue;
-            }
         }
     }
     .checkout__transport {
@@ -205,7 +189,7 @@
             margin-bottom: $mg-0 + 2;
         }
         .form-control {
-            padding: $pd-1;
+            padding: $pd-1 - 2 $pd-1 + 5;
             &:focus {
                 box-shadow: none;
             }
