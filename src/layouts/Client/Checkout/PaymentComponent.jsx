@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 
-export default function PaymentComponent(props) {
+function PaymentComponent(props) {
     const [payment, setPayment] = useState('direct');
     const handleActive = (payment, option) => {
         setPayment(option);
@@ -20,12 +20,10 @@ export default function PaymentComponent(props) {
                         <img src="./assets/img/paypal.png" alt="*" />
                         <h5 className="payment__category">Payment with PayPal</h5>
                     </div>
-                    <div className={payment === 'vnpay' ? 'payment__item active' : 'payment__item'} onClick={() => { handleActive(2, 'vnpay'); }}>
-                        <img src="./assets/img/logo VNPAY-02.png" alt="*" />
-                        <h5 className="payment__category">Payment with VNPay</h5>
-                    </div>
                 </div>
             </div>
         </>
     )
 }
+
+export default memo(PaymentComponent);

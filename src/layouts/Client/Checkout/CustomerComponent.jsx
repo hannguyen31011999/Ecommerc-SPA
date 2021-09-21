@@ -56,7 +56,7 @@ export default function CustomerComponent(props) {
                             <label htmlFor="note" className="form-label">
                                 Note
                             </label>
-                            <textarea className="form-control" name="note" rows={3} defaultValue={""} />
+                            <textarea className="form-control" {...register('note')} name="note" rows={3} defaultValue={""} />
                         </div>
                     </div>
                 </div>

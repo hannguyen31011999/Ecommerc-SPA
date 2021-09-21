@@ -16,6 +16,17 @@ export const apiRefreshToken = (endpoint, method = "get", data = null) => {
     });
 }
 
+export const apiCheckout = (endpoint, method = "get", data = null, token) => {
+    return axios({
+        method,
+        url: `${BASE_URL}/${endpoint}`,
+        data,
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+}
+
 export const apiTransport = (endpoint, method = "get", data = null) => {
     return axios({
         method,

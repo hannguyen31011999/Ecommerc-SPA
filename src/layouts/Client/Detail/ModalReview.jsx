@@ -28,7 +28,7 @@ export default function ModalReview(props) {
             setValue('review_email', isUser.email);
             setValue('review_phone', isUser.phone);
         }
-    }, [])
+    }, []);
     const onSubmitReview = (data) => {
         let formData = new FormData();
         for (const key in data) {

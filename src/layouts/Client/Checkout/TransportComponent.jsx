@@ -20,7 +20,10 @@ function TransportComponent(props) {
     const [select, setSelect] = useState({
         province_id: null,
         district_id: null,
-        ward_code: null
+        ward_code: null,
+        province_name: '',
+        district_name: '',
+        ward_name: ''
     });
     const [delivery, setDelivery] = useState(0);
     useEffect(() => {
@@ -35,9 +38,10 @@ function TransportComponent(props) {
         });
     }, []);
     const changeProvince = (value) => {
-        apiTransport(`${url_get_district}?province_id=${value}`).then(res => {
+        const province = value.split('-');
+        apiTransport(`${url_get_district}?province_id=${province[0]}`).then(res => {
             setData({ ...data, district: res.data.data });
-            setSelect({ ...select, province_id: value });
+            setSelect({ ...select, province_id: province[0], province_name: province[1] });
         }).catch(e => {
             if (e.response) {
                 alertErrors('Sorry, Server errors please try again!');
@@ -45,9 +49,10 @@ function TransportComponent(props) {
         });
     }
     const changeDistrict = (value) => {
-        apiTransport(`${url_get_ward}?district_id=${value}`).then(res => {
+        const district = value.split('-');
+        apiTransport(`${url_get_ward}?district_id=${district[0]}`).then(res => {
             setData({ ...data, ward: res.data.data });
-            setSelect({ ...select, district_id: value });
+            setSelect({ ...select, district_id: district[0], district_name: district[1] });
         }).catch(e => {
             if (e.response) {
                 alertErrors('Sorry, Server errors please try again!');
@@ -76,7 +81,8 @@ function TransportComponent(props) {
                                 {
                                     data.province?.map(item => {
                                         return (
-                                            <Option value={item.ProvinceID} key={item.ProvinceID}>
+                                            <Option
+                                                value={`${item.ProvinceID}-${item.ProvinceName}`} key={item.ProvinceID}>
                                                 {item.ProvinceName}
                                             </Option>
                                         )
@@ -100,7 +106,7 @@ function TransportComponent(props) {
                                 {
                                     data.district?.map(item => {
                                         return (
-                                            <Option value={item.DistrictID} key={item.DistrictID}>
+                                            <Option value={`${item.DistrictID}-${item.DistrictName}`} key={item.DistrictID}>
                                                 {item.DistrictName}
                                             </Option>
                                         )
@@ -125,7 +131,7 @@ function TransportComponent(props) {
                                 {
                                     data.ward?.map(item => {
                                         return (
-                                            <Option value={item.WardCode} key={item.WardCode}>
+                                            <Option value={`${item.WardCode}-${item.WardName}`} key={item.WardCode}>
                                                 {item.WardName}
                                             </Option>
                                         )

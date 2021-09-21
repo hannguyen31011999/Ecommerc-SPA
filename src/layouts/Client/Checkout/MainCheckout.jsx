@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useRef, useEffect } from 'react'
 import BreadCrumb from '../Breadcrumb/BreadCrumb';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -6,11 +6,13 @@ import TransportComponent from './TransportComponent';
 import PaymentComponent from './PaymentComponent';
 import CustomerComponent from './CustomerComponent';
 import CouponComponent from './CouponComponent';
-import { alertErrors, get_service_id, get_price_ship, SHOP_ID, DISTRICT_ID_FROM } from '../../../settings/config';
-import { apiTransport } from '../../../utils/callApi';
+import { alertErrors, get_service_id, get_price_ship, SHOP_ID, DISTRICT_ID_FROM, alertSuccess } from '../../../settings/config';
+import { apiCheckout, apiTransport, callApi } from '../../../utils/callApi';
+import * as actions from '../../../redux/Actions/User/CartActions';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup';
+import { ACCESS_TOKEN, INFO, TOTAL_CART } from '../../../settings/configUrl';
 
 const schema = yup.object().shape({
     firstName: yup.string().max(50, 'Maximum 50 character').required('First name is required'),
@@ -33,12 +35,53 @@ export default function MainCheckout(props) {
     });
     const [data, setData] = useState({
         price_ship: 0,
-        payment: null,
-        paymentOption: "",
-        required: ""
+        required: "",
+        address: ""
     });
+    const paymentData = useRef({
+        payment: 1,
+        paymentOption: "direct",
+    });
+    useEffect(() => {
+        const query = history.location.search;
+        if (query.split('&').length > 2 && query) {
+            const paymentId = query.split('&')[0].split('=')[1];
+            const token = query.split('&')[1].split('=')[1];
+            const payerId = query.split('&')[2].split('=')[1];
+            dispatch(actions.loadingCartAct(true));
+            apiCheckout(`api/checkout/paypal/execute`, 'post', { paymentId, payerId }).then(res => {
+                if (res.data.state === "approved" && res.data.status === "VERIFIED" && res.data.status_code == 200) {
+                    const user = JSON.parse(localStorage.getItem(INFO));
+                    apiCheckout(`api/checkout/update/${user.id}`, 'post', { status: "update" })
+                        .then(res => {
+                            if (res.data.status_code == 200) {
+                                localStorage.setItem(TOTAL_CART, 0);
+                                alertSuccess(res.data.message);
+                                dispatch(actions.fetchSuccessAct([]));
+                            }
+                        }).catch(e => {
+                            alertErrors('Sorry, Server errors please try again!');
+                            dispatch(actions.loadingCartAct(false));
+                        });
+                }
+            }).catch(e => {
+                if (e.response) {
+                    alertErrors('Sorry, Server errors please try again!');
+                    dispatch(actions.loadingCartAct(false));
+                }
+            });
+        } else if (query.split('?').length > 1) {
+            apiCheckout(`api/checkout/paypal/execute`, 'post', { status: "delete" })
+                .then(res => {
+                    alertErrors('Sorry, Payment Fail!');
+                }).catch(e => {
+                    alertErrors('Sorry, Server errors please try again!');
+                    dispatch(actions.loadingCartAct(false));
+                });
+        }
+    }, [history.location.search]);
     const cart = useSelector(state => state.CartReducer.cart);
-    const getTransport = useCallback((values, select) => getPriceShipping(values, select), [data]);
+    const getTransport = useCallback((values, select) => getPriceShipping(values, select), []);
     const getPaymentMethod = useCallback((payment, option) => getPayment(payment, option), []);
     const calculatorSubTotalPrice = () => {
         return cart?.reduce((total, cart) => {
@@ -54,18 +97,19 @@ export default function MainCheckout(props) {
         return calculatorSubTotalPrice() - calculatorTotalDiscount() + data.price_ship;
     }
     const getPriceShipping = (values, select) => {
+        const ward = values.split('-');
         const distance = {
             shop_id: SHOP_ID,
             from_district: DISTRICT_ID_FROM,
-            to_district: select.district_id
+            to_district: parseInt(select.district_id)
         }
         apiTransport(get_service_id, 'post', distance).then(res => {
             const service = res.data.data[0];
             const data = {
                 service_id: service.service_id,
                 insurance_value: calculatorSubTotalPrice() - calculatorTotalDiscount(),
-                to_ward_code: parseInt(values),
-                to_district_id: select.district_id,
+                to_ward_code: parseInt(ward[0]),
+                to_district_id: distance.to_district,
                 from_district_id: DISTRICT_ID_FROM,
                 weight: 225,
                 length: 16,
@@ -76,7 +120,8 @@ export default function MainCheckout(props) {
                 setData({
                     ...data,
                     price_ship: Math.ceil((res.data.data.total / 22771) * 3),
-                    required: ""
+                    required: "",
+                    address: `${ward[1]} ${select.district_name} ${select.province_name}`
                 });
             }).catch(e => {
                 if (e.response) {
@@ -90,12 +135,45 @@ export default function MainCheckout(props) {
         })
     }
     const getPayment = (payment, option) => {
-        console.log(payment, option);
-        setData({ ...data, payment, paymentOption: option });
+        paymentData.current = {
+            payment,
+            paymentOption: option
+        }
+        // setData({ ...data, payment: payment, paymentOption: option });
     }
-    const handleSubmitCheckout = (values) => {
+    const handleSubmitCheckout = async (values) => {
         if (data.price_ship > 0) {
-
+            const user = JSON.parse(localStorage.getItem(INFO));
+            const token = localStorage.getItem(ACCESS_TOKEN);
+            if (user && token && cart.length > 0) {
+                const obj = {
+                    user_id: user.id,
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    email: values.email,
+                    phone: values.phone,
+                    address: `${values.address} ${data.address}`,
+                    paymentOption: paymentData.current.paymentOption,
+                    payment: paymentData.current.payment,
+                    cart: cart,
+                    totalPrice: calculatorTotalPrice(),
+                    transport_price: data.price_ship
+                }
+                dispatch(actions.loadingCartAct(true));
+                if (obj.payment == 2) {
+                    callApi('api/checkout/paypal/create', 'post', obj).then(res => {
+                        console.log(res.data.data);
+                        window.location.replace(res.data.data);
+                    }).catch(e => {
+                        if (e.response) {
+                            alertErrors('Sorry, Server errors please try again!');
+                            dispatch(actions.loadingCartAct(false));
+                        }
+                    });
+                }
+            } else {
+                history.push('/login');
+            }
         } else {
             setData({ ...data, required: "Ward is required" });
         }
