@@ -30,7 +30,11 @@ export default function ModalEdit(props) {
             formData = { ...values, discount_start: values.date[0]._i, discount_end: values.date[1]._i };
         }
         delete formData.date;
-        dispatch(trans.updateDiscountAction(dataEdit.id, formData, form));
+        const data = new FormData();
+        for (const key in formData) {
+            formData.append(key, formData[key]);
+        }
+        dispatch(trans.updateDiscountAction(dataEdit.id, data, form));
     }
     const setDataField = () => {
         if (dataEdit) {

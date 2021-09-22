@@ -24,7 +24,11 @@ export default function LoginComponent(props) {
     });
     const onSubmitHandler = async (data) => {
         setLoading(true);
-        const res = await apiLogin.login(data);
+        const formData = new FormData();
+        for (const key in data) {
+            formData.append(key, data[key]);
+        }
+        const res = await apiLogin.login(formData);
         if (res.data.status_code === 200) {
             let timestamp = new Date(res.data.timestamp.time);
             let miliseconds = timestamp.getTime();
@@ -53,7 +57,7 @@ export default function LoginComponent(props) {
                         </div>
                         <div className="login__social row">
                             <div className="col-md-4 login__item">
-                                <a href="" className="login__facebook">
+                                <a href="https://gridshop-demo.000webhostapp.com/api/redirect/facebook" className="login__facebook">
                                     <i className="lni lni-facebook-filled" />
                                     Facebook login
                                 </a>

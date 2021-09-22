@@ -12,7 +12,8 @@ import * as actions from '../../../redux/Actions/User/CartActions';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup';
-import { ACCESS_TOKEN, INFO, TOTAL_CART } from '../../../settings/configUrl';
+import { ACCESS_TOKEN, CART_LIST, INFO, ORDER, TOTAL_CART } from '../../../settings/configUrl';
+import { Space, Spin } from 'antd';
 
 const schema = yup.object().shape({
     firstName: yup.string().max(50, 'Maximum 50 character').required('First name is required'),
@@ -29,7 +30,10 @@ const fields = Object.keys(schema.fields).reduce((obj, field) => {
 export default function MainCheckout(props) {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { register, handleSubmit, formState: { errors }, reset } = useForm({
+    const user = JSON.parse(localStorage.getItem(INFO));
+    const token = localStorage.getItem(ACCESS_TOKEN);
+    const cart = useSelector(state => state.CartReducer.cart);
+    const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm({
         mode: 'onChange',
         resolver: yupResolver(schema),
     });
@@ -38,6 +42,7 @@ export default function MainCheckout(props) {
         required: "",
         address: ""
     });
+    const [loading, setLoading] = useState(false);
     const paymentData = useRef({
         payment: 1,
         paymentOption: "direct",
@@ -48,39 +53,55 @@ export default function MainCheckout(props) {
             const paymentId = query.split('&')[0].split('=')[1];
             const token = query.split('&')[1].split('=')[1];
             const payerId = query.split('&')[2].split('=')[1];
-            dispatch(actions.loadingCartAct(true));
-            apiCheckout(`api/checkout/paypal/execute`, 'post', { paymentId, payerId }).then(res => {
+            const order_id = localStorage.getItem(ORDER);
+            const user_id = user.id;
+            const cart = JSON.parse(localStorage.getItem(CART_LIST));
+            const obj = { paymentId, payerId, order_id, user_id };
+            const formData = new FormData();
+            for (const key in obj) {
+                formData.append(key, obj[key]);
+            }
+            formData.append('cart[]', cart);
+            setLoading(true);
+            apiCheckout(`api/checkout/paypal/execute`, 'post', formData).then(res => {
                 if (res.data.state === "approved" && res.data.status === "VERIFIED" && res.data.status_code == 200) {
-                    const user = JSON.parse(localStorage.getItem(INFO));
-                    apiCheckout(`api/checkout/update/${user.id}`, 'post', { status: "update" })
-                        .then(res => {
-                            if (res.data.status_code == 200) {
-                                localStorage.setItem(TOTAL_CART, 0);
-                                alertSuccess(res.data.message);
-                                dispatch(actions.fetchSuccessAct([]));
-                            }
-                        }).catch(e => {
-                            alertErrors('Sorry, Server errors please try again!');
-                            dispatch(actions.loadingCartAct(false));
-                        });
+                    localStorage.setItem(TOTAL_CART, 0);
+                    localStorage.removeItem(ORDER);
+                    localStorage.removeItem(CART_LIST);
+                    dispatch(actions.fetchSuccessAct([]));
+                    setLoading(false);
+                    alertSuccess(res.data.message);
                 }
             }).catch(e => {
                 if (e.response) {
                     alertErrors('Sorry, Server errors please try again!');
-                    dispatch(actions.loadingCartAct(false));
+                    setLoading(false);
                 }
             });
-        } else if (query.split('?').length > 1) {
-            apiCheckout(`api/checkout/paypal/execute`, 'post', { status: "delete" })
+        } else if (query.split('?').length > 1 && cart.length > 0) {
+            const order_id = localStorage.getItem(ORDER);
+            apiCheckout(`api/checkout/delete/${order_id}`)
                 .then(res => {
-                    alertErrors('Sorry, Payment Fail!');
+                    if (res.data.status_code == 200) {
+                        localStorage.removeItem(ORDER);
+                        localStorage.removeItem(CART_LIST);
+                        alertErrors(res.data.message);
+                    }
                 }).catch(e => {
                     alertErrors('Sorry, Server errors please try again!');
-                    dispatch(actions.loadingCartAct(false));
+                    setLoading(false);
                 });
         }
     }, [history.location.search]);
-    const cart = useSelector(state => state.CartReducer.cart);
+    useEffect(() => {
+        if (user) {
+            const name = user.name.split(" ");
+            setValue('firstName', name[0]);
+            setValue('lastName', name[name.length - 1]);
+            setValue('email', user.email);
+            setValue('phone', user.phone);
+        }
+    }, []);
     const getTransport = useCallback((values, select) => getPriceShipping(values, select), []);
     const getPaymentMethod = useCallback((payment, option) => getPayment(payment, option), []);
     const calculatorSubTotalPrice = () => {
@@ -139,13 +160,13 @@ export default function MainCheckout(props) {
             payment,
             paymentOption: option
         }
-        // setData({ ...data, payment: payment, paymentOption: option });
     }
     const handleSubmitCheckout = async (values) => {
         if (data.price_ship > 0) {
-            const user = JSON.parse(localStorage.getItem(INFO));
-            const token = localStorage.getItem(ACCESS_TOKEN);
             if (user && token && cart.length > 0) {
+                const temp = cart.map(item => {
+                    return item.id;
+                });
                 const obj = {
                     user_id: user.id,
                     firstName: values.firstName,
@@ -155,19 +176,37 @@ export default function MainCheckout(props) {
                     address: `${values.address} ${data.address}`,
                     paymentOption: paymentData.current.paymentOption,
                     payment: paymentData.current.payment,
-                    cart: cart,
                     totalPrice: calculatorTotalPrice(),
                     transport_price: data.price_ship
                 }
-                dispatch(actions.loadingCartAct(true));
+                const formData = new FormData();
+                for (const key in obj) {
+                    formData.append(key, obj[key]);
+                }
+                formData.append('cart[]', temp);
+                localStorage.setItem(CART_LIST, JSON.stringify(temp));
+                setLoading(true);
                 if (obj.payment == 2) {
-                    callApi('api/checkout/paypal/create', 'post', obj).then(res => {
-                        console.log(res.data.data);
-                        window.location.replace(res.data.data);
+                    callApi('api/checkout/paypal/create', 'post', formData).then(res => {
+                        localStorage.setItem(ORDER, res.data.order_id);
+                        window.location.replace(res.data.redirect);
                     }).catch(e => {
                         if (e.response) {
                             alertErrors('Sorry, Server errors please try again!');
-                            dispatch(actions.loadingCartAct(false));
+                            setLoading(false);
+                        }
+                    });
+                } else {
+                    setLoading(true);
+                    callApi('api/checkout/create', 'post', formData).then(res => {
+                        localStorage.setItem(TOTAL_CART, 0);
+                        dispatch(actions.fetchSuccessAct([]));
+                        setLoading(false);
+                        alertSuccess(res.data.message);
+                    }).catch(e => {
+                        if (e.response) {
+                            alertErrors('Sorry, Server errors please try again!');
+                            setLoading(false);
                         }
                     });
                 }
@@ -180,6 +219,11 @@ export default function MainCheckout(props) {
     }
     return (
         <>
+            <div className={loading ? "loading" : "loading active-loading"}>
+                <Space size="middle">
+                    <Spin size="large" />
+                </Space>
+            </div>
             <BreadCrumb />
             <section className="checkout">
                 <div className="container">

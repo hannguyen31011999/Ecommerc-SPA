@@ -27,7 +27,11 @@ function ModalEdit(props) {
         }
     }
     const handleSubmit = (values) => {
-        dispatch(trans.updateCategoriesAction(data.id, values, form));
+        const formData = new FormData();
+        for (const key in values) {
+            formData.append(key, values[key]);
+        }
+        dispatch(trans.updateCategoriesAction(data.id, formData, form));
     }
     return (
         <>

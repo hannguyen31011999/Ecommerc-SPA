@@ -27,7 +27,11 @@ export default function ModalEdit() {
         dispatch(trans.getListProductAction(true));
     }, [])
     const handleSubmit = (values) => {
-        dispatch(trans.updateInventoryAction(dataEdit.id, values, form));
+        const formData = new FormData();
+        for (const key in values) {
+            formData.append(key, values[key]);
+        }
+        dispatch(trans.updateInventoryAction(dataEdit.id, formData, form));
     }
     const setFieldData = () => {
         if (dataEdit) {

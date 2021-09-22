@@ -28,10 +28,10 @@ export const apiCart = {
         return callApi(`api/cart/create`, 'post', data);
     },
     updateCart(id, data) {
-        return callApi(`api/cart/update/${id}`, 'put', data);
+        return callApi(`api/cart/update/${id}`, 'post', data);
     },
     deleteCart(id) {
-        return callApi(`api/cart/delete/${id}`, 'delete');
+        return callApi(`api/cart/delete/${id}`, 'get');
     }
 }
 

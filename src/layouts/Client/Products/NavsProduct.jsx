@@ -35,14 +35,18 @@ export default function NavsProduct() {
                     qty: 1,
                     user_id: user.id
                 }
+                const formData = new FormData();
+                for (const key in data) {
+                    formData.append(key, data[key]);
+                }
                 if (temp) {
                     if (temp.qty >= sku.sku_qty) {
                         alertErrors('Sorry, Product is out of stock!');
                     } else {
-                        dispatch(cartAction.createCartAction(data));
+                        dispatch(cartAction.createCartAction(formData));
                     }
                 } else {
-                    dispatch(cartAction.createCartAction(data));
+                    dispatch(cartAction.createCartAction(formData));
                 }
             } else {
                 alertErrors('Sorry, Product is out of stock!');

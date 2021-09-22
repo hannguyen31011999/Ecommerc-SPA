@@ -34,7 +34,11 @@ export default function ModalEdit() {
     };
     const handleSubmit = (values) => {
         let dataUpdate = form.getFieldsValue(true);
-        dispatch(trans.updateProductAction(dataEdit.id, dataUpdate, form, [current, setCurrent]));
+        const formData = new FormData();
+        for (const key in dataUpdate) {
+            formData.append(key, dataUpdate[key]);
+        }
+        dispatch(trans.updateProductAction(dataEdit.id, formData, form, [current, setCurrent]));
     }
     const handleEditor = (values) => {
         if (values) {

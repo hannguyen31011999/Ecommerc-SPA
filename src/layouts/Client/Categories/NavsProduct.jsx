@@ -35,14 +35,18 @@ export default function NavsProduct() {
                     qty: 1,
                     user_id: user.id
                 }
+                const formData = new FormData();
+                for (const key in data) {
+                    formData.append(key, data[key]);
+                }
                 if (temp) {
                     if (temp.qty >= sku.sku_qty) {
                         alertErrors('Sorry, Product is out of stock!');
                     } else {
-                        dispatch(cartAction.createCartAction(data));
+                        dispatch(cartAction.createCartAction(formData));
                     }
                 } else {
-                    dispatch(cartAction.createCartAction(data));
+                    dispatch(cartAction.createCartAction(formData));
                 }
             } else {
                 alertErrors('Sorry, Product is out of stock!');
@@ -171,12 +175,12 @@ export default function NavsProduct() {
             <div className="tab-content" id="nav-tabContent">
                 <div className="tab-pane fade show active" id="nav-grid" role="tabpanel" aria-labelledby="nav-grid-tab">
                     <div className="product__tab--grid row">
-                        {discountProduct.length > 0 ? renderProductGrid() : ''}
+                        {discountProduct?.length > 0 ? renderProductGrid() : ''}
                     </div>
                 </div>
                 <div className="tab-pane fade" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
                     <div className="product__tab--list">
-                        {discountProduct.length > 0 ? renderProductList() : ''}
+                        {discountProduct?.length > 0 ? renderProductList() : ''}
                     </div>
                 </div>
             </div>

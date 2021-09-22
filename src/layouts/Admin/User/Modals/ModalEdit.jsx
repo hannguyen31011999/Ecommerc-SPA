@@ -29,7 +29,11 @@ export default function ModalEdit() {
         } else {
             formData = { ...values, birth: values.birth._i };
         }
-        dispatch(trans.updateUserAction(dataEdit.id, formData, form));
+        const formCreate = new FormData();
+        for (const key in formData) {
+            formCreate.append(key, values[key]);
+        }
+        dispatch(trans.updateUserAction(dataEdit.id, formCreate, form));
     }
     const setDataField = () => {
         if (dataEdit) {

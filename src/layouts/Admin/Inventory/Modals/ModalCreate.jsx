@@ -26,7 +26,11 @@ function ModalCreate() {
         dispatch(trans.getListProductAction(true));
     }, [])
     const handleSubmit = (values) => {
-        dispatch(trans.createInventoryAction(values, form));
+        const formData = new FormData();
+        for (const key in values) {
+            formData.append(key, values[key]);
+        }
+        dispatch(trans.createInventoryAction(formData, form));
     }
     const onChangeSelect = (id) => {
         let temp = data.filter(item => item.id === id);

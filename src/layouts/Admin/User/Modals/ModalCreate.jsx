@@ -31,7 +31,11 @@ export default function ModalComponent() {
         } else {
             formData = { ...values };
         }
-        dispatch(trans.createUserAction(formData, form));
+        const formCreate = new FormData();
+        for (const key in formData) {
+            formCreate.append(key, values[key]);
+        }
+        dispatch(trans.createUserAction(formCreate, form));
     }
     const changeDate = (values, toString) => {
         date.current = toString;

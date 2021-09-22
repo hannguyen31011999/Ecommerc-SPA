@@ -15,17 +15,22 @@ export default function MainCart() {
         history.push(`/detail/${slug}`);
     }
     const updateCart = (cart, isBool) => {
+        const formData = new FormData();
         if (isBool) {
-            dispatch(actions.updateCartAction(cart.id, { qty: 1 }));
+            formData.append('qty', 1);
+            dispatch(actions.updateCartAction(cart.id, formData));
         } else {
             if (cart.qty > 1) {
-                dispatch(actions.updateCartAction(cart.id, { qty: -1 }));
+                formData.append('qty', -1);
+                dispatch(actions.updateCartAction(cart.id, formData));
             }
         }
     }
     const handleChangeQuantity = async (e, cart) => {
         if (e.target.value) {
-            await dispatch(actions.updateCartAction(cart.id, { qty: e.target.value }));
+            const formData = new FormData();
+            formData.append('qty', e.target.value);
+            await dispatch(actions.updateCartAction(cart.id, formData));
             e.target.value = cart.qty;
         }
     }

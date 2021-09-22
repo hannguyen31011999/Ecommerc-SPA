@@ -42,14 +42,18 @@ export default function ProductList() {
                     qty: 1,
                     user_id: user.id
                 }
+                const formData = new FormData();
+                for (const key in data) {
+                    formData.append(key, data[key]);
+                }
                 if (temp) {
                     if (temp.qty >= inventory_managements[0].qty) {
                         alertErrors('Sorry, Product is out of stock!');
                     } else {
-                        dispatch(actions.createCartAction(data));
+                        dispatch(actions.createCartAction(formData));
                     }
                 } else {
-                    dispatch(actions.createCartAction(data));
+                    dispatch(actions.createCartAction(formData));
                 }
             } else {
                 alertErrors('Sorry, Product is out of stock!');

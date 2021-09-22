@@ -12,7 +12,7 @@ export default function Banner() {
                         <div className="banner__caption">
                             <p>New line required</p>
                             <h3>iPhone 12 Pro Max</h3>
-                            <h4>$1299</h4>
+                            <h4>$859</h4>
                         </div>
                     </div>
                     <div className="col-lg-12 col-md-6 banner__item">
@@ -22,7 +22,7 @@ export default function Banner() {
                         <div className="banner__caption">
                             <p>New line required</p>
                             <h3>iPhone 12 Pro</h3>
-                            <h4>$1099</h4>
+                            <h4>$699</h4>
                         </div>
                     </div>
                 </div>

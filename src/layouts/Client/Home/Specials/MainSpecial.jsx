@@ -39,14 +39,18 @@ export default function MainSpecial() {
                     qty: 1,
                     user_id: user.id
                 }
+                const formData = new FormData();
+                for (const key in data) {
+                    formData.append(key, data[key]);
+                }
                 if (temp) {
                     if (temp.qty >= product_skus[0].sku_qty) {
                         alertErrors('Sorry, Product is out of stock!');
                     } else {
-                        dispatch(actions.createCartAction(data));
+                        dispatch(actions.createCartAction(formData));
                     }
                 } else {
-                    dispatch(actions.createCartAction(data));
+                    dispatch(actions.createCartAction(formData));
                 }
             } else {
                 alertErrors('Sorry, Product is out of stock!');

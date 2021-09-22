@@ -15,7 +15,7 @@ const CartReducer = (state = initialState, { type, payload }) => {
             return { ...state, loading: payload };
         }
         case constants.fetchCartSuccess: {
-            return { ...state, cart: payload, loading: false };
+            return { ...state, cart: payload };
         }
         case constants.createCart: {
             localStorage.removeItem(TOTAL_CART);

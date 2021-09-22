@@ -10,15 +10,15 @@ export const apiAdmin = {
         return callApi("api/admin/login", "post", data);
     },
     fetchApiLogout() {
-        // return callApiAdmin(`logout?token=${getToken()}`);
-        return callApiAdmin('logout');
+        return callApiAdmin(`logout?token=${getToken()}`);
+        // return callApiAdmin('logout');
     },
     refreshToken() {
-        // return apiRefreshToken(`api/refresh/token?token=${getToken()}`);
-        return apiRefreshToken(`api/refresh/token`);
+        return apiRefreshToken(`api/refresh/token?token=${getToken()}`);
+        // return apiRefreshToken(`api/refresh/token`);
     },
     fetchInfo() {
-        // return callApiAdmin(`info?token=${TOKEN}`);
+        // return callApiAdmin(`info?token=${getToken()}`);
         return callApiAdmin('info');
     }
 }

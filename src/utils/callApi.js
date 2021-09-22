@@ -20,10 +20,7 @@ export const apiCheckout = (endpoint, method = "get", data = null, token) => {
     return axios({
         method,
         url: `${BASE_URL}/${endpoint}`,
-        data,
-        headers: {
-            "Authorization": `Bearer ${token}`
-        }
+        data
     });
 }
 

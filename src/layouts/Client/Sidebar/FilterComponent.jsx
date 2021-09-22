@@ -48,7 +48,7 @@ export default function FilterComponent(props) {
                 return count;
             }
             default:
-                return count;
+                break;
         }
     }
     const handleCheckbox = (e) => {
@@ -64,28 +64,28 @@ export default function FilterComponent(props) {
                             checked={isCheck && type === 'type-1'}
                             type="checkbox"
                             onChange={handleCheckbox} value="type-1" />
-                        <label htmlFor="">$50 - 100 ({calculator('0', data.length > 0 ? data : dataTemp)})</label>
+                        <label htmlFor="">$50 - 100 ({calculator('0', dataTemp)})</label>
                     </div>
                     <div className="input-group">
                         <input className="form-check"
                             checked={isCheck && type === 'type-2'}
                             type="checkbox"
                             onChange={handleCheckbox} value="type-2" />
-                        <label htmlFor="">$100 - 500 ({calculator('1', data.length > 0 ? data : dataTemp)})</label>
+                        <label htmlFor="">$100 - 500 ({calculator('1', dataTemp)})</label>
                     </div>
                     <div className="input-group">
                         <input className="form-check"
                             checked={isCheck && type === 'type-3'}
                             type="checkbox"
                             onChange={handleCheckbox} value="type-3" />
-                        <label htmlFor="">$500 - 1000 ({calculator('2', data.length > 0 ? data : dataTemp)})</label>
+                        <label htmlFor="">$500 - 1000 ({calculator('2', dataTemp)})</label>
                     </div>
                     <div className="input-group">
                         <input className="form-check"
                             checked={isCheck && type === 'type-4'}
                             type="checkbox"
                             onChange={handleCheckbox} value="type-4" />
-                        <label htmlFor="">$1000 - 2000 ({calculator('3', data.length > 0 ? data : dataTemp)})</label>
+                        <label htmlFor="">$1000 - 2000 ({calculator('3', dataTemp)})</label>
                     </div>
                 </div>
             </div>

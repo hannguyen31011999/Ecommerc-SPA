@@ -77,16 +77,20 @@ function ProductSku(props) {
                 qty: parseInt(e.target[0].value),
                 user_id: user.id
             }
+            const formData = new FormData();
+            for (const key in data) {
+                formData.append(key, data[key]);
+            }
             if (sku.status == 1 && sku.qty >= parseInt(e.target[0].value)) {
                 const temp = cart.filter(cart => cart.sku_id == image.id)[0];
                 if (temp) {
                     if ((temp.qty + parseInt(e.target[0].value)) > sku.qty) {
                         alertErrors('Sorry, Product is out of stock!');
                     } else {
-                        dispatch(cartAct.createCartAction(data));
+                        dispatch(cartAct.createCartAction(formData));
                     }
                 } else {
-                    dispatch(cartAct.createCartAction(data));
+                    dispatch(cartAct.createCartAction(formData));
                 }
             } else {
                 alertErrors('Sorry, Product is out of stock!');

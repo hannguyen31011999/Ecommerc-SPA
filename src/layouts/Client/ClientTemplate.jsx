@@ -10,14 +10,15 @@ import publicIp from 'public-ip';
 
 function ClientTemplate(props) {
     const getIp = async () => {
-
         return await publicIp.v4();
     }
     useEffect(() => {
         if (!localStorage.getItem('IP_GUEST')) {
             getIp().then(res => {
+                const formData = new FormData();
+                formData.append('ip_guest', res);
                 localStorage.setItem('IP_GUEST', true);
-                callApi('/api/visitor', 'post', { ip_guest: res });
+                callApi('/api/visitor', 'post', formData);
             }).catch(e => {
 
             });

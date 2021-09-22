@@ -22,7 +22,11 @@ function ModalCreate() {
 
     }, [dispatch]);
     const handleSubmit = (values) => {
-        dispatch(trans.createCategoriesAction(values, form));
+        const formData = new FormData();
+        for (const key in values) {
+            formData.append(key, values[key]);
+        }
+        dispatch(trans.createCategoriesAction(formData, form));
     }
     return (
         <>

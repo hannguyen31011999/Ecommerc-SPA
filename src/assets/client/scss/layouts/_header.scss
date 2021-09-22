@@ -100,44 +100,46 @@ header {
 
 .header__middle--center {
     height: 100%;
-    display: flex;
-    .header__middle--select {
-        width: 22%;
-        .form-select {
-            height: 100%;
-            border-radius: 0px;
-            border-right: none;
-            &:focus {
-                box-shadow: none;
+    form {
+        display: flex;
+        .header__middle--select {
+            width: 22%;
+            .form-select {
+                height: 100%;
+                border-radius: 0px;
+                border-right: none;
+                &:focus {
+                    box-shadow: none;
+                }
             }
         }
-    }
-    .header__middle--input {
-        flex: 1;
-        .form-control {
-            height: 100%;
-            border-radius: 0px;
-            &:focus {
-                box-shadow: none;
+        .header__middle--input {
+            flex: 1;
+            .form-control {
+                height: 100%;
+                border-radius: 0px;
+                &:focus {
+                    box-shadow: none;
+                }
             }
         }
-    }
-    .header__middle--btn {
-        width: 10%;
-        .btn-primary {
-            height: 100%;
-            width: 100%;
-            border: none;
-            border-radius: 0px;
-            transition: $tran-1;
-            i {
-                font-size: $fs-1 - 2;
-            }
-            &:hover {
-                background-color: $bg-dark-blue;
-            }
-            &:focus {
-                box-shadow: none;
+        .header__middle--btn {
+            width: 10%;
+            .btn-primary {
+                height: 100%;
+                width: 100%;
+                border: none;
+                border-radius: 0px;
+                transition: $tran-1;
+                i {
+                    font-size: $fs-1 - 2;
+                }
+                &:hover {
+                    background-color: $bg-dark-blue;
+                }
+                &:focus {
+                    box-shadow: none;
+                }
             }
         }
     }
@@ -150,7 +152,7 @@ header {
     padding: 0 0 0 $pd-2;
     .header__middle--hotline {
         position: relative;
-        width: 50%;
+        width: 55%;
         .lni-phone {
             color: #081828;
             font-size: 18px;
@@ -317,7 +319,7 @@ header {
                         }
                     }
                     p {
-                        margin-bottom: 0;
+                        margin-bottom: 5px;
                         @include styleText(13px,$color-gray-1,0,0,$fw-2);
                     }
                     .header__cart--gift {

@@ -12,10 +12,11 @@ export default function CategoryComponent() {
     }
     const renderCategories = () => {
         return categories?.map((cate, index) => {
+            const countCategories = count.filter(item => item.id == cate.id)[0];
             return (
                 <li key={cate.id}>
                     <a href="" onClick={(e) => redirectCategories(e, cate.id)}>
-                        {cate.categories_name} ({count[index]?.products_count ? count[index]?.products_count : 0})
+                        {cate.categories_name} ({countCategories?.products_count ? countCategories?.products_count : 0})
                     </a>
                 </li>
             )
