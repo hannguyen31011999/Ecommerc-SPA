@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { apiLogin } from '../../../services/clientApi'
 import { ACCESS_TOKEN, INFO, TIMESTAMP, TOTAL_CART } from '../../../settings/configUrl'
 import * as action from '../../../redux/Actions/User/CartActions';
+import { logoutAuthAction } from '../../../redux/Actions/Admin/authActions';
 export default function HeaderTop(props) {
     const history = useHistory();
     const dispatch = useDispatch();
@@ -16,10 +17,15 @@ export default function HeaderTop(props) {
             localStorage.removeItem(TOTAL_CART);
             localStorage.removeItem(TIMESTAMP);
             dispatch(action.fetchSuccessAct([]));
+            dispatch(logoutAuthAction(false));
             history.push('/login');
         } catch (e) {
 
         }
+    }
+    const redirectPage = (e, slug) => {
+        e.preventDefault();
+        history.push(slug);
     }
     return (
         <div className="header__topbar">
@@ -38,13 +44,13 @@ export default function HeaderTop(props) {
                                 }
                                 <ul className="topbar__user">
                                     <li>
-                                        <NavLink to="">Account</NavLink>
+                                        <NavLink to="/account/profile">Account</NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="">Purchase Order</NavLink>
+                                        <NavLink to="/purchase">Purchase Order</NavLink>
                                     </li>
                                     <li>
-                                        <a href="" onClick={(e) => handleLogout(e)}>Logout</a>
+                                        <a href="*" onClick={(e) => handleLogout(e)}>Logout</a>
                                     </li>
                                 </ul>
                             </div>

@@ -20,6 +20,8 @@ import MainProduct from '../layouts/Client/Products/MainProduct';
 import MainCategories from '../layouts/Client/Categories/MainCategories';
 import MainCart from '../layouts/Client/Cart/MainCart';
 import MainCheckout from "../layouts/Client/Checkout/MainCheckout";
+import MainAccount from '../layouts/Client/Account/MainAccount';
+
 
 export const adminRoutes = [
     {
@@ -129,5 +131,41 @@ export const clientRoutes = [
         path: '/checkout',
         component: MainCheckout,
         exact: true
+    },
+    {
+        path: '/purchase',
+        component: MainAccount,
+        exact: true,
+        auth: true
+    },
+    {
+        path: '/account/profile',
+        component: MainAccount,
+        exact: true,
+        auth: true
+    },
+    {
+        path: '/account/password',
+        component: MainAccount,
+        exact: true,
+        auth: true
     }
+]
+
+export const protectedClientRoutes = [
+    // {
+    //     path: '/purchase',
+    //     component: MainAccount,
+    //     exact: true
+    // },
+    // {
+    //     path: '/account/profile',
+    //     component: MainAccount,
+    //     exact: true
+    // },
+    // {
+    //     path: '/account/password',
+    //     component: MainAccount,
+    //     exact: true
+    // }
 ]

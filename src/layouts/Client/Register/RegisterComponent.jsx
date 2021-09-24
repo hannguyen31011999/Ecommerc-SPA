@@ -25,7 +25,11 @@ export default function RegisterComponent(props) {
     const dispatch = useDispatch();
     const errorsRegister = useSelector(state => state.RegisterReducer.errors);
     const onSubmitHandler = (data) => {
-        dispatch(actions.registerAction(data, reset));
+        const formData = new FormData();
+        for (const key in data) {
+            formData.append(key, data[key]);
+        }
+        dispatch(actions.registerAction(formData, reset));
     };
     return (
         <>

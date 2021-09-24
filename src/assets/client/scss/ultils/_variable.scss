@@ -8,6 +8,7 @@ $color-black-1: #232323;
 $color-gray-0: #666;
 $color-gray-1: #888;
 $color-yellow-0: #fecb00;
+$color-orange-0: #F0722D;
 
 // transition
 $tran-1 : all 0.2s;
@@ -69,5 +70,7 @@ $breakpoints:(
     'extra-large': 1200px,
     'large' : 992px,
     'medium' : 768px,
-    'small' : 576px
+    'small' : 576px,
+    'mobile' : 499px,
+    'small-mobile': 360px
 )

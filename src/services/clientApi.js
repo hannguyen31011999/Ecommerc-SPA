@@ -88,3 +88,9 @@ export const apiProduct = {
         return callApi(`api/categories/${id}?page=${page}`);
     }
 }
+
+export const apiPurchase = {
+    updateInfo(id, form) {
+        return callApi(`api/info/update/${id}?token=${getToken()}`, 'post', form);
+    }
+}

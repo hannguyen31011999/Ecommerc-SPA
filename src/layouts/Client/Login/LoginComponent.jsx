@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
 import BreadCrumb from '../Breadcrumb/BreadCrumb'
 import { NavLink, useHistory } from 'react-router-dom';
 import { useForm } from "react-hook-form";
@@ -8,6 +9,7 @@ import { Space, Spin } from 'antd';
 import { apiLogin } from '../../../services/clientApi';
 import { handleExpired } from '../../../utils/expired';
 import { INFO } from '../../../settings/configUrl';
+import { authUserAction } from '../../../redux/Actions/Admin/authActions';
 
 const schema = yup.object().shape({
     email: yup.string().max(100).email().required(),
@@ -18,6 +20,7 @@ export default function LoginComponent(props) {
     const [loading, setLoading] = useState(false);
     const [messageError, setMessageError] = useState('');
     const history = useHistory();
+    const dispatch = useDispatch();
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         mode: 'onChange',
         resolver: yupResolver(schema),
@@ -34,6 +37,7 @@ export default function LoginComponent(props) {
             let miliseconds = timestamp.getTime();
             handleExpired(res.data.timestamp.expired, miliseconds, res.data.token);
             localStorage.setItem(INFO, JSON.stringify(res.data.user));
+            dispatch(authUserAction(true));
             history.push('/');
         } else {
             setMessageError(res.data.message);

@@ -5,6 +5,11 @@ export const authAction = payload => ({
     payload
 });
 
+export const authUserAction = payload => ({
+    type: constants.loginAuthUserConstants,
+    payload
+});
+
 export const logoutAuthAction = payload => ({
     type: constants.logoutAuthConstants,
     payload
