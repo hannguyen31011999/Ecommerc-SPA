@@ -5,9 +5,11 @@ import InfoAccount from './Info/InfoAccount';
 import MenuAccount from './MenuAccount';
 import PurchaseComponent from './Purchase/PurchaseComponent';
 import PasswordAccount from './Info/PasswordAccount';
+import { INFO } from '../../../settings/configUrl';
 
 export default function MainAccount(props) {
     const path = useHistory().location.pathname;
+    const user = JSON.parse(localStorage.getItem(INFO));
     return (
         <>
             <section className="purchase">
@@ -19,7 +21,7 @@ export default function MainAccount(props) {
                                     <img src={process.env.PUBLIC_URL + "/assets/img/user.png"} alt="*" />
                                 </figure>
                                 <div className="purchase__info--action">
-                                    <h4 className="purchase__info--name">Nguyễn Việt Hân</h4>
+                                    <h4 className="purchase__info--name">{user.name}</h4>
                                     <div className="purchase__info--edit">
                                         <NavLink to="/account/profile">
                                             <i className="lni lni-pencil" />

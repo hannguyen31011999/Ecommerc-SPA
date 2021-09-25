@@ -5,11 +5,13 @@ const initialState = {
     product: {
         data: [],
         currentPage: 1,
+        lastPage: 0,
         total: 0
     },
     temp: {
         data: [],
         currentPage: 1,
+        lastPage: 0,
         total: 0
     },
     categories: [],
@@ -144,6 +146,18 @@ const ProductClientReducer = (state = initialState, { type, payload }) => {
                     tmp = [...state.temp.data];
             }
             return { ...state, product: { ...state.product, data: tmp } };
+        }
+        case constants.pagination: {
+            const { data, total, currentPage, lastPage } = payload.product;
+            const temp = [...state.product.data].concat(data);
+            return {
+                ...state,
+                product: { data: temp, total, currentPage, lastPage },
+                temp: payload.product,
+                categories: payload.categories,
+                discount: payload.discount,
+                loading: false
+            };
         }
         default:
             return state

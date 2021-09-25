@@ -5,6 +5,7 @@ import { alertErrors } from '../../../settings/config';
 import { ACCESS_TOKEN, INFO, STORAGE } from '../../../settings/configUrl';
 import * as actions from '../Products/Modules/Actions';
 import * as cartAction from '../../../redux/Actions/User/CartActions';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export default function NavsProduct() {
     const cart = useSelector(state => state.CartReducer.cart);
@@ -170,6 +171,11 @@ export default function NavsProduct() {
             )
         })
     }
+    const paginationProduct = () => {
+        if (product.lastPage > product.currentPage) {
+            dispatch(actions.paginationCategoriesProductAction(params, product.currentPage + 1));
+        }
+    }
     return (
         <>
             <div className="tab-content" id="nav-tabContent">
@@ -180,7 +186,13 @@ export default function NavsProduct() {
                 </div>
                 <div className="tab-pane fade" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
                     <div className="product__tab--list">
-                        {discountProduct?.length > 0 ? renderProductList() : ''}
+                        <InfiniteScroll
+                            dataLength={product.data.length}
+                            next={paginationProduct}
+                            hasMore={true}
+                        >
+                            {product.data.length > 0 ? renderProductList() : ''}
+                        </InfiniteScroll>
                     </div>
                 </div>
             </div>

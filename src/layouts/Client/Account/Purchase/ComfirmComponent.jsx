@@ -5,11 +5,14 @@ import { Space, Spin } from 'antd';
 import { INFO, STORAGE } from '../../../../settings/configUrl';
 import { returnStatus } from '../../../../utils/helper';
 import * as action from '../Modules/Actions';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export default function ComfirmComponent() {
     const [current, setCurrent] = useState(false);
     const loading = useSelector(state => state.PurchaseReducer.loading);
     const data = useSelector(state => state.PurchaseReducer.comfirm.data);
+    const currentPage = useSelector(state => state.PurchaseReducer.comfirm.currentPage);
+    const lastPage = useSelector(state => state.PurchaseReducer.comfirm.lastPage);
     const history = useHistory();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem(INFO));
@@ -25,6 +28,7 @@ export default function ComfirmComponent() {
             return (
                 <div className="purchase__order" key={item.id}>
                     <div className="purchase__status">
+                        <p>Code:{item.id}</p>
                         <p>{returnStatus(item.order_status)}</p>
                     </div>
                     <div className="purchase__list">
@@ -61,6 +65,11 @@ export default function ComfirmComponent() {
             )
         });
     }
+    const scrollPurchase = () => {
+        if (currentPage < lastPage) {
+            dispatch(action.paginationPurchaseStatusAction(user.id, query[1], currentPage + 1));
+        }
+    }
     return (
         <>
             <div className={loading ? "loading" : "loading active-loading"}>
@@ -68,7 +77,20 @@ export default function ComfirmComponent() {
                     <Spin size="large" />
                 </Space>
             </div>
-            {data.length > 0 ? renderPurchase(data) : ''}
+            <InfiniteScroll
+                dataLength={data.length}
+                next={scrollPurchase}
+                hasMore={true}
+            >
+                {data.length > 0 ? renderPurchase(data) :
+                    <div className="purchase__empty">
+                        <figure>
+                            <img src={process.env.PUBLIC_URL + "/img/order.png"} alt="*" />
+                        </figure>
+                        <h4 className="purchase__empty--title">No orders yet</h4>
+                    </div>
+                }
+            </InfiniteScroll>
         </>
     )
 }

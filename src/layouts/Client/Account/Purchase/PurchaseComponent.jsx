@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Space, Spin } from 'antd';
 import { INFO, STORAGE } from '../../../../settings/configUrl';
 import { returnStatus } from '../../../../utils/helper';
+import InfiniteScroll from "react-infinite-scroll-component";
 import * as action from '../Modules/Actions';
 import ComfirmComponent from './ComfirmComponent';
 import DeliveringComponent from './DeliveringComponent';
@@ -13,18 +14,26 @@ import DeliveredComponent from './DeliveredComponent';
 export default function PurchaseComponent(props) {
     const loading = useSelector(state => state.PurchaseReducer.loading);
     const data = useSelector(state => state.PurchaseReducer.total.data);
-    const [visiable, setVisiable] = useState(0);
+    const currentPage = useSelector(state => state.PurchaseReducer.total.currentPage);
+    const lastPage = useSelector(state => state.PurchaseReducer.total.lastPage);
+    const [current, setCurrent] = useState(false);
     const history = useHistory();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem(INFO));
     const query = history.location.search.split("?type=");
+    const path = history.location.pathname;
     useEffect(() => {
         if (query.length < 2 && data.length < 1) {
             dispatch(action.fetchAllPurchaseAction(user.id));
         }
     }, []);
+    useEffect(() => {
+        if (query[1] > 0 && query[1] === "5" && data.length < 1 && !current) {
+            setCurrent(true);
+            dispatch(action.fetchAllPurchaseAction(user.id));
+        }
+    }, [query]);
     const redirectPurchaseByType = (type) => {
-        setVisiable(type);
         type === 0 ? history.push(`/purchase`) : history.push(`/purchase?type=${type}`);
     }
     const renderPurchase = (order) => {
@@ -32,6 +41,7 @@ export default function PurchaseComponent(props) {
             return (
                 <div className="purchase__order" key={item.id}>
                     <div className="purchase__status">
+                        <p>Code:{item.id}</p>
                         <p>{returnStatus(item.order_status)}</p>
                     </div>
                     <div className="purchase__list">
@@ -68,6 +78,11 @@ export default function PurchaseComponent(props) {
             )
         });
     }
+    const scrollPurchase = () => {
+        if (currentPage < lastPage) {
+            dispatch(action.paginationAllPurchaseAction(user.id, currentPage + 1));
+        }
+    }
     return (
         <>
             <div className={loading ? "loading" : "loading active-loading"}>
@@ -76,41 +91,47 @@ export default function PurchaseComponent(props) {
                 </Space>
             </div>
             <ul className="nav nav-tabs align-items-center" id="myTab" role="tablist">
-                <li className={visiable === 0 ? "nav-item active-purchase" : "nav-item"} role="presentation">
-                    <button onClick={() => redirectPurchaseByType(0)} className="nav-link active" id="total-tab" data-bs-toggle="tab" data-bs-target="#total" type="button" role="tab" aria-controls="total" aria-selected="true">Total</button>
+                <li className={query[1] === "5" || (path === "/purchase" && query.length === 1) ? "nav-item active-purchase" : "nav-item"} role="presentation">
+                    <button onClick={() => redirectPurchaseByType(5)} className={query[1] === "5" || (path === "/purchase" && query.length === 1) ? "nav-link active" : "nav-link"} type="button">Total</button>
                 </li>
-                <li className={visiable === 1 ? "nav-item active-purchase" : "nav-item"} role="presentation">
-                    <button onClick={() => redirectPurchaseByType(1)} className="nav-link" id="wait-tab" data-bs-toggle="tab" data-bs-target="#wait" type="button" role="tab" aria-controls="wait" aria-selected="false">
+                <li className={query[1] === "1" ? "nav-item active-purchase" : "nav-item"} role="presentation">
+                    <button onClick={() => redirectPurchaseByType(1)} className={query[1] === "1" ? "nav-link active" : "nav-link"} type="button">
                         Comfirmation
                     </button>
                 </li>
-                <li className={visiable === 2 ? "nav-item active-purchase" : "nav-item"} role="presentation">
-                    <button onClick={() => redirectPurchaseByType(2)} className="nav-link" id="delivering-tab" data-bs-toggle="tab" data-bs-target="#delivering" type="button" role="tab" aria-controls="delivering" aria-selected="false">Delivering</button>
+                <li className={query[1] === "2" ? "nav-item active-purchase" : "nav-item"} role="presentation">
+                    <button onClick={() => redirectPurchaseByType(2)} className={query[1] === "2" ? "nav-link active" : "nav-link"} type="button">Delivering</button>
                 </li>
-                <li className={visiable === 3 ? "nav-item active-purchase" : "nav-item"} role="presentation">
-                    <button onClick={() => redirectPurchaseByType(3)} className="nav-link" id="delivered-tab" data-bs-toggle="tab" data-bs-target="#delivered" type="button" role="tab" aria-controls="delivered" aria-selected="false">Delivered</button>
+                <li className={query[1] === "3" ? "nav-item active-purchase" : "nav-item"} role="presentation">
+                    <button onClick={() => redirectPurchaseByType(3)} className={query[1] === "3" ? "nav-link active" : "nav-link"} type="button">Delivered</button>
                 </li>
-                <li className={visiable === 4 ? "nav-item active-purchase" : "nav-item"} role="presentation">
-                    <button onClick={() => redirectPurchaseByType(4)} className="nav-link" id="cancel-tab" data-bs-toggle="tab" data-bs-target="#cancel" type="button" role="tab" aria-controls="cancel" aria-selected="false">Cancelled</button>
+                <li className={query[1] === "4" ? "nav-item active-purchase" : "nav-item"} role="presentation">
+                    <button onClick={() => redirectPurchaseByType(4)} className={query[1] === "4" ? "nav-link active" : "nav-link"} type="button" role="tab">Cancelled</button>
                 </li>
             </ul>
             <div className="purchase__seach">
-                <input type="text" className="form-control" placeholder="Search by ID or Product name....." />
+                <input type="text" className="form-control" placeholder="Search by code bill....." />
             </div>
             <div className="tab-content" id="myTabContent">
-                <div className="tab-pane fade show active" id="total" role="tabpanel" aria-labelledby="total-tab">
-                    {data.length > 0 ? renderPurchase(data) : ''}
+                <div className={query[1] === "5" || (path === "/purchase" && query.length === 1) ? "tab-pane active" : "tab-pane"} id="total" role="tabpanel" aria-labelledby="total-tab">
+                    <InfiniteScroll
+                        dataLength={data.length}
+                        next={scrollPurchase}
+                        hasMore={true}
+                    >
+                        {data.length > 0 ? renderPurchase(data) : ''}
+                    </InfiniteScroll>
                 </div>
-                <div className="tab-pane fade" id="wait" role="tabpanel" aria-labelledby="wait-tab">
+                <div className={query[1] === "1" ? "tab-pane active" : "tab-pane"}>
                     <ComfirmComponent />
                 </div>
-                <div className="tab-pane fade" id="delivering" role="tabpanel" aria-labelledby="delivering-tab">
+                <div className={query[1] === "2" ? "tab-pane active" : "tab-pane"}>
                     <DeliveringComponent />
                 </div>
-                <div className="tab-pane fade" id="delivered" role="tabpanel" aria-labelledby="delivered-tab">
+                <div className={query[1] === "3" ? "tab-pane active" : "tab-pane"}>
                     <DeliveredComponent />
                 </div>
-                <div className="tab-pane fade" id="cancel" role="tabpanel" aria-labelledby="cancel-tab">
+                <div className={query[1] === "4" ? "tab-pane active" : "tab-pane"}>
                     <div className="purchase__empty">
                         <figure>
                             <img src={process.env.PUBLIC_URL + "/img/order.png"} alt="*" />

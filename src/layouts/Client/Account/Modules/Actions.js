@@ -23,7 +23,7 @@ export const fetchComfirmPurchaseAct = payload => ({
 });
 
 export const paginationComfirmAct = payload => ({
-    type: constant.paginationAll,
+    type: constant.paginationComfirm,
     payload
 });
 
@@ -72,7 +72,9 @@ export const fetchAllPurchaseAction = id => async (dispatch) => {
             dispatch(fetchAllAct(data));
         }
     } catch (e) {
-
+        if (e.response) {
+            alertErrors("Sorry, Please try again");
+        }
     }
 }
 
@@ -95,6 +97,58 @@ export const fetchPurchaseForStatusAction = (id, status) => async (dispatch) => 
                     break;
                 case "3":
                     dispatch(fetchDeliveredAct(data));
+                    break;
+                default:
+                    break;
+            }
+        }
+    } catch (e) {
+        if (e.response) {
+            alertErrors("Sorry, Please try again");
+        }
+    }
+}
+
+export const paginationAllPurchaseAction = (id, page) => async (dispatch) => {
+    try {
+        dispatch(loadingAct(true));
+        const res = await apiPurchase.paginationAll(id, page);
+        if (res.data.status_code == 200) {
+            const result = res.data.data;
+            const data = {
+                data: result.data,
+                currentPage: result.current_page,
+                lastPage: result.last_page
+            };
+            dispatch(paginationAllAct(data));
+        }
+    } catch (e) {
+        if (e.response) {
+            alertErrors("Sorry, Please try again");
+        }
+    }
+}
+
+export const paginationPurchaseStatusAction = (id, status, page) => async (dispatch) => {
+    try {
+        dispatch(loadingAct(true));
+        const res = await apiPurchase.paginationPurchaseStatus(id, status, page);
+        if (res.data.status_code == 200) {
+            const result = res.data.data;
+            const data = {
+                data: result.data,
+                currentPage: result.current_page,
+                lastPage: result.last_page
+            };
+            switch (status) {
+                case "1":
+                    dispatch(paginationComfirmAct(data));
+                    break;
+                case "2":
+                    dispatch(paginationDeliveringAct(data));
+                    break;
+                case "3":
+                    dispatch(paginationDeliveredAct(data));
                     break;
                 default:
                     break;

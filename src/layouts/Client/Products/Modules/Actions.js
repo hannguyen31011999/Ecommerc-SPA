@@ -12,6 +12,11 @@ export const fetchProductAct = payload => ({
     payload
 });
 
+export const paginationAct = payload => ({
+    type: constants.pagination,
+    payload
+});
+
 export const fetchFailAct = payload => ({
     type: constants.fetchFail,
     payload
@@ -43,6 +48,7 @@ export const fetchProductAction = (slug) => async dispatch => {
                     data: result.data.data,
                     total: result.data.total,
                     currentPage: result.data.current_page,
+                    lastPage: result.data.last_page
                 },
                 categories: result.categories,
                 discount: result.discount
@@ -68,11 +74,38 @@ export const fetchCategoriesProductAction = (id) => async dispatch => {
                     data: result.data.data,
                     total: result.data.total,
                     currentPage: result.data.current_page,
+                    lastPage: result.data.last_page
                 },
                 categories: result.categories,
                 discount: result.discount
             }
             dispatch(fetchProductAct(data));
+        }
+    } catch (e) {
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
+    }
+}
+
+export const paginationCategoriesProductAction = (id, page) => async dispatch => {
+    try {
+        dispatch(loadingAct(true));
+        const res = await apiProduct.paginationProductWithCategories(id, page);
+        if (res.data.status_code == STATUS_SUCCESS) {
+            const result = res.data.data;
+            const data = {
+                product: {
+                    data: result.data.data,
+                    total: result.data.total,
+                    currentPage: result.data.current_page,
+                    lastPage: result.data.last_page
+                },
+                categories: result.categories,
+                discount: result.discount
+            }
+            dispatch(paginationAct(data));
         }
     } catch (e) {
         if (e.response) {

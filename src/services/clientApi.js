@@ -101,5 +101,11 @@ export const apiPurchase = {
     },
     getPurchaseForStatus(id, status) {
         return callApi(`api/user/${id}/purchase?type=${status}&token=${getToken()}`, 'get');
+    },
+    paginationAll(id, page) {
+        return callApi(`api/user/${id}/purchase/all?page=${page}&token=${getToken()}`, 'get');
+    },
+    paginationPurchaseStatus(id, status, page) {
+        return callApi(`api/user/${id}/purchase?page=${page}&type=${status}&token=${getToken()}`, 'get');
     }
 }
