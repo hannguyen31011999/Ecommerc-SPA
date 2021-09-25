@@ -40,7 +40,6 @@ export default function InfoAccount() {
         resolver: yupResolver(schema),
     });
     const [loading, setLoading] = useState(false);
-    const form = useRef();
     const dateTime = useRef("");
     const gender = useRef();
     const user = JSON.parse(localStorage.getItem(INFO));

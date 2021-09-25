@@ -21,13 +21,13 @@ export default function MenuAccount(props) {
                     </ul>
                 </li>
                 <li className="purchase__navItem">
-                    <NavLink to="/purchase" className="purchase__navlink">
+                    <NavLink to="/purchase" className={history.location.pathname === '/purchase' ? "purchase__navlink purchase__navlink--active" : "purchase__navlink"}>
                         <i className="lni lni-cart" />
                         Purchase Order
                     </NavLink>
                 </li>
                 <li className="purchase__navItem">
-                    <NavLink to="/purchase" className="purchase__navlink">
+                    <NavLink to="/purchase" className={history.location.pathname === '/notification' ? "purchase__navlink purchase__navlink--active" : "purchase__navlink"}>
                         <i className="fa fa-bell" />
                         Notification
                     </NavLink>

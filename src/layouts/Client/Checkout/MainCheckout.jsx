@@ -106,7 +106,7 @@ export default function MainCheckout(props) {
     const getPaymentMethod = useCallback((payment, option) => getPayment(payment, option), []);
     const calculatorSubTotalPrice = () => {
         return cart?.reduce((total, cart) => {
-            return total += (cart.promotion_price ? cart.promotion_price : cart.unit_price) * cart.qty;
+            return total += (cart.promotion_price > 0 ? cart.promotion_price : cart.unit_price) * cart.qty;
         }, 0);
     }
     const calculatorTotalDiscount = () => {

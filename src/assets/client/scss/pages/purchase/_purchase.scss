@@ -82,6 +82,9 @@
                 color: $color-orange-0;
             }
         }
+        .purchase__navlink--active {
+            color: $color-orange-0;
+        }
         .purchase__menu {
             padding: $pd-1 0 0 $pd-2 + 8;
             list-style: none;
@@ -405,5 +408,24 @@
             width: 100%;
             padding: 0 $pd-0;
         }
+    }
+}
+
+.purchase__empty {
+    min-height: 300px;
+    background-color: $color-white;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 6px;
+    text-align: center;
+    padding: calc((300px - 128.8px) / 2) 0;
+    figure {
+        margin-bottom: 20px;
+        img {
+            width: 100px;
+            height: 100px;
+        }
+    }
+    .purchase__empty--title {
+        margin-bottom: 0;
+        @include styleText($fs-0,$bg-dark-blue,0,0,$fw-2);
     }
 }

@@ -92,5 +92,14 @@ export const apiProduct = {
 export const apiPurchase = {
     updateInfo(id, form) {
         return callApi(`api/info/update/${id}?token=${getToken()}`, 'post', form);
+    },
+    changePassword(id, form) {
+        return callApi(`api/password/update/${id}?token=${getToken()}`, 'post', form);
+    },
+    getAllPurchase(id) {
+        return callApi(`api/user/${id}/purchase/all?token=${getToken()}`, 'get');
+    },
+    getPurchaseForStatus(id, status) {
+        return callApi(`api/user/${id}/purchase?type=${status}&token=${getToken()}`, 'get');
     }
 }

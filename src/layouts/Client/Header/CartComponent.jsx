@@ -22,7 +22,7 @@ export default function CartComponent(props) {
     }
     const calculatorCart = () => {
         return cart?.reduce((total, cart) => {
-            if (cart.promotion_price) {
+            if (cart.promotion_price > 0) {
                 return total += parseFloat(cart.qty * cart.promotion_price) - parseFloat(cart.discount * cart.qty);
             } else {
                 return total += parseFloat(cart.qty * cart.unit_price) - parseFloat(cart.discount * cart.qty);
@@ -45,7 +45,7 @@ export default function CartComponent(props) {
                         <p>
                             <span className="header__cart--quantity">{cart.qty}x</span>
                             <span className="header__cart--amount">
-                                ${cart.promotion_price ? cart.promotion_price : cart.unit_price}
+                                ${cart.promotion_price > 0 ? cart.promotion_price : cart.unit_price}
                             </span>
 
                         </p>

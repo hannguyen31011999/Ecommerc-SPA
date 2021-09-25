@@ -22,6 +22,7 @@ import RegisterReducer from './Reducers/User/RegisterReducer';
 import ProductDetailReducer from '../layouts/Client/Detail/Modules/ProductDetailReducer';
 import ReviewReducer from '../layouts/Admin/Review/modules/ReviewReducer';
 import ProductClientReducer from '../layouts/Client/Products/Modules/ProductClientReducer';
+import PurchaseReducer from '../layouts/Client/Account/Modules/PurchaseReducer';
 
 const rootReducer = combineReducers({
     // admin
@@ -40,7 +41,8 @@ const rootReducer = combineReducers({
     CartReducer,
     RegisterReducer,
     ProductDetailReducer,
-    ProductClientReducer
+    ProductClientReducer,
+    PurchaseReducer
 });
 
 const persistConfig = {

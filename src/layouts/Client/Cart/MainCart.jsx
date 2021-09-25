@@ -75,7 +75,7 @@ export default function MainCart() {
                             </div>
                         </div>
                         <div className="col-lg-2 col-md-2 cart__subtotal">
-                            <p>${cart.promotion_price ? cart.promotion_price : cart.unit_price}</p>
+                            <p>${cart.promotion_price > 0 ? cart.promotion_price * cart.qty : cart.unit_price * cart.qty}</p>
                         </div>
                         <div className="col-lg-2 col-md-2 cart__discount">
                             <p>{cart.discount > 0 ? `$${cart.discount}` : '-'}</p>
@@ -100,7 +100,7 @@ export default function MainCart() {
     }
     const calculatorSubTotalPrice = () => {
         return cart?.reduce((total, cart) => {
-            return total += (cart.promotion_price ? cart.promotion_price : cart.unit_price) * cart.qty;
+            return total += (cart.promotion_price > 0 ? cart.promotion_price : cart.unit_price) * cart.qty;
         }, 0);
     }
     const calculatorTotalDiscount = () => {

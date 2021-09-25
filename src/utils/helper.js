@@ -16,3 +16,18 @@ export const capitalize = (str) => {
 export const formatCurrency = (num) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
+
+export const returnStatus = (status) => {
+    switch (status) {
+        case 1:
+            return "Comfirmation";
+        case 2:
+            return "Delivering";
+        case 3:
+            return "Delivered"
+        case 4:
+            return "Cancel"
+        default:
+            break;
+    }
+}
