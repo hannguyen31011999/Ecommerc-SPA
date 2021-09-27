@@ -153,7 +153,7 @@ const ProductClientReducer = (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 product: { data: temp, total, currentPage, lastPage },
-                temp: payload.product,
+                temp: { data: temp, total, currentPage, lastPage },
                 categories: payload.categories,
                 discount: payload.discount,
                 loading: false

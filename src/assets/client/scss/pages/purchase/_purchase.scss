@@ -247,7 +247,7 @@
     .purchase__action {
         width: 100%;
         text-align: right;
-        padding: $pd-2 $pd-1;
+        padding: 0 $pd-2 $pd-2 $pd-2;
         .product__btn {
             border: none;
             padding: $pd-1 $pd-3;
@@ -256,6 +256,18 @@
             @include responsive('mobile'){
                 padding: $pd-0 $pd-2;
                 font-size: $fs-default;
+            }
+        }
+    }
+    .purchase__total {
+        padding: $pd-2;
+        text-align: right;
+        p {
+            margin-bottom: 0;
+            @include styleText($fs-0 - 1,$bg-dark-blue,0,0,$fw-4);
+            .purchase__price--total {
+                padding-left: $pd-0;
+                @include styleText($fs-1 - 4,$color-orange-0,0,0,$fw-4);
             }
         }
     }
@@ -430,3 +442,4 @@
         @include styleText($fs-0,$bg-dark-blue,0,0,$fw-2);
     }
 }
+

@@ -1,11 +1,12 @@
 import * as constant from './Constants';
 import { apiPurchase } from '../../../../services/clientApi';
-import { alertErrors } from '../../../../settings/config';
+import { alertErrors, alertSuccess } from '../../../../settings/config';
 
 export const loadingAct = payload => ({
     type: constant.loading,
     payload
 });
+
 
 export const fetchAllAct = payload => ({
     type: constant.fetchAll,
@@ -58,6 +59,16 @@ export const paginationCancelledAct = payload => ({
     payload
 });
 
+export const deletePurchaseAllAct = payload => ({
+    type: constant.deletePurchaseAll,
+    payload
+});
+
+
+export const createPurchase = payload => ({
+    type: constant.createPurchase,
+    payload
+});
 
 export const fetchAllPurchaseAction = id => async (dispatch) => {
     try {
@@ -74,6 +85,7 @@ export const fetchAllPurchaseAction = id => async (dispatch) => {
     } catch (e) {
         if (e.response) {
             alertErrors("Sorry, Please try again");
+            dispatch(loadingAct(false));
         }
     }
 }
@@ -98,6 +110,9 @@ export const fetchPurchaseForStatusAction = (id, status) => async (dispatch) => 
                 case "3":
                     dispatch(fetchDeliveredAct(data));
                     break;
+                case "4":
+                    dispatch(fetchCancelledAct(data));
+                    break;
                 default:
                     break;
             }
@@ -105,6 +120,7 @@ export const fetchPurchaseForStatusAction = (id, status) => async (dispatch) => 
     } catch (e) {
         if (e.response) {
             alertErrors("Sorry, Please try again");
+            dispatch(loadingAct(false));
         }
     }
 }
@@ -125,6 +141,7 @@ export const paginationAllPurchaseAction = (id, page) => async (dispatch) => {
     } catch (e) {
         if (e.response) {
             alertErrors("Sorry, Please try again");
+            dispatch(loadingAct(false));
         }
     }
 }
@@ -150,6 +167,9 @@ export const paginationPurchaseStatusAction = (id, status, page) => async (dispa
                 case "3":
                     dispatch(paginationDeliveredAct(data));
                     break;
+                case "4":
+                    dispatch(paginationCancelledAct(data));
+                    break;
                 default:
                     break;
             }
@@ -157,6 +177,25 @@ export const paginationPurchaseStatusAction = (id, status, page) => async (dispa
     } catch (e) {
         if (e.response) {
             alertErrors("Sorry, Please try again");
+            dispatch(loadingAct(false));
+        }
+    }
+}
+
+export const deletePurchaseAction = (id, status) => async (dispatch) => {
+    try {
+        dispatch(loadingAct(true));
+        const formData = new FormData();
+        formData.append('order_status', status);
+        const res = await apiPurchase.deletePurchase(id, formData);
+        if (res.data.status_code == 200) {
+            dispatch(deletePurchaseAllAct({ id, status }));
+            alertSuccess(res.data.message);
+        }
+    } catch (e) {
+        if (e.response) {
+            alertErrors("Sorry, Please try again");
+            dispatch(loadingAct(false));
         }
     }
 }

@@ -29,7 +29,6 @@ function AdminTemplate(props) {
                                 }
                             </Breadcrumb.Item>
                         </Breadcrumb>
-
                     </div>
                     {props.children}
                 </div>

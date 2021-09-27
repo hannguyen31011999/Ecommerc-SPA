@@ -14,6 +14,7 @@ export default function ProductDetail(props) {
     const params = useParams();
     const history = useHistory();
     useEffect(() => {
+        window.scrollTo(0, 0);
         dispatch(actions.fetchProductAction(params.slug));
     }, [params]);
     const redirect = useCallback((slug) => {

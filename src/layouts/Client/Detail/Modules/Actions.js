@@ -48,10 +48,8 @@ export const fetchProductAction = (slug) => async (dispatch) => {
                     total: result.review.total,
                     currentPage: result.review.current_page
                 },
-                inventory: result.inventory,
                 discount: result.discount,
                 variants: result.variants,
-                slug: result.slug
             }
             dispatch(fetchProductAct(data));
         }

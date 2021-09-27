@@ -14,6 +14,8 @@ import UserReducer from '../layouts/Admin/User/modules/UserReducer';
 import ProductReducer from '../layouts/Admin/Product/modules/ProductReducer';
 import ProductVariantReducer from '../layouts/Admin/ProductVariant/modules/ProductVariantReducer';
 import InventoryReducer from '../layouts/Admin/Inventory/modules/InventoryReducer';
+import OrderReducer from '../layouts/Admin/Order/modules/OrderReducer';
+import DashBoardReducer from '../layouts/Admin/Dashboard/modules/DashBoardReducer';
 import authReducer from './Reducers/Admin/authReducer';
 // Reducer client
 import HomeReducer from '../layouts/Client/Home/Modules/HomeReducer';
@@ -35,6 +37,8 @@ const rootReducer = combineReducers({
     ProductVariantReducer,
     InventoryReducer,
     ReviewReducer,
+    OrderReducer,
+    DashBoardReducer,
     authReducer,
     // client
     HomeReducer,

@@ -13,24 +13,21 @@ function ProductSku(props) {
     const discount = useSelector(state => state.ProductDetailReducer.discount);
     const variant = useSelector(state => state.ProductDetailReducer.variants);
     const product_sku = useSelector(state => state.ProductDetailReducer.product_sku);
-    const slugs = useSelector(state => state.ProductDetailReducer.slug);
-    const inventory = useSelector(state => state.ProductDetailReducer.inventory);
     const image = useSelector(state => state.ProductDetailReducer.image);
     const cart = useSelector(state => state.CartReducer.cart);
     const history = useHistory();
     const dispatch = useDispatch();
     const renderRom = () => {
         return variant?.map((item, index) => {
-            const url = slugs.filter(slug => slug.product_variant_id == item.id)[0];
-            if (item.id == product.id) {
+            if (item.id === product.id) {
                 return (
-                    <div className="product__rom--item rom-active" key={item.id} onClick={() => { props.redirect(url.slug_url) }}>
+                    <div className="product__rom--item rom-active" key={item.id} onClick={() => { props.redirect(item.slugs[0].slug_url) }}>
                         <span>{item.product_variant_rom}GB</span>
                     </div>
                 )
             } else {
                 return (
-                    <div className="product__rom--item" key={item.id} onClick={() => { props.redirect(url.slug_url) }}>
+                    <div className="product__rom--item" key={item.id} onClick={() => { props.redirect(item.slugs[0].slug_url) }}>
                         <span>{item.product_variant_rom}GB</span>
                     </div>
                 )
@@ -63,7 +60,7 @@ function ProductSku(props) {
         e.preventDefault();
         const user = JSON.parse(localStorage.getItem(INFO));
         const token = localStorage.getItem(ACCESS_TOKEN);
-        const sku = inventory?.filter(inv => inv.sku_id == image.id)[0];
+        const inventory = image.inventory_managements[0];
         if (token && user) {
             const data = {
                 sku_id: image.id,
@@ -71,8 +68,8 @@ function ProductSku(props) {
                 unit_price: image.sku_unit_price,
                 promotion_price: image.sku_promotion_price ? image.sku_promotion_price : 0,
                 color: image.color,
-                slug: slugs.filter(slug => slug.product_variant_id == product.id)[0].slug_url,
-                discount: discount.discount_value,
+                slug: variant.filter(variant => variant.id === product.id)[0].slug_url,
+                discount: discount?.discount_value ? discount?.discount_value : 0,
                 image: image.sku_image,
                 qty: parseInt(e.target[0].value),
                 user_id: user.id
@@ -81,10 +78,10 @@ function ProductSku(props) {
             for (const key in data) {
                 formData.append(key, data[key]);
             }
-            if (sku.status == 1 && sku.qty >= parseInt(e.target[0].value)) {
-                const temp = cart.filter(cart => cart.sku_id == image.id)[0];
+            if (inventory.status == 1 && inventory.qty >= parseInt(e.target[0].value)) {
+                const temp = cart.filter(cart => parseInt(cart.sku_id) === image.id)[0];
                 if (temp) {
-                    if ((temp.qty + parseInt(e.target[0].value)) > sku.qty) {
+                    if ((parseInt(temp.qty) + parseInt(e.target[0].value)) > parseInt(inventory.qty)) {
                         alertErrors('Sorry, Product is out of stock!');
                     } else {
                         dispatch(cartAct.createCartAction(formData));
@@ -96,7 +93,7 @@ function ProductSku(props) {
                 alertErrors('Sorry, Product is out of stock!');
             }
         } else {
-            history.push('/login');
+            history.push('/login', history.location.pathname);
         }
     }
     return (

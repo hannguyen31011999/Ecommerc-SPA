@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Space, Spin } from 'antd';
 import { INFO, STORAGE } from '../../../../settings/configUrl';
 import { returnStatus } from '../../../../utils/helper';
-import { useSelector, useDispatch } from 'react-redux';
 import * as action from '../Modules/Actions';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-export default function DeliveringComponent() {
+export default function CancelComponent() {
     const [current, setCurrent] = useState(false);
     const loading = useSelector(state => state.PurchaseReducer.loading);
-    const data = useSelector(state => state.PurchaseReducer.delivering.data);
-    const currentPage = useSelector(state => state.PurchaseReducer.delivering.currentPage);
-    const lastPage = useSelector(state => state.PurchaseReducer.delivering.lastPage);
+    const data = useSelector(state => state.PurchaseReducer.cancelled.data);
+    const currentPage = useSelector(state => state.PurchaseReducer.cancelled.currentPage);
+    const lastPage = useSelector(state => state.PurchaseReducer.cancelled.lastPage);
     const history = useHistory();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem(INFO));
     const query = history.location.search.split("?type=");
     useEffect(() => {
-        if (query[1] > 0 && query[1] === "2" && data.length < 1 && !current) {
+        if (query[1] > 0 && query[1] === "4" && data.length < 1 && !current) {
             setCurrent(true);
             dispatch(action.fetchPurchaseForStatusAction(user.id, query[1]));
         }
@@ -67,6 +67,12 @@ export default function DeliveringComponent() {
                             }, 0) + item.transport_price}
                         </span></p>
                     </div>
+                    {
+                        item.order_status == 1 ?
+                            <div className="purchase__action">
+                                <button className="product__btn">Cancel</button>
+                            </div> : ''
+                    }
                 </div>
             )
         });
@@ -86,7 +92,8 @@ export default function DeliveringComponent() {
             <InfiniteScroll
                 dataLength={data.length}
                 next={scrollPurchase}
-                hasMore={true}>
+                hasMore={true}
+            >
                 {data.length > 0 ? renderPurchase(data) :
                     <div className="purchase__empty">
                         <figure>

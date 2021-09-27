@@ -17,6 +17,5 @@ export default function MainProduct() {
                 </div>
             </div>
         </section>
-
     )
 }

@@ -41,6 +41,9 @@ const PurchaseReducer = (state = initialState, { type, payload }) => {
             return { ...state, delivering: payload, loading: false };
         case constant.fetchDelivered:
             return { ...state, delivered: payload, loading: false };
+        case constant.fetchCancelled: {
+            return { ...state, cancelled: payload };
+        }
         case constant.paginationAll: {
             const { data, currentPage, lastPage } = payload;
             const temp = [...state.total.data].concat(data);
@@ -76,6 +79,55 @@ const PurchaseReducer = (state = initialState, { type, payload }) => {
                 delivered: { data: temp, currentPage, lastPage },
                 loading: false
             };
+        }
+        case constant.paginationCancelled: {
+            const { data, currentPage, lastPage } = payload;
+            const temp = [...state.cancelled.data].concat(data);
+            return {
+                ...state,
+                cancelled: { data: temp, currentPage, lastPage },
+                loading: false
+            };
+        }
+        case constant.deletePurchaseAll: {
+            const temp = [...state.total.data];
+            const canc = [...state.cancelled.data];
+            const index = temp.findIndex(item => item.id === payload.id);
+            temp[index].order_status = payload.status;
+            canc.push(temp[index]);
+            return {
+                ...state,
+                total: { ...state.total, data: temp },
+                cancelled: { ...state.cancelled, data: canc },
+                loading: false
+            };
+        }
+        case constant.createPurchase: {
+            const temp = [...state.total.data];
+            temp.push(payload);
+            console.log(payload);
+            switch (payload.order_status) {
+                case 1: {
+                    const comfirm = [...state.comfirm.data];
+                    comfirm.push(payload);
+                    return {
+                        ...state,
+                        total: { ...state.total, data: temp },
+                        comfirm: { ...state.comfirm, data: comfirm }
+                    }
+                }
+                case 2: {
+                    const deliver = [...state.delivering.data];
+                    deliver.push(payload);
+                    return {
+                        ...state,
+                        total: { ...state.total, data: temp },
+                        delivering: { ...state.delivering, data: deliver }
+                    }
+                }
+                default:
+                    break;
+            }
         }
         default:
             return state

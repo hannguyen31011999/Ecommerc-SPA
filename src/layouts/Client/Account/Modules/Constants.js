@@ -10,3 +10,5 @@ export const paginationDelivered = "PAGINATION_DELIVERED_PURCHASE";
 export const fetchCancelled = "FETCH_CANCELLED_PURCHASE";
 export const paginationCancelled = "PAGINATION_CANCELLED_PURCHASE";
 export const cancelPurchase = "CANCEL_PURCHASE";
+export const deletePurchaseAll = "DELETE_PURCHASE_ALL";
+export const createPurchase = "CREATE_PURCHASE";

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { NavLink, useHistory, useParams } from 'react-router-dom';
 import { alertErrors } from '../../../settings/config';
 import { ACCESS_TOKEN, INFO, STORAGE } from '../../../settings/configUrl';
 import * as actions from './Modules/Actions';
@@ -16,45 +16,6 @@ export default function NavsProduct() {
     useEffect(() => {
         dispatch(actions.fetchProductAction(params.slug));
     }, [params]);
-    const addToCart = (e, sku, variant, slug) => {
-        e.preventDefault();
-        const user = JSON.parse(localStorage.getItem(INFO));
-        const token = localStorage.getItem(ACCESS_TOKEN);
-        if (user && token) {
-            const temp = cart?.filter(cart => cart.sku_id == sku.id)[0];
-            if (sku.sku_qty > 0) {
-                let data = {
-                    sku_id: sku.id,
-                    name: variant.product_variant_name,
-                    unit_price: sku.sku_unit_price,
-                    promotion_price: sku.sku_promotion_price ? sku.sku_promotion_price : 0,
-                    color: sku.color,
-                    slug: slug.slug_url,
-                    discount: discount ? discount.discount_value : 0,
-                    image: sku.sku_image,
-                    qty: 1,
-                    user_id: user.id
-                }
-                const formData = new FormData();
-                for (const key in data) {
-                    formData.append(key, data[key]);
-                }
-                if (temp) {
-                    if (temp.qty >= sku.sku_qty) {
-                        alertErrors('Sorry, Product is out of stock!');
-                    } else {
-                        dispatch(cartAction.createCartAction(formData));
-                    }
-                } else {
-                    dispatch(cartAction.createCartAction(formData));
-                }
-            } else {
-                alertErrors('Sorry, Product is out of stock!');
-            }
-        } else {
-            history.push('/login');
-        }
-    }
     const redirectSku = (e, slug) => {
         e.preventDefault();
         history.push(`/detail/${slug}`);
@@ -68,19 +29,17 @@ export default function NavsProduct() {
                         <div className="product__image">
                             <img src={`${STORAGE}/products/${sku.sku_image}`} alt="*" />
                             <div className="product__btn">
-                                <a href="*"
-                                    onClick={(e) => addToCart(e, sku, item, item.slugs[0])}>
+                                <NavLink to={`/detail/${item.slugs[0].slug_url}`}>
                                     <i className="lni lni-cart" />
                                     Add to Cart
-                                </a>
+                                </NavLink>
                             </div>
                         </div>
                         <div className="product__info">
                             <h4 className="product__name">
-                                <a href=""
-                                    onClick={(e) => redirectSku(e, item.slugs[0].slug_url)}>
+                                <NavLink to={`/detail/${item.slugs[0].slug_url}`}>
                                     {item.product_variant_name}
-                                </a>
+                                </NavLink>
                             </h4>
                             <ul className="product__review">
                                 <li><i className="lni lni-star-filled" /></li>

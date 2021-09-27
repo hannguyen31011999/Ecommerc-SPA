@@ -26,8 +26,11 @@ export default function SpecialTimer(props) {
         }, 1000);
     }
     useEffect(() => {
-        if (history.action == "PUSH") {
+        if (history.length > 2) {
             startTimer();
+            return () => {
+                clearInterval(interval);
+            }
         }
         window.addEventListener('load', startTimer);
         return () => {

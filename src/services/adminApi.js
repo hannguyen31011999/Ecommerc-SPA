@@ -277,3 +277,33 @@ export const apiInventory = {
         return callApiAdmin(`inventory/status/${id}`, 'patch', form);
     }
 }
+
+export const apiOrder = {
+    fetch(pageSize = 10) {
+        // return callApiAdmin(`order/list?pageSize=${pageSize}&token=${getToken()}`);
+        return callApiAdmin(`order/list?pageSize=${pageSize}`);
+    },
+    changePagination(currentPage, pageSize = 10) {
+        // return callApiAdmin(`order/list?page=${currentPage}&pageSize=${pageSize}&token=${getToken()}`);
+        return callApiAdmin(`order/list?page=${currentPage}&pageSize=${pageSize}`);
+    },
+    update(id, form) {
+        // return callApiAdmin(`order/update/${id}?token=${getToken()}`, 'post', form);
+        return callApiAdmin(`order/update/${id}`, 'post', form);
+    },
+    seach(pageSize, keyword) {
+        // return callApiAdmin(`order/seach?keyword=${keyword}&pageSize=${pageSize}&token=${getToken()}`);
+        return callApiAdmin(`order/seach?keyword=${keyword}&pageSize=${pageSize}`);
+    },
+    export(month) {
+        // return callApiAdmin(`order/export?month=${month}&token=${getToken()}`);
+        return callApiAdmin(`order/export?month=${month}`);
+    }
+}
+
+export const apiDashBoard = {
+    count() {
+        // return callApiAdmin(`dashboard/count?token=${getToken()}`);
+        return callApiAdmin(`dashboard/count`);
+    },
+}

@@ -46,11 +46,6 @@ const categories = [
         icon: renderIcon(<i className="fa fa-shopping-cart" />)
     },
     {
-        name: 'Order Details',
-        url: '/admin/order/detail',
-        icon: renderIcon(<i className="fab fa-cc-apple-pay" />)
-    },
-    {
         name: 'Analytics',
         url: '/admin/analytics',
         icon: renderIcon(<i className="fa fa-chart-bar" />)

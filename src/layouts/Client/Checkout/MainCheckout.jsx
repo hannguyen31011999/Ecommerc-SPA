@@ -6,9 +6,10 @@ import TransportComponent from './TransportComponent';
 import PaymentComponent from './PaymentComponent';
 import CustomerComponent from './CustomerComponent';
 import CouponComponent from './CouponComponent';
-import { alertErrors, get_service_id, get_price_ship, SHOP_ID, DISTRICT_ID_FROM, alertSuccess } from '../../../settings/config';
+import { alertErrors, get_service_id, get_price_ship, SHOP_ID, DISTRICT_ID_FROM } from '../../../settings/config';
 import { apiCheckout, apiTransport, callApi } from '../../../utils/callApi';
 import * as actions from '../../../redux/Actions/User/CartActions';
+import * as purchase from '../Account/Modules/Actions';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup';
@@ -61,16 +62,21 @@ export default function MainCheckout(props) {
             for (const key in obj) {
                 formData.append(key, obj[key]);
             }
-            formData.append('cart[]', cart);
+            cart.forEach(item => {
+                formData.append('cart[]', item);
+            })
             setLoading(true);
             apiCheckout(`api/checkout/paypal/execute`, 'post', formData).then(res => {
                 if (res.data.state === "approved" && res.data.status === "VERIFIED" && res.data.status_code == 200) {
                     localStorage.setItem(TOTAL_CART, 0);
                     localStorage.removeItem(ORDER);
                     localStorage.removeItem(CART_LIST);
-                    dispatch(actions.fetchSuccessAct([]));
                     setLoading(false);
-                    alertSuccess(res.data.message);
+                    dispatch(actions.fetchSuccessAct([]));
+                    dispatch(purchase.fetchAllPurchaseAction(user.id));
+                    dispatch(purchase.fetchPurchaseForStatusAction(user.id, "2"));
+                    dispatch(purchase.createPurchase(res.data.data));
+                    history.push('/purchase', ["Checkout success"]);
                 }
             }).catch(e => {
                 if (e.response) {
@@ -78,7 +84,7 @@ export default function MainCheckout(props) {
                     setLoading(false);
                 }
             });
-        } else if (query.split('?').length > 1 && cart.length > 0) {
+        } else if (query.split('?').length > 1) {
             const order_id = localStorage.getItem(ORDER);
             apiCheckout(`api/checkout/delete/${order_id}`)
                 .then(res => {
@@ -164,9 +170,6 @@ export default function MainCheckout(props) {
     const handleSubmitCheckout = async (values) => {
         if (data.price_ship > 0) {
             if (user && token && cart.length > 0) {
-                const temp = cart.map(item => {
-                    return item.id;
-                });
                 const obj = {
                     user_id: user.id,
                     firstName: values.firstName,
@@ -183,7 +186,11 @@ export default function MainCheckout(props) {
                 for (const key in obj) {
                     formData.append(key, obj[key]);
                 }
-                formData.append('cart[]', temp);
+                let temp = [];
+                cart.forEach(element => {
+                    formData.append('cart[]', element.id);
+                    temp.push(element.id);
+                });
                 localStorage.setItem(CART_LIST, JSON.stringify(temp));
                 setLoading(true);
                 if (obj.payment == 2) {
@@ -200,9 +207,12 @@ export default function MainCheckout(props) {
                     setLoading(true);
                     callApi('api/checkout/create', 'post', formData).then(res => {
                         localStorage.setItem(TOTAL_CART, 0);
-                        dispatch(actions.fetchSuccessAct([]));
                         setLoading(false);
-                        alertSuccess(res.data.message);
+                        dispatch(actions.fetchSuccessAct([]));
+                        dispatch(purchase.fetchAllPurchaseAction(user.id));
+                        dispatch(purchase.fetchPurchaseForStatusAction(user.id, "1"));
+                        dispatch(purchase.createPurchase(res.data.data));
+                        history.push('/purchase', ["Checkout success"]);
                     }).catch(e => {
                         if (e.response) {
                             alertErrors('Sorry, Server errors please try again!');

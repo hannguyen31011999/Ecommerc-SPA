@@ -38,7 +38,11 @@ export default function LoginComponent(props) {
             handleExpired(res.data.timestamp.expired, miliseconds, res.data.token);
             localStorage.setItem(INFO, JSON.stringify(res.data.user));
             dispatch(authUserAction(true));
-            history.push('/');
+            if (history.location.state) {
+                history.push(history.location.state);
+            } else {
+                history.push('/');
+            }
         } else {
             setMessageError(res.data.message);
             setLoading(false);

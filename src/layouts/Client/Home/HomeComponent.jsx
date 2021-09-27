@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import MainBanner from './Banners/MainBanner'
 import MainProduct from './Products/MainProduct'
 import MainRelation from './Relation/MainRelation'
@@ -8,6 +8,9 @@ import MainBlog from './Blogs/MainBlog';
 import MainShipping from './MainShipping';
 
 export default function HomeComponent(props) {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     return (
         <>
             <div className="main-page">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Space, Spin } from 'antd';
+import { Popconfirm, Space, Spin } from 'antd';
 import { INFO, STORAGE } from '../../../../settings/configUrl';
 import { returnStatus } from '../../../../utils/helper';
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -9,6 +9,8 @@ import * as action from '../Modules/Actions';
 import ComfirmComponent from './ComfirmComponent';
 import DeliveringComponent from './DeliveringComponent';
 import DeliveredComponent from './DeliveredComponent';
+import CancelComponent from './CancelComponent';
+import { alertSuccess } from '../../../../settings/config';
 
 
 export default function PurchaseComponent(props) {
@@ -18,13 +20,16 @@ export default function PurchaseComponent(props) {
     const lastPage = useSelector(state => state.PurchaseReducer.total.lastPage);
     const [current, setCurrent] = useState(false);
     const history = useHistory();
+    const location = useLocation();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem(INFO));
-    const query = history.location.search.split("?type=");
-    const path = history.location.pathname;
+    const query = location.search.split("?type=");
+    const path = location.pathname;
     useEffect(() => {
         if (query.length < 2 && data.length < 1) {
             dispatch(action.fetchAllPurchaseAction(user.id));
+        } else if (location.state) {
+            alertSuccess(location.state[0]);
         }
     }, []);
     useEffect(() => {
@@ -35,6 +40,11 @@ export default function PurchaseComponent(props) {
     }, [query]);
     const redirectPurchaseByType = (type) => {
         type === 0 ? history.push(`/purchase`) : history.push(`/purchase?type=${type}`);
+    }
+    const scrollPurchase = () => {
+        if (currentPage < lastPage) {
+            dispatch(action.paginationAllPurchaseAction(user.id, currentPage + 1));
+        }
     }
     const renderPurchase = (order) => {
         return order?.map(item => {
@@ -68,20 +78,37 @@ export default function PurchaseComponent(props) {
                             })
                         }
                     </div>
+                    <div className="purchase__total">
+                        <p>Transport fee:
+                            <span className="purchase__price--total">
+                                ${item.transport_price}
+                            </span>
+                        </p>
+                        <p>Total amount: <span className="purchase__price--total">
+                            ${item.order_details.reduce((total, ord) => {
+                                return total += ord.product_price * ord.qty;
+                            }, 0) + item.transport_price}
+                        </span></p>
+                    </div>
                     {
                         item.order_status == 1 ?
                             <div className="purchase__action">
-                                <button className="product__btn">Cancel</button>
+                                <Popconfirm
+                                    placement="bottomRight"
+                                    title="You want to delete?"
+                                    onConfirm={() => {
+                                        dispatch(action.deletePurchaseAction(item.id, 4))
+                                    }}
+                                    cancelText="No"
+                                    okText="Yes"
+                                >
+                                    <button className="product__btn">Cancel</button>
+                                </Popconfirm>
                             </div> : ''
                     }
                 </div>
             )
         });
-    }
-    const scrollPurchase = () => {
-        if (currentPage < lastPage) {
-            dispatch(action.paginationAllPurchaseAction(user.id, currentPage + 1));
-        }
     }
     return (
         <>
@@ -119,7 +146,12 @@ export default function PurchaseComponent(props) {
                         next={scrollPurchase}
                         hasMore={true}
                     >
-                        {data.length > 0 ? renderPurchase(data) : ''}
+                        {data.length > 0 ? renderPurchase(data) : <div className="purchase__empty">
+                            <figure>
+                                <img src={process.env.PUBLIC_URL + "/img/order.png"} alt="*" />
+                            </figure>
+                            <h4 className="purchase__empty--title">No orders yet</h4>
+                        </div>}
                     </InfiniteScroll>
                 </div>
                 <div className={query[1] === "1" ? "tab-pane active" : "tab-pane"}>
@@ -132,12 +164,7 @@ export default function PurchaseComponent(props) {
                     <DeliveredComponent />
                 </div>
                 <div className={query[1] === "4" ? "tab-pane active" : "tab-pane"}>
-                    <div className="purchase__empty">
-                        <figure>
-                            <img src={process.env.PUBLIC_URL + "/img/order.png"} alt="*" />
-                        </figure>
-                        <h4 className="purchase__empty--title">No orders yet</h4>
-                    </div>
+                    <CancelComponent />
                 </div>
             </div>
         </>

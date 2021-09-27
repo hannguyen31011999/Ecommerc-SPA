@@ -1,4 +1,5 @@
 import React from 'react';
+import LazyLoad from 'react-lazyload';
 import { NavLink } from 'react-router-dom';
 import { STORAGE } from '../../../../settings/configUrl';
 import SpecialTimer from './SpecialTimer';
@@ -9,7 +10,9 @@ export default function SpecialSale(props) {
         <>
             <div className="special__offer" >
                 <div className="special__image">
-                    <img src={data.sku_image ? `${STORAGE}/products/${data.sku_image}` : ''} alt="*" />
+                    <LazyLoad>
+                        <img src={data.sku_image ? `${STORAGE}/products/${data.sku_image}` : ''} alt="*" />
+                    </LazyLoad>
                 </div>
                 <div className="special__text">
                     <h2><NavLink to={data.slug_url ? `/detail/${data.slug_url}` : ''}>{data?.product_variant_name}</NavLink></h2>

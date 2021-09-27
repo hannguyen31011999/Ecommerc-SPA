@@ -107,5 +107,11 @@ export const apiPurchase = {
     },
     paginationPurchaseStatus(id, status, page) {
         return callApi(`api/user/${id}/purchase?page=${page}&type=${status}&token=${getToken()}`, 'get');
+    },
+    deletePurchase(id, form) {
+        return callApi(`api/purchase/update/${id}?token=${getToken()}`, 'post', form);
+    },
+    fetchPurchaseTrash(id) {
+        return callApi(`api/user/${id}/purchase/trash?token=${getToken()}`, 'get');
     }
 }

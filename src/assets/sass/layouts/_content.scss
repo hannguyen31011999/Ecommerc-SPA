@@ -227,3 +227,25 @@
         }
     }
 }
+
+.download-btn {
+    text-decoration: none;
+    padding: $pd-0 $pd-2 - 5;
+    background-color: $info;
+    color: $white;
+    margin-bottom: $mg-0;
+    &:hover {
+        color: $white;
+    }
+}
+
+.select-month {
+    padding: $pd-0 $pd-1;
+    margin-bottom: $mg-0;
+    margin-right: $mg-0;
+    border: 1px solid $info;
+    font-size: $fs-0;
+    &:focus {
+        border: 1px solid $info;
+    }
+}

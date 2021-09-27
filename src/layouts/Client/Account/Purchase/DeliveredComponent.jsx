@@ -55,12 +55,18 @@ export default function DeliveredComponent() {
                             })
                         }
                     </div>
-                    {
-                        item.order_status == 1 ?
-                            <div className="purchase__action">
-                                <button className="product__btn">Cancel</button>
-                            </div> : ''
-                    }
+                    <div className="purchase__total">
+                        <p>Transport fee:
+                            <span className="purchase__price--total">
+                                ${item.transport_price}
+                            </span>
+                        </p>
+                        <p>Total amount: <span className="purchase__price--total">
+                            ${item.order_details.reduce((total, ord) => {
+                                return total += ord.product_price * ord.qty;
+                            }, 0) + item.transport_price}
+                        </span></p>
+                    </div>
                 </div>
             )
         });
