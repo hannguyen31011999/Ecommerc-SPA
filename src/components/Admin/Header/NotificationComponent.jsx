@@ -5,7 +5,7 @@ export default function NotificationComponent(props) {
     return (
         <>
             <li className="nav-item dropdown">
-                <NavLink to="" className="nav-link content__icon--right" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <NavLink to="/admin/dashboard" className="nav-link content__icon--right" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i className="fa fa-envelope" />
                     <span className="notification">10</span>
                 </NavLink>

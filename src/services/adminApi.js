@@ -306,4 +306,8 @@ export const apiDashBoard = {
         // return callApiAdmin(`dashboard/count?token=${getToken()}`);
         return callApiAdmin(`dashboard/count`);
     },
+    chart() {
+        // return callApiAdmin(`dashboard/chart?token=${getToken()}`);
+        return callApiAdmin(`dashboard/chart`);
+    }
 }

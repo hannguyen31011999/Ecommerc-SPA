@@ -1,13 +1,12 @@
 import React from 'react'
-import checkLoginAdmin from '../../../hoc/checkLoginAdmin';
 import CardDashboard from './CardDashboard';
+import ChartComponent from './ChartComponent';
 
 export default function DashboardComponent(props) {
     return (
         <div className="list-card row">
             <CardDashboard />
+            <ChartComponent />
         </div>
     )
 }
-
-// export default checkLoginAdmin(DashboardComponent)

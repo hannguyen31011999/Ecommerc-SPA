@@ -63,7 +63,7 @@ function InfoComponent(props) {
                     </ul>
                 </li>
                 <li className="nav-item">
-                    <NavLink to="" className="nav-link content__icon--right">
+                    <NavLink to="/admin/dashboard" className="nav-link content__icon--right">
                         <i className="fa fa-bell" />
                         <span className="notification">12</span>
                     </NavLink>

@@ -12,6 +12,11 @@ export const countAct = payload => ({
     payload
 });
 
+export const chartAct = payload => ({
+    type: constants.fetchChart,
+    payload
+});
+
 export const countAction = () => async dispatch => {
     dispatch(loadingAct(true));
     try {
@@ -30,6 +35,25 @@ export const countAction = () => async dispatch => {
         if (e.response) {
             alertErrors('Sorry, Server errors please try again!');
             dispatch(loadingAct(false));
+        }
+    }
+}
+
+export const chartAction = () => async dispatch => {
+    try {
+        const res = await apiDashBoard.chart();
+        if (res.data.status_code === STATUS_SUCCESS) {
+            const result = res.data.data;
+            const data = {
+                categories: result.categories,
+                order: result.order,
+                user: result.user
+            }
+            dispatch(chartAct(data));
+        }
+    } catch (e) {
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
         }
     }
 }

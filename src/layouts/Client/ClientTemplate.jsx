@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import LoadingComponent from './LoadingComponent';
 import { callApi } from '../../utils/callApi';
 import publicIp from 'public-ip';
+import MessageComponent from '../../components/Client/Chat/MessageComponent';
 
 function ClientTemplate(props) {
     const getIp = async () => {
@@ -32,6 +33,7 @@ function ClientTemplate(props) {
             <MainFooter />
             <LoadingComponent />
             <ScrollToTop />
+            <MessageComponent />
         </>
     )
 }
