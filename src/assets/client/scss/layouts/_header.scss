@@ -319,7 +319,7 @@ header {
                         }
                     }
                     p {
-                        margin-bottom: 5px;
+                        margin: 5px;
                         @include styleText(13px,$color-gray-1,0,0,$fw-2);
                     }
                     .header__cart--gift {
@@ -327,6 +327,7 @@ header {
                         @include styleText($fs-default,$color-gray-1,0,0,$fw-2);
                     }
                     .header__cart--color {
+                        margin-top: 5px;
                         @include styleText($fs-default,$color-gray-1,0,0,$fw-2);
                     }
                 }

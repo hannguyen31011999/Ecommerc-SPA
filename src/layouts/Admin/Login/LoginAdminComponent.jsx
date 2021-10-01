@@ -28,7 +28,7 @@ export default function LoginAdminComponent(props) {
                 let timestamp = new Date(res.data.timestamp.time);
                 let miliseconds = timestamp.getTime();
                 handleExpired(res.data.timestamp.expired, miliseconds, res.data.token);
-                if (res.data.user.role === 2) {
+                if (parseInt(res.data.user.role) === 2) {
                     dispatch(authAction(res.data.user));
                     history.push('/admin/dashboard');
                 } else {
