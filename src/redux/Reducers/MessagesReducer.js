@@ -26,8 +26,6 @@ const MessagesReducer = (state = initialState, { type, payload }) => {
                     return;
                 }
             });
-            console.log(payload);
-            console.log(index);
             if (index !== -1) {
                 temp[index].push(payload);
                 currentMessenger = [...temp[index]];

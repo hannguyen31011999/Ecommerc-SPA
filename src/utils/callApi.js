@@ -60,9 +60,9 @@ export const callApiAdmin = async (endpoint, method = "get", data = null) => {
             method,
             url: `${BASE_URL_ADMIN}/${endpoint}`,
             data,
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`
-            }
+            // headers: {
+            //     "Authorization": `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`
+            // }
         });
     }
 }

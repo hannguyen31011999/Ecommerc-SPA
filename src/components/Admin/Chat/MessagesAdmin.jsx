@@ -21,7 +21,6 @@ export default function MessagesAdmin() {
             formData.append('messages', e.target[0].value);
             formData.append('isRole', 2);
             formData.append('name', auth.name);
-            console.log(user);
             dispatch(actions.createMessengerAct({
                 content: e.target[0].value,
                 isRole: 2,

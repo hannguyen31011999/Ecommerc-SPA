@@ -31,7 +31,6 @@ export default function NotificationComponent(props) {
         return () => { channel.unbind('messenger-event'); }
     }, []);
     const openMessenger = (index) => {
-        console.log(index);
         dispatch(actions.fetchMessengerAct(index));
     }
     const renderNotification = () => {
