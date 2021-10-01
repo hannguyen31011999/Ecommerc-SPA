@@ -41,12 +41,12 @@ export const apiCategories = {
         // return callApiAdmin(`categories/edit/${id}`);
     },
     updateCategories(id, form) {
-        return callApiAdmin(`categories/update/${id}?token=${getToken()}`, 'put', form);
-        // return callApiAdmin(`categories/update/${id}`, 'put', form);
+        return callApiAdmin(`categories/update/${id}?token=${getToken()}`, 'post', form);
+        // return callApiAdmin(`categories/update/${id}`, 'post', form);
     },
     deleteCategories(id) {
-        return callApiAdmin(`categories/delete/${id}?token=${getToken()}`, 'delete');
-        // return callApiAdmin(`categories/delete/${id}`, 'delete');
+        return callApiAdmin(`categories/delete/${id}?token=${getToken()}`);
+        // return callApiAdmin(`categories/delete/${id}`);
     },
     seachCategories(pageSize, keyword) {
         return callApiAdmin(`categories/seach?keyword=${keyword}&pageSize=${pageSize}&token=${getToken()}`);
@@ -75,8 +75,8 @@ export const apiPost = {
         // return callApiAdmin(`post/update/${id}`, 'post', form);
     },
     delete(id) {
-        return callApiAdmin(`post/delete/${id}?token=${getToken()}`, 'delete');
-        // return callApiAdmin(`post/delete/${id}`, 'delete');
+        return callApiAdmin(`post/delete/${id}?token=${getToken()}`);
+        // return callApiAdmin(`post/delete/${id}`);
     },
     seach(pageSize, keyword) {
         return callApiAdmin(`post/seach?keyword=${keyword}&pageSize=${pageSize}&token=${getToken()}`);
@@ -94,12 +94,12 @@ export const apiReview = {
         // return callApiAdmin(`review/list?page=${currentPage}&pageSize=${pageSize}`);
     },
     update(id, data) {
-        return callApiAdmin(`review/update/${id}?token=${getToken()}`, 'patch', data);
-        // return callApiAdmin(`review/update/${id}`, 'put', data);
+        return callApiAdmin(`review/update/${id}?token=${getToken()}`, 'post', data);
+        // return callApiAdmin(`review/update/${id}`, 'post', data);
     },
     delete(id) {
-        return callApiAdmin(`review/delete/${id}?token=${getToken()}`, 'delete');
-        // return callApiAdmin(`review/delete/${id}`, 'delete');
+        return callApiAdmin(`review/delete/${id}?token=${getToken()}`);
+        // return callApiAdmin(`review/delete/${id}`);
     },
     seach(pageSize, keyword) {
         return callApiAdmin(`review/seach?keyword=${keyword}&pageSize=${pageSize}&token=${getToken()}`);
@@ -125,12 +125,12 @@ export const apiDiscount = {
         // return callApiAdmin(`discount/edit/${id}`);
     },
     update(id, form) {
-        return callApiAdmin(`discount/update/${id}?token=${getToken()}`, 'put', form);
-        // return callApiAdmin(`discount/update/${id}`, 'put', form);
+        return callApiAdmin(`discount/update/${id}?token=${getToken()}`, 'post', form);
+        // return callApiAdmin(`discount/update/${id}`, 'post', form);
     },
     delete(id) {
-        return callApiAdmin(`discount/delete/${id}?token=${getToken()}`, 'delete');
-        // return callApiAdmin(`discount/delete/${id}`, 'delete');
+        return callApiAdmin(`discount/delete/${id}?token=${getToken()}`);
+        // return callApiAdmin(`discount/delete/${id}`);
     },
     seach(pageSize, keyword) {
         return callApiAdmin(`discount/seach?keyword=${keyword}&pageSize=${pageSize}&token=${getToken()}`);
@@ -156,20 +156,20 @@ export const apiUser = {
         // return callApiAdmin(`user/edit/${id}`);
     },
     update(id, form) {
-        return callApiAdmin(`user/update/${id}?token=${getToken()}`, 'put', form);
-        // return callApiAdmin(`user/update/${id}`, 'put', form);
+        return callApiAdmin(`user/update/${id}?token=${getToken()}`, 'post', form);
+        // return callApiAdmin(`user/update/${id}`, 'post', form);
     },
     delete(id) {
-        return callApiAdmin(`user/delete/${id}?token=${getToken()}`, 'delete');
-        // return callApiAdmin(`user/delete/${id}`, 'delete');
+        return callApiAdmin(`user/delete/${id}?token=${getToken()}`);
+        // return callApiAdmin(`user/delete/${id}`);
     },
     seach(pageSize, keyword) {
         return callApiAdmin(`user/seach?keyword=${keyword}&pageSize=${pageSize}&token=${getToken()}`);
         // return callApiAdmin(`user/seach?keyword=${keyword}&pageSize=${pageSize}`);
     },
     updatStatus(id, status) {
-        return callApiAdmin(`user/status/${id}?status=${status}&token=${getToken()}`, 'patch');
-        // return callApiAdmin(`user/status/${id}?status=${status}`, 'patch');
+        return callApiAdmin(`user/status/${id}?status=${status}&token=${getToken()}`, 'post');
+        // return callApiAdmin(`user/status/${id}?status=${status}`, 'post');
     }
 }
 
@@ -191,12 +191,12 @@ export const apiProduct = {
         // return callApiAdmin(`product/edit/${id}`);
     },
     update(id, form) {
-        return callApiAdmin(`product/update/${id}?token=${getToken()}`, 'put', form);
-        // return callApiAdmin(`product/update/${id}`, 'put', form);
+        return callApiAdmin(`product/update/${id}?token=${getToken()}`, 'post', form);
+        // return callApiAdmin(`product/update/${id}`, 'post', form);
     },
     delete(id) {
-        return callApiAdmin(`product/delete/${id}?token=${getToken()}`, 'delete');
-        // return callApiAdmin(`product/delete/${id}`, 'delete');
+        return callApiAdmin(`product/delete/${id}?token=${getToken()}`);
+        // return callApiAdmin(`product/delete/${id}`);
     },
     seach(pageSize, keyword) {
         return callApiAdmin(`product/seach?keyword=${keyword}&pageSize=${pageSize}&token=${getToken()}`)
@@ -207,12 +207,12 @@ export const apiProduct = {
         // return callApiAdmin(`product/variant/${id}`, 'post', form);
     },
     updateVariant(id, form) {
-        return callApiAdmin(`product/variant/${id}?token=${getToken()}`, 'put', form);
-        // return callApiAdmin(`product/variant/${id}`, 'put', form);
+        return callApiAdmin(`product/variant/${id}?token=${getToken()}`, 'post', form);
+        // return callApiAdmin(`product/variant/${id}`, 'post', form);
     },
     deleteVariant(id) {
-        return callApiAdmin(`product/variant/${id}?token=${getToken()}`, 'delete');
-        // return callApiAdmin(`product/variant/${id}`, 'delete');
+        return callApiAdmin(`product/variant/${id}?token=${getToken()}`);
+        // return callApiAdmin(`product/variant/${id}`);
     },
 }
 
@@ -238,8 +238,8 @@ export const apiProductSku = {
         // return callApiAdmin(`product/sku/update/${id}`, 'post', form);
     },
     delete(id) {
-        return callApiAdmin(`product/sku/delete/${id}?token=${getToken()}`, 'delete');
-        // return callApiAdmin(`product/sku/delete/${id}`, 'delete');
+        return callApiAdmin(`product/sku/delete/${id}?token=${getToken()}`);
+        // return callApiAdmin(`product/sku/delete/${id}`);
     }
 }
 
@@ -261,8 +261,8 @@ export const apiInventory = {
         // return callApiAdmin(`inventory/edit/${id}`);
     },
     update(id, form) {
-        return callApiAdmin(`inventory/update/${id}?token=${getToken()}`, 'put', form);
-        // return callApiAdmin(`inventory/update/${id}`, 'put', form);
+        return callApiAdmin(`inventory/update/${id}?token=${getToken()}`, 'post', form);
+        // return callApiAdmin(`inventory/update/${id}`, 'post', form);
     },
     seach(pageSize, keyword) {
         return callApiAdmin(`inventory/seach?keyword=${keyword}&pageSize=${pageSize}&token=${getToken()}`);
@@ -273,8 +273,8 @@ export const apiInventory = {
         // return callApiAdmin(`inventory/product`);
     },
     updateStatus(id, form) {
-        return callApiAdmin(`inventory/status/${id}?token=${getToken()}`, 'patch', form);
-        // return callApiAdmin(`inventory/status/${id}`, 'patch', form);
+        return callApiAdmin(`inventory/status/${id}?token=${getToken()}`, 'post', form);
+        // return callApiAdmin(`inventory/status/${id}`, 'post', form);
     },
     export(month) {
         return callApiAdmin(`inventory/export?month=${month}&token=${getToken()}`);

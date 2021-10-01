@@ -54,7 +54,7 @@ export default function InfoAccount() {
     const onSubmitHandler = values => {
         const data = {
             ...values,
-            birth: dateTime.current ? dateTime.current : user.birth,
+            // birth: dateTime.current ? dateTime.current : user.birth,
             gender: gender.current ? gender.current : user.gender
         };
         const formData = new FormData();
@@ -167,7 +167,7 @@ export default function InfoAccount() {
                                 </div>
                             </div>
                         </div>
-                        <div className="profile__group">
+                        {/* <div className="profile__group">
                             <div className="profile__label">
                                 <span>Birth Date</span>
                             </div>
@@ -179,7 +179,7 @@ export default function InfoAccount() {
                                         format="DD-MM-YYYY" />
                                 </Space>
                             </div>
-                        </div>
+                        </div> */}
                         <div className="profile__group">
                             <div className="profile__label"></div>
                             <button className="profile__btn">Save</button>

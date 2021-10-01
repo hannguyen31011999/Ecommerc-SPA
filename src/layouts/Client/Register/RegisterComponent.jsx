@@ -104,10 +104,10 @@ export default function RegisterComponent(props) {
                                     errorsRegister?.phone && <span className="register__error">{errorsRegister?.phone}</span>
                                 }
                             </div>
-                            <div className="register__group">
+                            {/* <div className="register__group">
                                 <label htmlFor="birth">Birth</label>
                                 <input type="date" name="birth" className="form-control" />
-                            </div>
+                            </div> */}
                             <div className="register__group">
                                 <label htmlFor="gender">Gender</label>
                                 <select name="gender" className="form-select">
