@@ -27,6 +27,7 @@
     cursor: pointer;
 }
 
+
 .chat__box--none {
     display: none;
 }
@@ -75,8 +76,9 @@
     }
     .chat-list {
         margin-top: $mg-0;
+        max-height: 250px;
+        height: 200px;
         overflow-y: scroll;
-        max-height: 200px;
         .chat-item {
             padding: $pd-0 $pd-1;
             margin-bottom: $mg-0;
@@ -96,11 +98,10 @@
                     border: 1px solid #dcdce0;
                     padding: $pd-0 $pd-1 + 5;
                     display: flex;
-                    flex-direction: column;
                     align-items: center;
-                    justify-content: center;
-                    span {
+                    p {
                         @include styleText($fs-default + 1,$bg-dark-blue,0,0,$fw-2);
+                        margin-bottom: 0;
                     }
                 }
             }
@@ -121,11 +122,10 @@
                     border: 1px solid #dcdce0;
                     padding: $pd-0 $pd-1 + 5;
                     display: flex;
-                    flex-direction: column;
                     align-items: center;
-                    justify-content: center;
-                    span {
+                    p {
                         @include styleText($fs-default + 1,$bg-dark-blue,0,0,$fw-2);
+                        margin-bottom: 0;
                     }
                 }
             }

@@ -1,7 +1,9 @@
 import * as contants from './Constants';
+import moment from 'moment';
 
 const initialState = {
     data: [],
+    excel: [],
     pagination: {
         current: 1,
         pageSize: 15
@@ -113,6 +115,27 @@ const InventoryReducer = (state = initialState, { type, payload }) => {
                 return { ...state, product: payload.result }
             }
             return { ...state, visiable: payload }
+        }
+        case contants.exportExcel: {
+            let excel = [
+                [
+                    'id', 'variant_id', 'sku_id', 'product_name', 'color', 'unit_price', 'promotion_price', 'qty', 'created_at'
+                ]
+            ];
+            payload.forEach(item => {
+                const arr = [];
+                arr.push(item.id);
+                arr.push(item.sku_id);
+                arr.push(item.variant_id);
+                arr.push(item.product_variants.product_variant_name);
+                arr.push(item.product_skus.color);
+                arr.push(item.unit_price);
+                arr.push(item.promotion_price);
+                arr.push(item.qty);
+                arr.push(moment(item.created_at).format("DD-MM-YYYY"));
+                excel.push(arr);
+            });
+            return { ...state, excel, loading: false };
         }
         default:
             return state

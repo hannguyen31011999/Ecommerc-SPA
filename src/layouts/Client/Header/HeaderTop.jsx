@@ -4,21 +4,38 @@ import { useDispatch } from 'react-redux';
 import { apiLogin } from '../../../services/clientApi'
 import { ACCESS_TOKEN, INFO, TIMESTAMP, TOTAL_CART } from '../../../settings/configUrl'
 import * as action from '../../../redux/Actions/User/CartActions';
+import * as purchase from '../Account/Modules/Actions';
+import * as messenger from '../../../redux/Actions/MessagesActions';
 import { logoutAuthAction } from '../../../redux/Actions/Admin/authActions';
+import { STATUS_SUCCESS } from '../../../settings/config';
 export default function HeaderTop(props) {
     const history = useHistory();
     const dispatch = useDispatch();
+    const user = JSON.parse(localStorage.getItem(INFO));
     const handleLogout = async (e) => {
         e.preventDefault();
         try {
-            const res = apiLogin.logout();
-            localStorage.removeItem(INFO);
-            localStorage.removeItem(ACCESS_TOKEN);
-            localStorage.removeItem(TOTAL_CART);
-            localStorage.removeItem(TIMESTAMP);
-            dispatch(action.fetchSuccessAct([]));
-            dispatch(logoutAuthAction(false));
-            history.push('/login');
+            const temp = {
+                data: [],
+                currentPage: 0,
+                lastPage: 0
+            }
+            const res = await apiLogin.logout();
+            if (res.data.status_code == STATUS_SUCCESS) {
+                localStorage.removeItem(INFO);
+                localStorage.removeItem(ACCESS_TOKEN);
+                localStorage.removeItem(TOTAL_CART);
+                localStorage.removeItem(TIMESTAMP);
+                dispatch(action.fetchSuccessAct([]));
+                dispatch(purchase.fetchAllAct(temp));
+                dispatch(purchase.fetchComfirmPurchaseAct(temp));
+                dispatch(purchase.fetchDeliveringAct(temp));
+                dispatch(purchase.fetchDeliveredAct(temp));
+                dispatch(purchase.fetchCancelledAct(temp));
+                dispatch(messenger.deleteMessengerAct(user.id));
+                dispatch(logoutAuthAction(false));
+                history.push('/login');
+            }
         } catch (e) {
 
         }

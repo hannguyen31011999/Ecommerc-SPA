@@ -1,5 +1,5 @@
 import { Space, Spin } from 'antd';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from './modules/Actions';
 
@@ -7,19 +7,10 @@ export default function CardDashboard() {
     const loading = useSelector(state => state.DashBoardReducer.loading);
     const count = useSelector(state => state.DashBoardReducer.count);
     const dispatch = useDispatch();
-    let interval = null;
-    const setTime = () => {
-
-        return interval;
-    }
     useEffect(() => {
-        if (count?.visitor < 1) {
+        if (!(count.order > 0 || count.visitor > 0 || count.user > 0)) {
             dispatch(actions.countAction());
         }
-        interval = setInterval(() => {
-            dispatch(actions.countAction());
-        }, 1000 * 300);
-        return () => { clearInterval(interval) };
     }, []);
     return (
         <>

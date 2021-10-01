@@ -45,11 +45,11 @@ const categories = [
         url: '/admin/order',
         icon: renderIcon(<i className="fa fa-shopping-cart" />)
     },
-    {
-        name: 'Analytics',
-        url: '/admin/analytics',
-        icon: renderIcon(<i className="fa fa-chart-bar" />)
-    },
+    // {
+    //     name: 'Analytics',
+    //     url: '/admin/analytics',
+    //     icon: renderIcon(<i className="fa fa-chart-bar" />)
+    // },
     {
         name: 'Discount',
         url: '/admin/discount',

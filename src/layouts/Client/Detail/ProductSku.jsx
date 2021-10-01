@@ -1,11 +1,12 @@
 import React, { memo } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom'
+import { NavLink, useHistory } from 'react-router-dom'
 import * as actions from './Modules/Actions';
 import * as cartAct from '../../../redux/Actions/User/CartActions';
 import moment from 'moment';
 import { INFO, ACCESS_TOKEN } from '../../../settings/configUrl';
 import { alertErrors } from '../../../settings/config';
+import * as service from '../../../services/product';
 
 function ProductSku(props) {
     const categories = useSelector(state => state.ProductDetailReducer.categories);
@@ -17,45 +18,11 @@ function ProductSku(props) {
     const cart = useSelector(state => state.CartReducer.cart);
     const history = useHistory();
     const dispatch = useDispatch();
-    const renderRom = () => {
-        return variant?.map((item, index) => {
-            if (item.id === product.id) {
-                return (
-                    <div className="product__rom--item rom-active" key={item.id} onClick={() => { props.redirect(item.slugs[0].slug_url) }}>
-                        <span>{item.product_variant_rom}GB</span>
-                    </div>
-                )
-            } else {
-                return (
-                    <div className="product__rom--item" key={item.id} onClick={() => { props.redirect(item.slugs[0].slug_url) }}>
-                        <span>{item.product_variant_rom}GB</span>
-                    </div>
-                )
-            }
-        });
-    }
+
     const changeImage = (sku) => {
         dispatch(actions.changeImageAct(sku));
     }
-    const renderColor = () => {
-        return product_sku?.map((item, index) => {
-            if (image.id == item.id) {
-                return (
-                    <div className="product__color--item color-active" key={item.id}
-                        onClick={() => changeImage(item)}>
-                        <span>{item.color}</span>
-                    </div>
-                )
-            } else {
-                return (
-                    <div className="product__color--item" key={item.id}
-                        onClick={() => changeImage(item)}>
-                        <span>{item.color}</span>
-                    </div>
-                )
-            }
-        })
-    }
+
     const addToCart = (e) => {
         e.preventDefault();
         const user = JSON.parse(localStorage.getItem(INFO));
@@ -71,17 +38,18 @@ function ProductSku(props) {
                 slug: variant.filter(variant => variant.id === product.id)[0].slug_url,
                 discount: discount?.discount_value ? discount?.discount_value : 0,
                 image: image.sku_image,
-                qty: parseInt(e.target[0].value),
+                qty: 1,
                 user_id: user.id
             }
             const formData = new FormData();
             for (const key in data) {
                 formData.append(key, data[key]);
             }
-            if (inventory.status == 1 && inventory.qty >= parseInt(e.target[0].value)) {
+            if (image.sku_qty > 0) {
                 const temp = cart.filter(cart => parseInt(cart.sku_id) === image.id)[0];
                 if (temp) {
-                    if ((parseInt(temp.qty) + parseInt(e.target[0].value)) > parseInt(inventory.qty)) {
+                    const qty = parseInt(temp.qty);
+                    if (qty >= 3) {
                         alertErrors('Sorry, Product is out of stock!');
                     } else {
                         dispatch(cartAct.createCartAction(formData));
@@ -106,7 +74,7 @@ function ProductSku(props) {
                     <div className="product__category">
                         <h4>
                             <i className="lni lni-tag" />
-                            Categories: <a href="">{categories?.categories_name}</a>
+                            Categories: <NavLink to={`/categories?q=${categories.id}`}>{categories?.categories_name}</NavLink>
                         </h4>
                     </div>
                     <div className="product__price">
@@ -115,12 +83,12 @@ function ProductSku(props) {
                     </div>
                     <div className="product__rom">
                         {
-                            variant.length > 0 ? renderRom() : ''
+                            variant.length > 0 ? service.renderRom(props, variant, product) : ''
                         }
                     </div>
                     <div className="product__color">
                         {
-                            product_sku.length > 0 ? renderColor() : ''
+                            product_sku.length > 0 ? service.renderColor(dispatch, product_sku, image) : ''
                         }
                     </div>
                     <div className="product__discount">
@@ -135,9 +103,9 @@ function ProductSku(props) {
                         }
                     </div>
                     <form onSubmit={addToCart} className="product__action">
-                        <div className="product__action--quantity">
-                            <input type="number" className="form-control" defaultValue={1} min={1} max={5} />
-                        </div>
+                        {/* <div className="product__action--quantity">
+                            <input type="number" className="form-control" defaultValue={1} min={1} max={2} />
+                        </div> */}
                         <div className="product__action--item">
                             <button className="product__btn--add">Add To Cart</button>
                         </div>

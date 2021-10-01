@@ -1,22 +1,27 @@
-import React, { useEffect, useState, useRef, memo, useCallback } from 'react'
-import { Table, Button, Input, Space, Select } from 'antd';
-import Highlighter from 'react-highlight-words';
-import { SearchOutlined } from '@ant-design/icons';
+import React, { useEffect, useState, useRef } from 'react'
+import { Table, Button, Space, Select } from 'antd';
 import { useSelector, useDispatch } from 'react-redux'
 import * as trans from '../modules/Actions';
 import { formatCurrency } from '../../../../utils/getImage';
 import ModalEdit from '../Modals/ModalEdit';
+import { CSVLink } from 'react-csv';
+import { renderMonth } from '../../../../utils/helper';
+import { alertErrors } from '../../../../settings/config';
 // import ModalEdit from '../Modals/ModalEdit';
+import { getColumnSearchProps } from '../../../../services/table';
 const { Option } = Select;
 
 export default function TableComponent() {
     let inventory = useSelector(state => state.InventoryReducer.data);
     let pagination = useSelector(state => state.InventoryReducer.pagination);
     let loading = useSelector(state => state.InventoryReducer.loading);
+    const excel = useSelector(state => state.InventoryReducer?.excel);
     let [seach, setSeach] = useState({
         searchText: '',
         searchedColumn: '',
     });
+    let month = useRef();
+    let date = new Date();
     let searchInput = useRef(null);
     const dispatch = useDispatch();
     useEffect(() => {
@@ -30,81 +35,6 @@ export default function TableComponent() {
         const { current, pageSize } = pagination;
         dispatch(trans.paginationAction(current, pageSize));
     }
-    const getColumnSearchProps = dataIndex => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8 }}>
-                <Input
-                    ref={node => {
-                        searchInput = node;
-                    }}
-                    placeholder={`Search ${dataIndex}`}
-                    value={selectedKeys[0]}
-                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                    style={{ marginBottom: 8, display: 'block' }}
-                />
-                <Space>
-                    <Button
-                        type="primary"
-                        onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                        icon={<SearchOutlined />}
-                        size="small"
-                        style={{ width: 90 }}
-                    >
-                        Search
-                    </Button>
-                    <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-                        Reset
-                    </Button>
-                    <Button
-                        type="link"
-                        size="small"
-                        onClick={() => {
-                            confirm({ closeDropdown: false });
-                            setSeach({
-                                searchText: selectedKeys[0],
-                                searchedColumn: dataIndex,
-                            })
-                        }}
-                    >
-                        Filter
-                    </Button>
-                </Space>
-            </div>
-        ),
-        filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-        onFilter: (value, record) =>
-            record[dataIndex]
-                ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-                : '',
-        onFilterDropdownVisibleChange: visible => {
-            if (visible) {
-                setTimeout(() => searchInput.select(), 100);
-            }
-        },
-        render: text =>
-            seach.searchedColumn === dataIndex ? (
-                <Highlighter
-                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-                    searchWords={[seach.searchText]}
-                    autoEscape
-                    textToHighlight={text ? text.toString() : ''}
-                />
-            ) : (
-                text
-            ),
-    });
-    const handleSearch = (selectedKeys, confirm, dataIndex) => {
-        confirm();
-        setSeach({
-            searchText: selectedKeys[0],
-            searchedColumn: dataIndex,
-        })
-    };
-    const handleReset = clearFilters => {
-        clearFilters();
-        setSeach({ ...seach, searchText: '' });
-    };
     const handleEdit = (id) => {
         dispatch(trans.editAct(id));
     }
@@ -116,7 +46,7 @@ export default function TableComponent() {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
-            ...getColumnSearchProps('id'),
+            ...getColumnSearchProps('id', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.id - b.id,
             sortDirections: ['descend', 'ascend']
         },
@@ -124,7 +54,7 @@ export default function TableComponent() {
             title: 'Product name',
             dataIndex: 'variant_id',
             key: 'variant_id',
-            ...getColumnSearchProps('variant_id'),
+            ...getColumnSearchProps('variant_id', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.variant_id - b.variant_id,
             sortDirections: ['descend', 'ascend'],
             render: (text, data) => {
@@ -137,7 +67,7 @@ export default function TableComponent() {
             title: 'Color',
             dataIndex: 'sku_id',
             key: 'sku_id',
-            ...getColumnSearchProps('sku_id'),
+            ...getColumnSearchProps('sku_id', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.sku_id - b.sku_id,
             sortDirections: ['descend', 'ascend'],
             render: (text, data) => {
@@ -150,15 +80,25 @@ export default function TableComponent() {
             title: 'Quantity',
             dataIndex: 'qty',
             key: 'qty',
-            ...getColumnSearchProps('qty'),
-            sorter: (a, b) => a.variant_id - b.variant_id,
+            ...getColumnSearchProps('qty', searchInput, [seach, setSeach]),
+            sorter: (a, b) => a.qty - b.qty,
+            sortDirections: ['descend', 'ascend']
+        },
+        {
+            title: 'Quantity Sku',
+            render: (t, data) => {
+                return (
+                    <span>{data.product_skus.sku_qty}</span>
+                )
+            },
+            sorter: (a, b) => a.product_skus.sku_qty - b.product_skus.sku_qty,
             sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Price unit',
             dataIndex: 'unit_price',
             key: 'unit_price',
-            ...getColumnSearchProps('unit_price'),
+            ...getColumnSearchProps('unit_price', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.unit_price - b.unit_price,
             sortDirections: ['descend', 'ascend'],
             render: (text, data) => {
@@ -171,7 +111,7 @@ export default function TableComponent() {
             title: 'Price promotion',
             dataIndex: 'promotion_price',
             key: 'promotion_price',
-            ...getColumnSearchProps('promotion_price'),
+            ...getColumnSearchProps('promotion_price', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.promotion_price - b.promotion_price,
             sortDirections: ['descend', 'ascend'],
             render: (text, data) => {
@@ -184,7 +124,7 @@ export default function TableComponent() {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-            ...getColumnSearchProps('status'),
+            ...getColumnSearchProps('status', searchInput, [seach, setSeach]),
             render: (text, data) => {
                 return (
                     <Select value={data.status} onChange={(e) => { handleChangeStatus(e, data.id) }}>
@@ -207,10 +147,35 @@ export default function TableComponent() {
             }
         }
     ];
+    const handleChangeMonth = (e) => {
+        if (e.target.value) {
+            month.current = e.target.value
+            dispatch(trans.exportExcelAction(e.target.value));
+        }
+    }
     return (
         <>
             {inventory.length > 0 ? <ModalEdit /> : ''}
             <div className="col-12">
+                <select className="select-month" onChange={handleChangeMonth}>
+                    <option value="">Select month</option>
+                    {renderMonth()}
+                </select>
+                <CSVLink
+                    data={excel}
+                    filename={`revenue-${month.current}-${date.getFullYear()}.csv`}
+                    onClick={e => {
+                        if (month.current) {
+                            return true;
+                        } else {
+                            alertErrors("Please select month you can export");
+                            return false;
+                        }
+                    }}
+                    className="download-btn"
+                    title="Export Excel">
+                    <i className="lni lni-download"></i>
+                </CSVLink>
                 < Table
                     columns={columns}
                     dataSource={inventory}
@@ -219,6 +184,9 @@ export default function TableComponent() {
                     loading={loading}
                     rowKey="id"
                 />
+            </div>
+            <div className="col-2 d-flex justify-content-end align-items-center">
+
             </div>
         </>
     )

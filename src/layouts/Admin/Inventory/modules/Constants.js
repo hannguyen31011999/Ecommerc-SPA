@@ -10,3 +10,4 @@ export const seachContants = "SEACH_INVENTORY";
 export const updateStatusContants = "UPDATE_STATUS_INVENTORY";
 export const modalContants = "MODAL_INVENTORY";
 export const fetchProductContants = "FETCH_PRODUCT_INVENTORY";
+export const exportExcel = "EXPORT_EXCEL_INVENTORY";

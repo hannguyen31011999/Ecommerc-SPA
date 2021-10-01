@@ -63,6 +63,11 @@ export const fetchFailAct = (payload) => ({
     payload
 });
 
+export const exportExcelAct = payload => ({
+    type: contants.exportExcel,
+    payload
+});
+
 // fetch data
 export const transAction = (pageSize) => async (dispatch) => {
     try {
@@ -204,6 +209,21 @@ export const updateStatusAction = (id, data) => async (dispatch) => {
         if (res.data.status_code === STATUS_SUCCESS) {
             dispatch(updateStatusAct({ update: data.status, id }));
             alertSuccess('Update status success');
+        }
+    } catch (e) {
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(loadingAct(false));
+        }
+    }
+}
+
+export const exportExcelAction = (month) => async (dispatch) => {
+    try {
+        dispatch(loadingAct(true));
+        const res = await apiInventory.export(month);
+        if (res.data.status_code === STATUS_SUCCESS) {
+            dispatch(exportExcelAct(res.data.data));
         }
     } catch (e) {
         if (e.response) {

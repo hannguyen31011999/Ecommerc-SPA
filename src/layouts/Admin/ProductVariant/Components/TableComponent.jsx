@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, memo, useCallback } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useParams, useHistory } from "react-router-dom";
 import { Table, Button, Input, Space, Popconfirm } from 'antd';
 import Highlighter from 'react-highlight-words';
@@ -8,6 +8,7 @@ import { formatCurrency } from '../../../../utils/getImage';
 import * as trans from '../modules/Actions';
 import { STORAGE } from '../../../../settings/configUrl';
 import ModalEdit from '../Modals/ModalEdit';
+import { getColumnSearchProps } from '../../../../services/table';
 
 
 export default function TableComponent(props) {
@@ -25,81 +26,6 @@ export default function TableComponent(props) {
     useEffect(() => {
         dispatch(trans.transAction(id, pagination.pageSize));
     }, [id]);
-    const getColumnSearchProps = dataIndex => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8 }}>
-                <Input
-                    ref={node => {
-                        searchInput = node;
-                    }}
-                    placeholder={`Search ${dataIndex}`}
-                    value={selectedKeys[0]}
-                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                    style={{ marginBottom: 8, display: 'block' }}
-                />
-                <Space>
-                    <Button
-                        type="primary"
-                        onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                        icon={<SearchOutlined />}
-                        size="small"
-                        style={{ width: 90 }}
-                    >
-                        Search
-                    </Button>
-                    <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-                        Reset
-                    </Button>
-                    <Button
-                        type="link"
-                        size="small"
-                        onClick={() => {
-                            confirm({ closeDropdown: false });
-                            setSeach({
-                                searchText: selectedKeys[0],
-                                searchedColumn: dataIndex,
-                            })
-                        }}
-                    >
-                        Filter
-                    </Button>
-                </Space>
-            </div>
-        ),
-        filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-        onFilter: (value, record) =>
-            record[dataIndex]
-                ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-                : '',
-        onFilterDropdownVisibleChange: visible => {
-            if (visible) {
-                setTimeout(() => searchInput.select(), 100);
-            }
-        },
-        render: text =>
-            seach.searchedColumn === dataIndex ? (
-                <Highlighter
-                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-                    searchWords={[seach.searchText]}
-                    autoEscape
-                    textToHighlight={text ? text.toString() : ''}
-                />
-            ) : (
-                text
-            ),
-    });
-    const handleSearch = (selectedKeys, confirm, dataIndex) => {
-        confirm();
-        setSeach({
-            searchText: selectedKeys[0],
-            searchedColumn: dataIndex,
-        })
-    };
-    const handleReset = clearFilters => {
-        clearFilters();
-        setSeach({ ...seach, searchText: '' });
-    };
     const handleEdit = (id) => {
         dispatch(trans.editAct(id));
     }
@@ -114,7 +40,7 @@ export default function TableComponent(props) {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
-            ...getColumnSearchProps('id'),
+            ...getColumnSearchProps('id', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.id - b.id,
             sortDirections: ['descend', 'ascend']
         },
@@ -122,7 +48,7 @@ export default function TableComponent(props) {
             title: 'Product_id',
             dataIndex: 'product_id',
             key: 'product_id',
-            ...getColumnSearchProps('product_id'),
+            ...getColumnSearchProps('product_id', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.id - b.id,
             sortDirections: ['descend', 'ascend']
         },
@@ -130,16 +56,16 @@ export default function TableComponent(props) {
             title: 'Variant_id',
             dataIndex: 'product_variant_id',
             key: 'product_variant_id',
-            ...getColumnSearchProps('product_variant_id'),
+            ...getColumnSearchProps('product_variant_id', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.id - b.id,
             sortDirections: ['descend', 'ascend']
         },
         {
-            title: 'Price unit',
+            title: 'Unit price',
             dataIndex: 'sku_unit_price',
             key: 'sku_unit_price',
-            ...getColumnSearchProps('categories_name'),
-            sorter: (a, b) => a.categories_name.length - b.categories_name.length,
+            ...getColumnSearchProps('sku_unit_price', searchInput, [seach, setSeach]),
+            sorter: (a, b) => a.sku_unit_price - b.sku_unit_price,
             sortDirections: ['descend', 'ascend'],
             render: (text, data) => {
                 return (
@@ -148,11 +74,11 @@ export default function TableComponent(props) {
             }
         },
         {
-            title: 'Price unit',
+            title: 'Promotion price',
             dataIndex: 'sku_promotion_price',
             key: 'sku_promotion_price',
-            ...getColumnSearchProps('categories_name'),
-            sorter: (a, b) => a.categories_name.length - b.categories_name.length,
+            ...getColumnSearchProps('sku_promotion_price', searchInput, [seach, setSeach]),
+            sorter: (a, b) => a.sku_promotion_price - b.categories_name,
             sortDirections: ['descend', 'ascend'],
             render: (text, data) => {
                 return (
@@ -175,7 +101,7 @@ export default function TableComponent(props) {
             dataIndex: 'sku_image',
             key: 'sku_image',
             render: (text, data) => {
-                return <img src={`${STORAGE}/products/${data.sku_image}`} height={45} width={45} onClick={() => onReviewImage(`${STORAGE}/products/${data.sku_image}`)} style={{ cursor: "pointer" }} />
+                return <img src={`${STORAGE}/products/${data.sku_image}`} height={45} width={45} onClick={() => onReviewImage(`${STORAGE}/products/${data.sku_image}`)} style={{ cursor: "pointer" }} alt="*" />
             }
         },
         {

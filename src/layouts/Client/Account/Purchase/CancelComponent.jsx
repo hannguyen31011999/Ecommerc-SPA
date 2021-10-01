@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Space, Spin } from 'antd';
-import { INFO, STORAGE } from '../../../../settings/configUrl';
-import { returnStatus } from '../../../../utils/helper';
+import { ACCESS_TOKEN, INFO } from '../../../../settings/configUrl';
 import * as action from '../Modules/Actions';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import * as service from '../../../../services/purchase';
 
 export default function CancelComponent() {
     const [current, setCurrent] = useState(false);
@@ -16,67 +16,14 @@ export default function CancelComponent() {
     const history = useHistory();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem(INFO));
+    const token = localStorage.getItem(ACCESS_TOKEN);
     const query = history.location.search.split("?type=");
     useEffect(() => {
-        if (query[1] > 0 && query[1] === "4" && data.length < 1 && !current) {
+        if (query[1] > 0 && query[1] === "4" && data.length < 1 && !current && token) {
             setCurrent(true);
             dispatch(action.fetchPurchaseForStatusAction(user.id, query[1]));
         }
     }, [query]);
-    const renderPurchase = (order) => {
-        return order?.map(item => {
-            return (
-                <div className="purchase__order" key={item.id}>
-                    <div className="purchase__status">
-                        <p>Code:{item.id}</p>
-                        <p>{returnStatus(item.order_status)}</p>
-                    </div>
-                    <div className="purchase__list">
-                        {
-                            item.order_details?.map(ord => {
-                                const sku = ord.product_skus;
-                                return (
-                                    <div className="purchase__item" key={ord.id}>
-                                        <div className="purchase__image">
-                                            <a href="*"><img src={`${STORAGE}/products/${sku.sku_image}`} alt="*" /></a>
-                                        </div>
-                                        <div className="purchase__product">
-                                            <h4 className="product__name">
-                                                <a href="*">{ord.product_name}</a>
-                                            </h4>
-                                            <h5 className="product__sku">Color: {sku.color}</h5>
-                                            <p className="product__qty">x{ord.qty}</p>
-                                        </div>
-                                        <div className="purchase__price">
-                                            <p>${ord.qty * ord.product_price}</p>
-                                        </div>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
-                    <div className="purchase__total">
-                        <p>Transport fee:
-                            <span className="purchase__price--total">
-                                ${item.transport_price}
-                            </span>
-                        </p>
-                        <p>Total amount: <span className="purchase__price--total">
-                            ${item.order_details.reduce((total, ord) => {
-                                return total += ord.product_price * ord.qty;
-                            }, 0) + item.transport_price}
-                        </span></p>
-                    </div>
-                    {
-                        item.order_status == 1 ?
-                            <div className="purchase__action">
-                                <button className="product__btn">Cancel</button>
-                            </div> : ''
-                    }
-                </div>
-            )
-        });
-    }
     const scrollPurchase = () => {
         if (currentPage < lastPage) {
             dispatch(action.paginationPurchaseStatusAction(user.id, query[1], currentPage + 1));
@@ -94,7 +41,7 @@ export default function CancelComponent() {
                 next={scrollPurchase}
                 hasMore={true}
             >
-                {data.length > 0 ? renderPurchase(data) :
+                {data.length > 0 ? service.renderPurchase(data) :
                     <div className="purchase__empty">
                         <figure>
                             <img src={process.env.PUBLIC_URL + "/img/order.png"} alt="*" />

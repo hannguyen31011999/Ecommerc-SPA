@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Table, Button, Input, Space, Popconfirm, TreeSelect } from 'antd';
-import Highlighter from 'react-highlight-words';
-import { SearchOutlined } from '@ant-design/icons';
+import { Table, Button, Space, Popconfirm, TreeSelect } from 'antd';
 import { useSelector, useDispatch } from 'react-redux'
 import * as trans from '../modules/Actions';
 import { useHistory } from 'react-router-dom';
@@ -10,6 +8,7 @@ import ModalOption from '../Modals/Product/ModalOption';
 import ModalEdit from '../Modals/Product/ModalEdit';
 import ModalCreateVariant from '../Modals/Variant/ModalCreateVariant';
 import ModalEditVariant from '../Modals/Variant/ModalEditVariant';
+import { getColumnSearchProps } from '../../../../services/table';
 const { TreeNode } = TreeSelect;
 
 export default function TableComponent(props) {
@@ -42,84 +41,6 @@ export default function TableComponent(props) {
         const { current, pageSize } = pagination;
         dispatch(trans.paginationAction(current, pageSize));
     }
-    const getColumnSearchProps = dataIndex => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8 }}>
-                <Input
-                    ref={node => {
-                        searchInput = node;
-                    }}
-                    placeholder={`Search ${dataIndex}`}
-                    value={selectedKeys[0]}
-                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                    style={{ marginBottom: 8, display: 'block' }}
-                />
-                <Space>
-                    <Button
-                        type="primary"
-                        onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                        icon={<SearchOutlined />}
-                        size="small"
-                        style={{ width: 90 }}
-                    >
-                        Search
-                    </Button>
-                    <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-                        Reset
-                    </Button>
-                    <Button
-                        type="link"
-                        size="small"
-                        onClick={() => {
-                            confirm({ closeDropdown: false });
-                            setSeach({
-                                searchText: selectedKeys[0],
-                                searchedColumn: dataIndex,
-                            })
-                        }}
-                    >
-                        Filter
-                    </Button>
-                </Space>
-            </div>
-        ),
-        filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-        onFilter: (value, record) =>
-            record[dataIndex]
-                ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-                : '',
-        onFilterDropdownVisibleChange: visible => {
-            if (visible) {
-                setTimeout(() => searchInput.select(), 100);
-            }
-        },
-        render: text =>
-            seach.searchedColumn === dataIndex ? (
-                <Highlighter
-                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-                    searchWords={[seach.searchText]}
-                    autoEscape
-                    textToHighlight={text ? text.toString() : ''}
-                />
-            ) : (
-                text
-            ),
-    });
-    const handleSearch = (selectedKeys, confirm, dataIndex) => {
-        confirm();
-        setSeach({
-            searchText: selectedKeys[0],
-            searchedColumn: dataIndex,
-        })
-    };
-    const handleReset = clearFilters => {
-        clearFilters();
-        setSeach({ ...seach, searchText: '' });
-    };
-    const handleEdit = (id) => {
-        dispatch(trans.editAct(id));
-    }
     const handleDetele = (id) => {
         dispatch(trans.deleteProductAction(id));
     }
@@ -142,7 +63,7 @@ export default function TableComponent(props) {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
-            ...getColumnSearchProps('id'),
+            ...getColumnSearchProps('id', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.id - b.id,
             sortDirections: ['descend', 'ascend']
         },
@@ -160,7 +81,7 @@ export default function TableComponent(props) {
             title: 'Product name',
             dataIndex: 'product_name',
             key: 'product_name',
-            ...getColumnSearchProps('product_name'),
+            ...getColumnSearchProps('product_name', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.product_name.length - b.product_name.length,
             sortDirections: ['descend', 'ascend']
         },

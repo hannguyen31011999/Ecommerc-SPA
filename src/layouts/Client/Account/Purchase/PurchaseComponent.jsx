@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Popconfirm, Space, Spin } from 'antd';
-import { INFO, STORAGE } from '../../../../settings/configUrl';
+import { ACCESS_TOKEN, INFO, STORAGE } from '../../../../settings/configUrl';
 import { returnStatus } from '../../../../utils/helper';
 import InfiniteScroll from "react-infinite-scroll-component";
 import * as action from '../Modules/Actions';
@@ -23,13 +23,13 @@ export default function PurchaseComponent(props) {
     const location = useLocation();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem(INFO));
+    const token = localStorage.getItem(ACCESS_TOKEN);
     const query = location.search.split("?type=");
     const path = location.pathname;
     useEffect(() => {
-        if (query.length < 2 && data.length < 1) {
+        alertSuccess(location.state);
+        if (query.length < 2 && data.length < 1 && token) {
             dispatch(action.fetchAllPurchaseAction(user.id));
-        } else if (location.state) {
-            alertSuccess(location.state[0]);
         }
     }, []);
     useEffect(() => {

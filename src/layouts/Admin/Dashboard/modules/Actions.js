@@ -18,13 +18,12 @@ export const chartAct = payload => ({
 });
 
 export const countAction = () => async dispatch => {
-    dispatch(loadingAct(true));
     try {
         const res = await apiDashBoard.count();
         if (res.data.status_code === STATUS_SUCCESS) {
             const result = res.data.data;
             const data = {
-                revenue: result.revenue[0].total,
+                revenue: result.revenue[0]?.total ? result.revenue[0]?.total : 0,
                 order: result.order,
                 user: result.user,
                 visitor: result.visitor

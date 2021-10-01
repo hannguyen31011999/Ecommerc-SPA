@@ -105,7 +105,6 @@ const PurchaseReducer = (state = initialState, { type, payload }) => {
         case constant.createPurchase: {
             const temp = [...state.total.data];
             temp.push(payload);
-            console.log(payload);
             switch (payload.order_status) {
                 case 1: {
                     const comfirm = [...state.comfirm.data];

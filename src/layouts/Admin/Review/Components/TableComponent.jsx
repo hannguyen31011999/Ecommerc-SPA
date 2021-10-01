@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef, memo } from 'react'
-import { Table, Button, Input, Space, Popconfirm, Switch } from 'antd';
-import Highlighter from 'react-highlight-words';
-import { SearchOutlined } from '@ant-design/icons';
+import { Table, Button, Space, Popconfirm, Switch } from 'antd';
 import { useSelector, useDispatch } from 'react-redux'
 import * as trans from '../modules/Actions';
+import { getColumnSearchProps } from '../../../../services/table';
 
 function TableComponent() {
     let review = useSelector(state => state.ReviewReducer.data);
@@ -26,81 +25,6 @@ function TableComponent() {
         const { current, pageSize } = pagination;
         dispatch(trans.paginationAction(current, pageSize));
     }
-    const getColumnSearchProps = dataIndex => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8 }}>
-                <Input
-                    ref={node => {
-                        searchInput = node;
-                    }}
-                    placeholder={`Search ${dataIndex}`}
-                    value={selectedKeys[0]}
-                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                    style={{ marginBottom: 8, display: 'block' }}
-                />
-                <Space>
-                    <Button
-                        type="primary"
-                        onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                        icon={<SearchOutlined />}
-                        size="small"
-                        style={{ width: 90 }}
-                    >
-                        Search
-                    </Button>
-                    <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-                        Reset
-                    </Button>
-                    <Button
-                        type="link"
-                        size="small"
-                        onClick={() => {
-                            confirm({ closeDropdown: false });
-                            setSeach({
-                                searchText: selectedKeys[0],
-                                searchedColumn: dataIndex,
-                            })
-                        }}
-                    >
-                        Filter
-                    </Button>
-                </Space>
-            </div>
-        ),
-        filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-        onFilter: (value, record) =>
-            record[dataIndex]
-                ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-                : '',
-        onFilterDropdownVisibleChange: visible => {
-            if (visible) {
-                setTimeout(() => searchInput.select(), 100);
-            }
-        },
-        render: text =>
-            seach.searchedColumn === dataIndex ? (
-                <Highlighter
-                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-                    searchWords={[seach.searchText]}
-                    autoEscape
-                    textToHighlight={text ? text.toString() : ''}
-                />
-            ) : (
-                text
-            ),
-    });
-    const handleSearch = (selectedKeys, confirm, dataIndex) => {
-        confirm();
-        setSeach({
-            searchText: selectedKeys[0],
-            searchedColumn: dataIndex,
-        })
-    };
-    const handleReset = clearFilters => {
-        clearFilters();
-        setSeach({ ...seach, searchText: '' });
-    };
     const handleUpdate = (id, status) => {
         dispatch(trans.updateAction(id, { review_status: status }));
     }
@@ -112,7 +36,7 @@ function TableComponent() {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
-            ...getColumnSearchProps('id'),
+            ...getColumnSearchProps('id', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.id - b.id,
             sortDirections: ['descend', 'ascend']
         },
@@ -120,7 +44,7 @@ function TableComponent() {
             title: 'Id_user',
             dataIndex: 'user_id',
             key: 'user_id',
-            ...getColumnSearchProps('user_id'),
+            ...getColumnSearchProps('user_id', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.user_id - b.user_id,
             sortDirections: ['descend', 'ascend']
         },
@@ -128,7 +52,7 @@ function TableComponent() {
             title: 'variant_id',
             dataIndex: 'product_variant_id',
             key: 'product_variant_id',
-            ...getColumnSearchProps('product_variant_id'),
+            ...getColumnSearchProps('product_variant_id', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.product_variant_id - b.product_variant_id,
             sortDirections: ['descend', 'ascend']
         },
@@ -136,7 +60,7 @@ function TableComponent() {
             title: 'Name',
             dataIndex: 'review_name',
             key: 'review_name',
-            ...getColumnSearchProps('review_name'),
+            ...getColumnSearchProps('review_name', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.review_name.length - b.review_name.length,
             sortDirections: ['descend', 'ascend']
         },
@@ -144,7 +68,7 @@ function TableComponent() {
             title: 'Email',
             dataIndex: 'review_email',
             key: 'review_email',
-            ...getColumnSearchProps('review_email'),
+            ...getColumnSearchProps('review_email', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.review_email.length - b.review_email.length,
             sortDirections: ['descend', 'ascend']
         },
@@ -152,7 +76,7 @@ function TableComponent() {
             title: 'Phone',
             dataIndex: 'review_phone',
             key: 'review_phone',
-            ...getColumnSearchProps('review_phone'),
+            ...getColumnSearchProps('review_phone', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.review_phone.length - b.review_phone.length,
             sortDirections: ['descend', 'ascend']
         },
@@ -160,7 +84,7 @@ function TableComponent() {
             title: 'Star',
             dataIndex: 'review_star',
             key: 'review_star',
-            ...getColumnSearchProps('review_star'),
+            ...getColumnSearchProps('review_star', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.review_star - b.review_star,
             sortDirections: ['descend', 'ascend']
         },

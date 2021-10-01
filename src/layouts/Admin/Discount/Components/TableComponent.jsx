@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
 import moment from 'moment';
-import { Table, Button, Input, Space, Popconfirm } from 'antd';
-import Highlighter from 'react-highlight-words';
-import { SearchOutlined } from '@ant-design/icons';
+import { Table, Button, Space, Popconfirm } from 'antd';
 import { useSelector, useDispatch } from 'react-redux'
 import * as trans from '../modules/Action';
 import ModalEdit from '../Modals/ModalEdit';
+import { getColumnSearchProps } from '../../../../services/table';
 
 export default function TableComponent(props) {
     let discount = useSelector(state => state.DiscountReducer.data);
@@ -28,81 +27,6 @@ export default function TableComponent(props) {
         const { current, pageSize } = pagination;
         dispatch(trans.paginationAction(current, pageSize));
     }
-    const getColumnSearchProps = dataIndex => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8 }}>
-                <Input
-                    ref={node => {
-                        searchInput = node;
-                    }}
-                    placeholder={`Search ${dataIndex}`}
-                    value={selectedKeys[0]}
-                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                    style={{ marginBottom: 8, display: 'block' }}
-                />
-                <Space>
-                    <Button
-                        type="primary"
-                        onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                        icon={<SearchOutlined />}
-                        size="small"
-                        style={{ width: 90 }}
-                    >
-                        Search
-                    </Button>
-                    <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-                        Reset
-                    </Button>
-                    <Button
-                        type="link"
-                        size="small"
-                        onClick={() => {
-                            confirm({ closeDropdown: false });
-                            setSeach({
-                                searchText: selectedKeys[0],
-                                searchedColumn: dataIndex,
-                            })
-                        }}
-                    >
-                        Filter
-                    </Button>
-                </Space>
-            </div>
-        ),
-        filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-        onFilter: (value, record) =>
-            record[dataIndex]
-                ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-                : '',
-        onFilterDropdownVisibleChange: visible => {
-            if (visible) {
-                setTimeout(() => searchInput.select(), 100);
-            }
-        },
-        render: text =>
-            seach.searchedColumn === dataIndex ? (
-                <Highlighter
-                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-                    searchWords={[seach.searchText]}
-                    autoEscape
-                    textToHighlight={text ? text.toString() : ''}
-                />
-            ) : (
-                text
-            ),
-    });
-    const handleSearch = (selectedKeys, confirm, dataIndex) => {
-        confirm();
-        setSeach({
-            searchText: selectedKeys[0],
-            searchedColumn: dataIndex,
-        })
-    };
-    const handleReset = clearFilters => {
-        clearFilters();
-        setSeach({ ...seach, searchText: '' });
-    };
     const handleEdit = (id) => {
         dispatch(trans.editAct(id));
     }
@@ -114,7 +38,7 @@ export default function TableComponent(props) {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
-            ...getColumnSearchProps('id'),
+            ...getColumnSearchProps('id', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.id - b.id,
             sortDirections: ['descend', 'ascend']
         },
@@ -122,7 +46,7 @@ export default function TableComponent(props) {
             title: 'Discount name',
             dataIndex: 'discount_name',
             key: 'discount_name',
-            ...getColumnSearchProps('discount_name'),
+            ...getColumnSearchProps('discount_name', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.discount_name.length - b.discount_name.length,
             sortDirections: ['descend', 'ascend']
         },
@@ -130,7 +54,7 @@ export default function TableComponent(props) {
             title: 'Discount type',
             dataIndex: 'discount_type',
             key: 'discount_type',
-            ...getColumnSearchProps('discount_type'),
+            ...getColumnSearchProps('discount_type', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.discount_type.length - b.discount_type.length,
             sortDirections: ['descend', 'ascend']
         },
@@ -138,7 +62,7 @@ export default function TableComponent(props) {
             title: 'Discount value',
             dataIndex: 'discount_value',
             key: 'discount_value',
-            ...getColumnSearchProps('discount_value'),
+            ...getColumnSearchProps('discount_value', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.discount_value.length - b.discount_value.length,
             sortDirections: ['descend', 'ascend']
         },
@@ -146,7 +70,7 @@ export default function TableComponent(props) {
             title: 'Date start',
             dataIndex: 'discount_start',
             key: 'discount_start',
-            ...getColumnSearchProps('discount_start'),
+            ...getColumnSearchProps('discount_start', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.discount_start.length - b.discount_start.length,
             sortDirections: ['descend', 'ascend'],
             render: (text, data) => {
@@ -159,7 +83,7 @@ export default function TableComponent(props) {
             title: 'Date end',
             dataIndex: 'discount_end',
             key: 'discount_end',
-            ...getColumnSearchProps('discount_end'),
+            ...getColumnSearchProps('discount_end', searchInput, [seach, setSeach]),
             sorter: (a, b) => a.discount_end.length - b.discount_end.length,
             sortDirections: ['descend', 'ascend'],
             render: (text, data) => {

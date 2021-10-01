@@ -275,6 +275,10 @@ export const apiInventory = {
     updateStatus(id, form) {
         // return callApiAdmin(`inventory/status/${id}?token=${getToken()}`, 'patch', form);
         return callApiAdmin(`inventory/status/${id}`, 'patch', form);
+    },
+    export(month) {
+        // return callApiAdmin(`inventory/export?month=${month}&token=${getToken()}`);
+        return callApiAdmin(`inventory/export?month=${month}`);
     }
 }
 

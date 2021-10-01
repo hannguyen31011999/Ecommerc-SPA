@@ -71,3 +71,10 @@ export const getMonthByString = (str) => {
             break;
     }
 }
+
+export const renderMonth = () => {
+    const data = Array.from({ length: 12 });
+    return data.map((i, index) => {
+        return <option value={index + 1} key={index}>{index + 1}</option>
+    })
+}

@@ -1,5 +1,4 @@
 import React from 'react'
-import checkLoginAdmin from '../../../hoc/checkLoginAdmin'
 import { Input } from 'antd';
 import { useDispatch } from 'react-redux'
 import * as trans from './modules/Actions';

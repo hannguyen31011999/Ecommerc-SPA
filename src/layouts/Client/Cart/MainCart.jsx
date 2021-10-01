@@ -4,7 +4,9 @@ import BreadCrumb from '../Breadcrumb/BreadCrumb';
 import { useSelector, useDispatch } from 'react-redux';
 import { STORAGE } from '../../../settings/configUrl';
 import * as actions from '../../../redux/Actions/User/CartActions';
+import * as service from '../../../services/checkout';
 import { Popconfirm } from 'antd';
+import CouponComponent from './CouponComponent';
 
 export default function MainCart() {
     const cart = useSelector(state => state.CartReducer.cart);
@@ -98,19 +100,6 @@ export default function MainCart() {
             )
         })
     }
-    const calculatorSubTotalPrice = () => {
-        return cart?.reduce((total, cart) => {
-            return total += (cart.promotion_price > 0 ? cart.promotion_price : cart.unit_price) * cart.qty;
-        }, 0);
-    }
-    const calculatorTotalDiscount = () => {
-        return cart?.reduce((total, cart) => {
-            return total += cart.discount ? cart.discount * cart.qty : 0;
-        }, 0);
-    }
-    const calculatorTotalPrice = () => {
-        return calculatorSubTotalPrice() - calculatorTotalDiscount();
-    }
     return (
         <>
             <BreadCrumb />
@@ -148,21 +137,14 @@ export default function MainCart() {
                         <div className="cart__bot">
                             <div className="row">
                                 <div className="col-lg-8 col-md-6 col-12">
-                                    <div className="cart__coupon">
-                                        <form action="*">
-                                            <input type="text" className="form-control" placeholder="Enter Your Coupon" />
-                                            <div className="coupon__btn">
-                                                <button>Apply Coupon</button>
-                                            </div>
-                                        </form>
-                                    </div>
+                                    <CouponComponent />
                                 </div>
                                 <div className="col-lg-4 col-md-6 col-12">
                                     <div className="total__amount">
                                         <ul>
-                                            <li>Cart Subtotal <span>${cart.length > 0 ? calculatorSubTotalPrice() : 0}</span></li>
-                                            <li>You Save <span>${cart.length > 0 ? calculatorTotalDiscount() : 0}</span></li>
-                                            <li>You Pay <span>${cart.length > 0 ? calculatorTotalPrice() : 0}</span></li>
+                                            <li>Cart Subtotal <span>${cart.length > 0 ? service.subTotalPrice(cart) : 0}</span></li>
+                                            <li>You Save <span>${cart.length > 0 ? service.totalDiscount(cart) : 0}</span></li>
+                                            <li>You Pay <span>${cart.length > 0 ? service.totalPrice(cart) : 0}</span></li>
                                         </ul>
                                         <div className="total__amount--btn">
                                             {

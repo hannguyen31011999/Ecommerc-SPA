@@ -20,6 +20,7 @@ function ModalCreate() {
     let data = useSelector(state => state.InventoryReducer?.product);
     let [sku, setSku] = useState([]);
     let [select, setSelect] = useState([]);
+
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     useEffect(() => {
@@ -36,6 +37,7 @@ function ModalCreate() {
         let temp = data.filter(item => item.id === id);
         setSku(temp[0].product_skus);
     }
+
     return (
         <>
             <div className="col-12 col-sm-6 col-xl-9 d-flex justify-content-end">

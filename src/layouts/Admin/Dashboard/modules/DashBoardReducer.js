@@ -66,7 +66,7 @@ const DashBoardReducer = (state = initialState, { type, payload }) => {
                     let num = 0;
                     order.forEach(ord => {
                         if (ord.month === index + 1) {
-                            num = ord.month;
+                            num = ord.total;
                         }
                     });
                     return num;
@@ -75,7 +75,7 @@ const DashBoardReducer = (state = initialState, { type, payload }) => {
                     return getMonthByString(item.month);
                 })
             }
-            return { ...state, chart: { category, user: users, order: orders } };
+            return { ...state, chart: { category, user: users, order: orders }, loading: false };
         }
         default:
             return state

@@ -18,9 +18,6 @@ function ModalCreate() {
     let styled = {
         marginBottom: "12px",
     }
-    useEffect(() => {
-
-    }, [dispatch]);
     const handleSubmit = (values) => {
         const formData = new FormData();
         for (const key in values) {

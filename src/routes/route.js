@@ -11,6 +11,7 @@ import DiscountComponent from '../layouts/Admin/Discount/DiscountComponent';
 import PostComponent from '../layouts/Admin/Post/PostComponent';
 import ReviewComponent from '../layouts/Admin/Review/ReviewComponent';
 import InventoryManagement from '../layouts/Admin/Inventory/InventoryManagement';
+import SettingComponent from '../layouts/Admin/Settings/SettingComponent';
 // Client
 import HomeComponent from '../layouts/Client/Home/HomeComponent';
 import LoginComponent from '../layouts/Client/Login/LoginComponent';
@@ -87,6 +88,11 @@ export const adminRoutes = [
     {
         path: '/admin/discount',
         component: DiscountComponent,
+        exact: true
+    },
+    {
+        path: '/admin/setting',
+        component: SettingComponent,
         exact: true
     }
 ];

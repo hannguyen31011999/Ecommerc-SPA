@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../Products/Modules/Actions';
+import { calculator } from '../../../services/product';
 
 export default function FilterComponent(props) {
     const data = useSelector(state => state.ProductClientReducer.product.data);
@@ -8,49 +9,6 @@ export default function FilterComponent(props) {
     const isCheck = useSelector(state => state.ProductClientReducer.filter.checkValue.isCheck);
     const type = useSelector(state => state.ProductClientReducer.filter.checkValue.value);
     const dispatch = useDispatch();
-    const calculator = (key, data) => {
-        let count = 0;
-        switch (key) {
-            case '0': {
-                data.forEach(item => {
-                    const product = item.product_skus[0];
-                    if (product.sku_unit_price >= 50 && product.sku_unit_price < 101) {
-                        ++count;
-                    }
-                });
-                return count;
-            }
-            case '1': {
-                data.forEach(item => {
-                    const product = item.product_skus[0];
-                    if (product.sku_unit_price > 100 && product.sku_unit_price < 501) {
-                        ++count;
-                    }
-                });
-                return count;
-            }
-            case '2': {
-                data.forEach(item => {
-                    const product = item.product_skus[0];
-                    if (product.sku_unit_price > 500 && product.sku_unit_price < 1001) {
-                        ++count;
-                    }
-                })
-                return count;
-            }
-            case '3': {
-                data.forEach(item => {
-                    const product = item.product_skus[0];
-                    if (product.sku_unit_price > 1000 && product.sku_unit_price < 2001) {
-                        ++count;
-                    }
-                })
-                return count;
-            }
-            default:
-                break;
-        }
-    }
     const handleCheckbox = (e) => {
         dispatch(actions.filterWithCheckbox(e.target.value));
     }

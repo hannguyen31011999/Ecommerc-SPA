@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { ACCESS_TOKEN, TIMESTAMP } from '../../../settings/configUrl';
 import { memo } from 'react';
 import { logoutAuthAction } from '../../../redux/Actions/Admin/authActions';
+import OrderNotification from './OrderNotification';
 
 function InfoComponent(props) {
     let user = useSelector(state => state.authReducer.currentUser);
@@ -62,12 +63,7 @@ function InfoComponent(props) {
                         </li>
                     </ul>
                 </li>
-                <li className="nav-item">
-                    <NavLink to="/admin/dashboard" className="nav-link content__icon--right">
-                        <i className="fa fa-bell" />
-                        <span className="notification">12</span>
-                    </NavLink>
-                </li>
+                <OrderNotification />
                 <NotificationComponent />
             </ul>
         </>
