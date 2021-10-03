@@ -40,7 +40,7 @@ const DashBoardReducer = (state = initialState, { type, payload }) => {
             const category = {
                 data: categories.map(cate => {
                     return cate.products.reduce((total, pro) => {
-                        return total += pro.product_variants_count;
+                        return total += parseInt(pro.product_variants_count);
                     }, 0);
                 }),
                 label: categories.map(cate => {
@@ -66,10 +66,10 @@ const DashBoardReducer = (state = initialState, { type, payload }) => {
                     let num = 0;
                     order.forEach(ord => {
                         if (ord.month === index + 1) {
-                            num = ord.total;
+                            num = parseInt(ord.total);
                         }
                     });
-                    return num;
+                    return parseInt(num);
                 }),
                 label: order.map(item => {
                     return getMonthByString(item.month);

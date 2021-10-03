@@ -27,7 +27,7 @@ function ProductSku(props) {
         e.preventDefault();
         const user = JSON.parse(localStorage.getItem(INFO));
         const token = localStorage.getItem(ACCESS_TOKEN);
-        const inventory = image.inventory_managements[0];
+        // const inventory = image.inventory_managements[0];
         if (token && user) {
             const data = {
                 sku_id: image.id,
