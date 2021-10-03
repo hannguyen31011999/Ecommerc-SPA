@@ -1,14 +1,15 @@
 import React from 'react'
-import checkLoginAdmin from '../../../hoc/checkLoginAdmin'
-import { Input } from 'antd';
+import { useHistory } from 'react-router';
+import { Button, Input } from 'antd';
 import { useDispatch } from 'react-redux'
 import * as trans from './modules/Actions';
 import { ToastContainer } from 'react-toastify';
 import TableComponent from './Components/TableComponent';
-import ModalCreate from './Modals/Product/ModalCreate';
+import { FolderAddOutlined } from '@ant-design/icons';
 
 export default function ProductComponent() {
     const dispatch = useDispatch();
+    const history = useHistory();
     const handleSeachInput = (e) => {
         const { value } = e.target;
         dispatch(trans.seachProductAction(15, value));
@@ -22,11 +23,12 @@ export default function ProductComponent() {
                         <Input size="default" allowClear defaultValue="" onChange={handleSeachInput} placeholder="Seach...." />
                     </Input.Group>
                 </div>
-                <ModalCreate />
+                <div className="col-12 col-sm-6 col-xl-9 d-flex justify-content-end">
+                    <Button type="primary" title="Create" onClick={() => { history.push('/admin/product/create') }} icon={<FolderAddOutlined />} size="default" />
+                </div>
+                {/* <ModalCreate /> */}
                 <TableComponent />
             </div>
         </>
     )
 }
-
-// export default checkLoginAdmin(ProductComponent);

@@ -23,7 +23,7 @@ export default function SidebarComponent(props) {
                                 {item.name}
                             </NavLink>
                         </div>
-                        <ul className="sidebar__menu">
+                        {/* <ul className="sidebar__menu">
                             {
                                 item.children.map((child, i) => {
                                     return (
@@ -35,7 +35,7 @@ export default function SidebarComponent(props) {
                                     );
                                 })
                             }
-                        </ul>
+                        </ul> */}
                     </li>
                 )
             } else {

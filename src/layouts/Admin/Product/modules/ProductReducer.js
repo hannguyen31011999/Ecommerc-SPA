@@ -9,12 +9,17 @@ const initialState = {
     errorsValidate: {},
     loading: false,
     disabled: false,
-    modal: false,
     modalContent: false,
     modalOption: false,
     modalVariant: false,
     modalEditVariant: false,
     relationship: {
+        categories: [],
+        discount: []
+    },
+    dataEdit: {
+        product: {},
+        option: {}
     }
 }
 
@@ -25,7 +30,13 @@ const ProductReducer = (state = initialState, { type, payload }) => {
         }
         case contants.fetchSuccessContants: {
             const { data, total, lastPage, categories, discount } = payload;
-            return { ...state, data, pagination: { ...state.pagination, total, lastPage }, loading: false, relationship: { categories, discount } }
+            return { ...state, data, pagination: { ...state.pagination, total, lastPage }, loading: false }
+        }
+        case contants.fetchRelationship: {
+            return { ...state, relationship: payload };
+        }
+        case contants.modalContants: {
+            return { ...state, modalContent: payload, modalOption: payload };
         }
         case contants.fetchFailContants: {
             return { ...state, disabled: payload, loading: false };
@@ -46,19 +57,33 @@ const ProductReducer = (state = initialState, { type, payload }) => {
             temp.push(payload);
             return { ...state, data: temp, loading: false };
         }
-        case contants.modalContants: {
-            return { ...state, modal: payload, modalContent: payload, modalOption: payload }
-        }
         case contants.editContants: {
-            let temp = [...state.data];
-            const index = temp.findIndex(cate => cate.id === payload);
-            return { ...state, dataEdit: temp[index], modal: true }
+            const temp = [...state.data];
+            const index = temp.findIndex(item => item.id == payload);
+            let edit = {};
+            if (Array.isArray(temp[index].product_options)) {
+                edit = { option: temp[index].product_options[0], product: temp[index] };
+            } else {
+                edit = { option: temp[index].product_options, product: temp[index] };
+            }
+            return { ...state, dataEdit: edit };
+        }
+        case contants.fetchEditContants: {
+            return { ...state, dataEdit: payload, loading: false }
         }
         case contants.updateContants: {
             const { update, id } = payload;
             const index = state.data.findIndex(cate => cate.id === id);
             state.data[index] = update;
-            return { ...state, data: [...state.data], dataEdit: {}, loading: false, modal: false }
+            return {
+                ...state,
+                data: [...state.data],
+                dataEdit: {
+                    product: {},
+                    option: {}
+                },
+                loading: false
+            }
         }
         case contants.deleteContants: {
             let dataTemp = [...state.data];
@@ -93,11 +118,7 @@ const ProductReducer = (state = initialState, { type, payload }) => {
             }
         }
         case contants.createVariantConstant: {
-            let temp = [...state.data];
-            let index = state.data.findIndex(item => item.id === payload.id);
-            temp[index].product_variants.push(payload.variant);
-            temp[index].product_skus.push(payload.sku);
-            return { ...state, data: temp, loading: false, dataVariant: {}, disabled: false }
+            return { ...state, loading: false, disabled: false }
         }
         case contants.editVariantConstant: {
             if (payload.id) {
@@ -105,7 +126,7 @@ const ProductReducer = (state = initialState, { type, payload }) => {
                 const dataVariantEdit = data[0].product_variants.filter(item => item.id == payload.id);
                 return { ...state, modalEditVariant: payload, dataVariantEdit }
             }
-            return { ...state, modalEditVariant: payload.isBool }
+            return { ...state, modalEditVariant: {} }
         }
         case contants.updateVariantConstant: {
             let temp = [...state.data];

@@ -20,8 +20,6 @@ export default function TableComponent() {
     useEffect(() => {
         if (Array.isArray(post) && !post.length > 0) {
             dispatch(trans.transAction(pagination.pageSize));
-        } else {
-            trans.loadingAct(false);
         }
     }, []);
     const onChange = (pagination) => {

@@ -123,6 +123,9 @@ function ProductSku(props) {
                         </div>
                     </form>
                 </div>
+                <div className="product__top--banner">
+                    <img src={process.env.PUBLIC_URL + '/assets/img/promotion.jpg'} alt="" />
+                </div>
             </div>
         </>
     )

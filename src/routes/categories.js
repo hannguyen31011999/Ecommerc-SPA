@@ -23,7 +23,21 @@ const categories = [
     {
         name: 'Product',
         url: '/admin/product',
-        icon: renderIcon(<i className="fab fa-product-hunt" />)
+        icon: renderIcon(<i className="fab fa-product-hunt" />),
+        // children: [
+        //     {
+        //         name: 'Product',
+        //         url: '/admin/product'
+        //     },
+        //     {
+        //         name: 'Product Variant',
+        //         url: '/admin/variant'
+        //     },
+        //     {
+        //         name: 'Product Sku',
+        //         url: '/admin/sku'
+        //     }
+        // ]
     },
     {
         name: 'Review',

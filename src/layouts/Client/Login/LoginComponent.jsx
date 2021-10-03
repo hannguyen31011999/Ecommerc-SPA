@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import BreadCrumb from '../Breadcrumb/BreadCrumb'
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup';
@@ -21,10 +21,32 @@ export default function LoginComponent(props) {
     const [messageError, setMessageError] = useState('');
     const history = useHistory();
     const dispatch = useDispatch();
+    const location = useLocation();
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         mode: 'onChange',
         resolver: yupResolver(schema),
     });
+    useEffect(() => {
+        const token = location.search.split('?token=')[1];
+        if (token?.length > 200) {
+            apiLogin.getInfo(token).then(res => {
+                if (res.data.status_code === 200) {
+                    let timestamp = new Date(res.data.timestamp.time);
+                    let miliseconds = timestamp.getTime();
+                    handleExpired(res.data.timestamp.expired, miliseconds, token);
+                    localStorage.setItem(INFO, JSON.stringify(res.data.user));
+                    dispatch(authUserAction(true));
+                    if (history.location.state) {
+                        history.push(history.location.state);
+                    } else {
+                        history.push('/');
+                    }
+                }
+            }).catch(e => {
+
+            })
+        }
+    }, [location.search]);
     const onSubmitHandler = async (data) => {
         setLoading(true);
         const formData = new FormData();
@@ -65,22 +87,22 @@ export default function LoginComponent(props) {
                         </div>
                         <div className="login__social row">
                             <div className="col-md-4 login__item">
-                                <a href="https://gridshop-demo.000webhostapp.com/api/redirect/facebook" className="login__facebook">
+                                <a href="https://demo-gridshop.000webhostapp.com/api/redirect/facebook" className="login__facebook">
                                     <i className="lni lni-facebook-filled" />
                                     Facebook login
                                 </a>
                             </div>
                             <div className="col-md-4 login__item">
-                                <a href="" className="login__twitter">
+                                <NavLink to="/" className="login__twitter">
                                     <i className="lni lni-twitter-original" />
                                     Twitter login
-                                </a>
+                                </NavLink>
                             </div>
                             <div className="col-md-4 login__item">
-                                <a href="" className="login__google">
+                                <NavLink to="/" className="login__google">
                                     <i className="lni lni-google" />
                                     Google login
-                                </a>
+                                </NavLink>
                             </div>
                         </div>
                         <div className="login__option">

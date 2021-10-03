@@ -1,20 +1,12 @@
-import React from 'react';
-import {
-    Form,
-    Modal,
-    Steps,
-    Input,
-    Button,
-    Popconfirm
-} from 'antd';
+import React, { useEffect } from 'react'
+import { Form, Modal, Button, Popconfirm, Input } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux'
 import * as trans from '../../modules/Actions';
-import { createVariant } from '../Product/Input';
-const { Step } = Steps;
 let styled = {
     marginBottom: "12px",
 }
+
 
 export default function ModalEditVariant(props) {
     let visiable = useSelector(state => state.ProductReducer.modalEditVariant);
@@ -22,28 +14,28 @@ export default function ModalEditVariant(props) {
     let dataEdit = useSelector(state => state.ProductReducer?.dataVariantEdit);
     const [form] = Form.useForm();
     const dispatch = useDispatch();
-    const handleSubmit = (values) => {
-        dispatch(trans.updateVariantProductAction(dataEdit[0].product_id, dataEdit[0].id, values, form));
-    }
-    const setFieldData = () => {
+    useEffect(() => {
         if (dataEdit) {
             form.setFieldsValue({
                 product_variant_name: dataEdit[0].product_variant_name,
-                product_variant_rom: dataEdit[0].product_variant_rom
+                product_variant_rom: dataEdit[0].product_variant_rom,
+                product_variant_ram: dataEdit[0].product_variant_ram,
             });
         }
-    }
+    }, [dataEdit])
     const handleDelete = () => {
         dispatch(trans.deleteVariantAction(dataEdit[0].product_id, dataEdit[0].id));
     }
+    const handleSubmit = (values) => {
+        dispatch(trans.updateVariantProductAction(dataEdit[0].id, values, form));
+    }
     return (
         <>
-            {dataEdit ? setFieldData() : ''}
             <Modal
                 title="Edit Variant"
                 centered
                 visible={visiable}
-                width={600}
+                width={500}
                 okButtonProps={{ disabled: disabled }}
                 onCancel={() => {
                     dispatch(trans.modalEditVariantAct(false));
@@ -76,6 +68,10 @@ export default function ModalEditVariant(props) {
                         style={styled}
                         rules={[
                             {
+                                required: true,
+                                message: "Slug is empty!"
+                            },
+                            {
                                 max: 254,
                                 message: "Maximum 254 character!"
                             }
@@ -95,6 +91,36 @@ export default function ModalEditVariant(props) {
                         ]}
                     >
                         <Input type="number" placeholder="Example 128GB" />
+                    </Form.Item>
+                    <Form.Item
+                        name="product_variant_ram"
+                        label="Ram"
+                        style={styled}
+                        rules={[
+                            {
+                                required: true,
+                                message: "Ram is empty!"
+                            }
+                        ]}
+                    >
+                        <Input type="number" placeholder="Example 8GB" />
+                    </Form.Item>
+                    <Form.Item
+                        name="slug_url"
+                        label="Slug"
+                        style={styled}
+                        rules={[
+                            {
+                                required: true,
+                                message: "Slug is empty!"
+                            },
+                            {
+                                pattern: "(?![enp])[a-z]",
+                                message: "Slug must be a-z"
+                            }
+                        ]}
+                    >
+                        <Input type="text" placeholder="Example iphone-12-pro-max" />
                     </Form.Item>
                 </Form>
             </Modal>

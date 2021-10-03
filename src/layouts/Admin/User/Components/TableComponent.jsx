@@ -110,7 +110,7 @@ export default function TableComponent(props) {
             sortDirections: ['descend', 'ascend'],
             render: (text, data) => {
                 return (
-                    data.status === 1 ?
+                    parseInt(data.status) === 1 ?
                         <Switch
                             checkedChildren="Block"
                             unCheckedChildren="Open"

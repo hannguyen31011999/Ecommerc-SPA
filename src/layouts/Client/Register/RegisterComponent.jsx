@@ -14,7 +14,7 @@ const schema = yup.object().shape({
     password: yup.string().min(6).max(254).required(),
     confirm_password: yup.string().oneOf([yup.ref('password'), null], 'confirm password must match'),
     address: yup.string().max(254).required(),
-    phone: yup.string().required().matches(new RegExp(/(0)[0-9]{9}/), 'number phone start 0 and maximum 10 number'),
+    phone: yup.string().required().max(10).matches(new RegExp(/(0)[0-9]{9}/), 'number phone start 0 and maximum 10 number'),
 });
 
 export default function RegisterComponent(props) {
@@ -104,10 +104,10 @@ export default function RegisterComponent(props) {
                                     errorsRegister?.phone && <span className="register__error">{errorsRegister?.phone}</span>
                                 }
                             </div>
-                            {/* <div className="register__group">
+                            <div className="register__group">
                                 <label htmlFor="birth">Birth</label>
                                 <input type="date" name="birth" className="form-control" />
-                            </div> */}
+                            </div>
                             <div className="register__group">
                                 <label htmlFor="gender">Gender</label>
                                 <select name="gender" className="form-select">

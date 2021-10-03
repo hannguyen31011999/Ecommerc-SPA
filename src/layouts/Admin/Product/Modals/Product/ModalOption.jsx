@@ -5,10 +5,11 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import * as trans from '../../modules/Actions';
 
-export default function ModalOption() {
-    let data = useSelector(state => state.ProductReducer?.dataEdit);
-    let modalContent = useSelector(state => state.ProductReducer?.modalOption);
-    let option = data?.product_options ? data?.product_options[0] : {};
+export default function ModalOption(props) {
+    const data = useSelector(state => state.ProductReducer?.dataEdit);
+    const modalContent = useSelector(state => state.ProductReducer?.modalOption);
+    const option = data?.product_options ? data?.product_options[0] : {};
+    const variant = data?.product_variants ? data?.product_variants[0] : {};
     const dispatch = useDispatch();
     return (
         <>
@@ -21,7 +22,7 @@ export default function ModalOption() {
                         onCancel={() => { dispatch(trans.modalAct(false)) }}
                         width={600}
                     >
-                        <table class="table table-success table-striped">
+                        <table className="table table-success table-striped">
                             <tbody>
                                 <tr>
                                     <td>Screen</td>
@@ -45,11 +46,15 @@ export default function ModalOption() {
                                 </tr>
                                 <tr>
                                     <td>Ram</td>
-                                    <td>{option.ram}</td>
+                                    <td>{variant.product_variant_ram}</td>
                                 </tr>
                                 <tr>
-                                    <td>Camera</td>
-                                    <td>{option.camera}</td>
+                                    <td>Camera Front</td>
+                                    <td>{option.camera_fr}</td>
+                                </tr>
+                                <tr>
+                                    <td>Camera Rear</td>
+                                    <td>{option.camera_be}</td>
                                 </tr>
                                 <tr>
                                     <td>Pin</td>

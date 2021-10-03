@@ -1,19 +1,17 @@
 import React from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import HeaderComponent from '../../components/Admin/HeaderComponent';
 import SidebarComponent from '../../components/Admin/SidebarComponent';
 import { Breadcrumb } from 'antd';
 import withLayout from '../../hoc/withLayouts';
 import MessagesAdmin from '../../components/Admin/Chat/MessagesAdmin';
-
-const capitalizeFirstLetter = string => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
+import { renderBreadcrumb } from '../../utils/helper';
 
 function AdminTemplate(props) {
-    const history = useHistory();
-    const length = history.location.pathname.split('/').length;
-    const breadcrumb = history.location.pathname.split('/')[length - 1];
+    const location = useLocation();
+    const length = location.pathname.split('/').length;
+    const arr = location.pathname.split('/');
+    const breadcrumb = renderBreadcrumb(length, arr);
     return (
         <>
             <div className="wrapper" >
@@ -27,7 +25,7 @@ function AdminTemplate(props) {
                                 <Breadcrumb.Item>
                                     {
                                         breadcrumb === 'dashboard' ?
-                                            '' : capitalizeFirstLetter(breadcrumb)
+                                            '' : breadcrumb
                                     }
                                 </Breadcrumb.Item>
                             </Breadcrumb>

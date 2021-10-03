@@ -7,6 +7,7 @@ import * as actions from '../../../redux/Actions/User/CartActions';
 import * as service from '../../../services/checkout';
 import { Popconfirm } from 'antd';
 import CouponComponent from './CouponComponent';
+import { alertErrors } from '../../../settings/config';
 
 export default function MainCart() {
     const cart = useSelector(state => state.CartReducer.cart);
@@ -20,7 +21,11 @@ export default function MainCart() {
         const formData = new FormData();
         if (isBool) {
             formData.append('qty', 1);
-            dispatch(actions.updateCartAction(cart.id, formData));
+            if (cart.qty >= 2) {
+                alertErrors('Sorry, Product is out of stock!');
+            } else {
+                dispatch(actions.updateCartAction(cart.id, formData));
+            }
         } else {
             if (cart.qty > 1) {
                 formData.append('qty', -1);
@@ -30,10 +35,14 @@ export default function MainCart() {
     }
     const handleChangeQuantity = async (e, cart) => {
         if (e.target.value) {
-            const formData = new FormData();
-            formData.append('qty', e.target.value);
-            await dispatch(actions.updateCartAction(cart.id, formData));
-            e.target.value = cart.qty;
+            if (parseInt(e.target.value) > 2) {
+                const formData = new FormData();
+                formData.append('qty', e.target.value);
+                await dispatch(actions.updateCartAction(cart.id, formData));
+                e.target.value = cart.qty;
+            } else {
+                alertErrors('Sorry, Product is out of stock!');
+            }
         }
     }
     const renderCart = () => {

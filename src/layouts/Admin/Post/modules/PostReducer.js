@@ -26,7 +26,7 @@ const PostReducer = (state = initialState, { type, payload }) => {
             return { ...state, data, pagination: { ...state.pagination, total, lastPage }, loading: false }
         }
         case contants.fetchFailContants: {
-            return { ...state, disabled: payload.disabled, loading: false, messageErrors: payload.errors };
+            return { ...state, disabled: payload.disabled, loading: false };
         }
         case contants.paginationContants: {
             const { data, pagination } = payload;
@@ -60,6 +60,16 @@ const PostReducer = (state = initialState, { type, payload }) => {
         }
         case contants.deleteContants: {
             let dataTemp = [...state.data];
+            if (dataTemp.length === 1) {
+                return {
+                    ...state, data: [], temp: [], loading: false,
+                    pagination: {
+                        current: 1,
+                        pageSize: 15
+                    },
+                    messageErrors: {}
+                }
+            }
             const index = dataTemp.findIndex((item) => item.id === payload);
             dataTemp.splice(index, 1);
             let { current, lastPage, total } = state.pagination;

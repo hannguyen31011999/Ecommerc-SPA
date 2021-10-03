@@ -2,38 +2,12 @@ import React, { useEffect, useRef, useState } from 'react'
 import { DatePicker, Space, Spin } from 'antd';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from 'yup';
-import { INFO } from '../../../../settings/configUrl';
 import moment from 'moment';
-import { apiPurchase } from '../../../../services/clientApi';
-import { alertErrors, alertSuccess } from '../../../../settings/config';
+import { onSubmitHandler, styled, hideCharacter, schema } from '../../../../services/user/info';
+import { INFO } from '../../../../settings/configUrl';
 
-const hideCharacter = (start, char1, char2) => {
-    let temp = "";
-    for (let i = 0; i < char1.length; i++) {
-        if (i > start) {
-            temp += "*";
-        } else {
-            temp += char1[i];
-        }
-    }
-    return `${temp}@${char2}`;
-}
 
-const styled = {
-    color: "#f73232",
-    fontSize: "13px",
-    display: "block",
-    width: "100%",
-    transform: "translateX(23%)",
-    marginTop: "5px"
-}
 
-const schema = yup.object().shape({
-    name: yup.string().max(100, 'Maximum 100 character').required('Name is required'),
-    address: yup.string().max(254, 'Maximum 254 character').required('Address is required'),
-    phone: yup.string().required('Phone is required').matches(new RegExp(/(0)[0-9]{9}/), 'Number phone start 0 and maximum 10 number'),
-});
 export default function InfoAccount() {
     const { register, handleSubmit, formState: { errors }, setValue, setError } = useForm({
         mode: 'onChange',
@@ -43,7 +17,7 @@ export default function InfoAccount() {
     const dateTime = useRef("");
     const gender = useRef();
     const user = JSON.parse(localStorage.getItem(INFO));
-    const date = moment(user?.birth).format("DD-MM-YYYY");
+    const date = user?.birth === true ? moment(user?.birth).format("DD-MM-YYYY") : moment();
     useEffect(() => {
         if (Object.keys(user).length > 0) {
             setValue("name", user.name);
@@ -51,39 +25,6 @@ export default function InfoAccount() {
             setValue("address", user.address);
         }
     }, []);
-    const onSubmitHandler = values => {
-        const data = {
-            ...values,
-            // birth: dateTime.current ? dateTime.current : user.birth,
-            gender: gender.current ? gender.current : user.gender
-        };
-        const formData = new FormData();
-        for (const key in data) {
-            formData.append(key, data[key]);
-        }
-        setLoading(true);
-        apiPurchase.updateInfo(user.id, formData).then(res => {
-            if (res.data.status_code == 200) {
-                const temp = { ...res.data.data };
-                delete temp.role;
-                localStorage.setItem(INFO, JSON.stringify(temp));
-                setLoading(false);
-                alertSuccess("Update profile success");
-            } else {
-                for (const [key, value] of Object.entries(res.data.data)) {
-                    setError(key, {
-                        type: "manual",
-                        message: value[0]
-                    });
-                }
-            }
-
-        }).catch(e => {
-            if (e.response) {
-                alertErrors("Sorry, please try again!");
-            }
-        });
-    }
     const changeDate = (date, dateString) => {
         dateTime.current = moment(date).format("YYYY-MM-DD");
     }
@@ -103,7 +44,7 @@ export default function InfoAccount() {
                     <p>Manage profile information for account security</p>
                 </div>
                 <div className="purchase__profile">
-                    <form action="*" onSubmit={handleSubmit(onSubmitHandler)} className="profile__content">
+                    <form action="*" onSubmit={handleSubmit((values) => onSubmitHandler(user, values, dateTime, gender, setLoading, setError))} className="profile__content">
                         <div className="profile__group">
                             <div className="profile__label">
                                 <span>Username</span>
@@ -167,7 +108,7 @@ export default function InfoAccount() {
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="profile__group">
+                        <div className="profile__group">
                             <div className="profile__label">
                                 <span>Birth Date</span>
                             </div>
@@ -179,7 +120,7 @@ export default function InfoAccount() {
                                         format="DD-MM-YYYY" />
                                 </Space>
                             </div>
-                        </div> */}
+                        </div>
                         <div className="profile__group">
                             <div className="profile__label"></div>
                             <button className="profile__btn">Save</button>

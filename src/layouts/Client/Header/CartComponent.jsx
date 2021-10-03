@@ -88,13 +88,13 @@ export default function CartComponent(props) {
             </div>
             <div className="header__middle--cart d-flex justify-content-end">
                 <div className="header__middle--item">
-                    <a href="*" className="header__middle--navlink">
+                    <a href="*" onClick={(e) => { e.preventDefault() }} className="header__middle--navlink">
                         <i className="lni lni-heart" />
                         <span className="header__middle--total">0</span>
                     </a>
                 </div>
                 <div className="header__middle--item">
-                    <a href="*" className="header__middle--navlink">
+                    <a href="*" onClick={(e) => { e.preventDefault() }} className="header__middle--navlink">
                         <i className="lni lni-cart" />
                         <span className="header__middle--total">{cart.length > 0 ? cart.length : localStorage.getItem(TOTAL_CART) ? localStorage.getItem(TOTAL_CART) : 0}</span>
                     </a>

@@ -2,11 +2,9 @@ import React, { useEffect, useState, useRef } from 'react'
 import { Table, Button, Space, Popconfirm, TreeSelect } from 'antd';
 import { useSelector, useDispatch } from 'react-redux'
 import * as trans from '../modules/Actions';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import ModalContent from '../Modals/Product/ModalContent';
 import ModalOption from '../Modals/Product/ModalOption';
-import ModalEdit from '../Modals/Product/ModalEdit';
-import ModalCreateVariant from '../Modals/Variant/ModalCreateVariant';
 import ModalEditVariant from '../Modals/Variant/ModalEditVariant';
 import { getColumnSearchProps } from '../../../../services/table';
 const { TreeNode } = TreeSelect;
@@ -16,11 +14,11 @@ export default function TableComponent(props) {
     let pagination = useSelector(state => state.ProductReducer.pagination);
     let loading = useSelector(state => state.ProductReducer.loading);
     const history = useHistory();
+    const location = useLocation();
     let [seach, setSeach] = useState({
         searchText: '',
         searchedColumn: '',
     });
-    const [locationKeys, setLocationKeys] = useState();
     let searchInput = useRef(null);
     const dispatch = useDispatch();
     const [treeLine, setTreeLine] = useState(true);
@@ -29,14 +27,16 @@ export default function TableComponent(props) {
         if (Array.isArray(product) && !product.length > 0) {
             dispatch(trans.transAction(pagination.pageSize));
         } else {
-            trans.loadingAct(false);
+            window.onpopstate = (e) => {
+                dispatch(trans.paginationAction(pagination.current, pagination.pageSize));
+            }
         }
     }, []);
     useEffect(() => {
-        window.onpopstate = (e) => {
+        if (history.action === "POP") {
             dispatch(trans.transAction(pagination.pageSize));
         }
-    }, [locationKeys]);
+    }, [history.action]);
     const onChange = (pagination) => {
         const { current, pageSize } = pagination;
         dispatch(trans.paginationAction(current, pageSize));
@@ -165,11 +165,12 @@ export default function TableComponent(props) {
             render: (tetext, data) => {
                 return (
                     <Space size="middle">
-                        <Button title="Add variant" onClick={() => { dispatch(trans.modalVariantAct({ id: data.id, isBool: true })) }}>
+                        <Button title="Add variant" onClick={() => { history.push(`/admin/product/${data.id}/variant/create`) }}>
                             <i className="fa fa-plus"></i>
                         </Button>
                         <Button title="Edit product" onClick={() => {
                             dispatch(trans.editAct(data.id));
+                            history.push(`/admin/product/edit/${data.id}`);
                         }}><i className="fa fa-edit"></i></Button>
                         <Popconfirm
                             placement="bottomRight"
@@ -187,10 +188,8 @@ export default function TableComponent(props) {
     ];
     return (
         <>
-            {product.length > 0 ? <ModalEdit /> : ''}
             {product.length > 0 ? <ModalContent /> : ''}
             {product.length > 0 ? <ModalOption /> : ''}
-            {product.length > 0 ? <ModalCreateVariant /> : ''}
             {product.length > 0 ? <ModalEditVariant /> : ''}
             <div className="col-12">
                 < Table

@@ -29,8 +29,10 @@ export default function ModalComponent() {
             delete values.birth
             formData = { ...values, birth: date.current.split('-').reverse().join('-') }
         } else {
+            delete values.birth;
             formData = { ...values };
         }
+        console.log(formData);
         const formCreate = new FormData();
         for (const key in formData) {
             formCreate.append(key, values[key]);
@@ -130,8 +132,8 @@ export default function ModalComponent() {
                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
                         >
-                            <Option value="1">Nam</Option>
-                            <Option value="0">Nữ</Option>
+                            <Option value="1">Male</Option>
+                            <Option value="0">Female</Option>
                         </Select>
                     </Form.Item>
                     <Form.Item

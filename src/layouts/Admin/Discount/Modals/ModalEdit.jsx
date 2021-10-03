@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import moment from 'moment';
 import {
     Form,
@@ -22,6 +22,16 @@ export default function ModalEdit(props) {
     let date = useRef([]);
     const [form] = Form.useForm();
     const dispatch = useDispatch();
+    useEffect(() => {
+        if (dataEdit) {
+            form.setFieldsValue({
+                discount_name: dataEdit.discount_name,
+                discount_type: dataEdit.discount_type,
+                discount_value: dataEdit.discount_value,
+                date: [moment(dataEdit.discount_start), moment(dataEdit.discount_end)]
+            });
+        }
+    }, [dataEdit]);
     const handleUpdate = values => {
         let formData = {};
         if (date.current.length > 0) {
@@ -32,27 +42,15 @@ export default function ModalEdit(props) {
         delete formData.date;
         const data = new FormData();
         for (const key in formData) {
-            formData.append(key, formData[key]);
+            data.append(key, formData[key]);
         }
         dispatch(trans.updateDiscountAction(dataEdit.id, data, form));
-    }
-    const setDataField = () => {
-        if (dataEdit) {
-            form.setFieldsValue({
-                discount_name: dataEdit.discount_name,
-                discount_type: dataEdit.discount_type,
-                discount_value: dataEdit.discount_value,
-                date: [moment(dataEdit.discount_start), moment(dataEdit.discount_end)]
-            });
-        }
-        return;
     }
     const changeDate = (values, toString) => {
         date.current = toString;
     }
     return (
         <>
-            {setDataField()}
             <Modal
                 title="Create"
                 centered

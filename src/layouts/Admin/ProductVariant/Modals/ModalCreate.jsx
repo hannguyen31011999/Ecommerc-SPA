@@ -111,22 +111,6 @@ export default function ModalCreate() {
                         <Input type="number" placeholder="Example 10.000.000" />
                     </Form.Item>
                     <Form.Item
-                        name="sku_qty"
-                        label="Quantity"
-                        style={styled}
-                        rules={[
-                            {
-                                required: true,
-                                message: "Quantity is empty!"
-                            },
-                            {
-                                max: 4,
-                                message: "Maximum 4 number!"
-                            }
-                        ]}>
-                        <Input type="number" placeholder="Example 5" />
-                    </Form.Item>
-                    <Form.Item
                         name="color"
                         label="Color"
                         style={styled}

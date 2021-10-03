@@ -1,7 +1,6 @@
-import React, { memo, useRef, useState, useEffect } from 'react';
+import React, { memo, useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-import { useDispatch, useSelector } from 'react-redux'
-import * as trans from '../modules/Action';
+import { useSelector } from 'react-redux'
 import { init } from '../../../../utils/getImage';
 
 function EditorComponent(props) {

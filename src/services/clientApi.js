@@ -57,8 +57,8 @@ export const apiLogin = {
     redirectFacebook() {
         return callApi(`api/redirect/facebook`);
     },
-    loginWithFacebook() {
-        return callApi(`api/callback/facebook`);
+    getInfo(token) {
+        return callApi(`api/info?token=${token}`);
     }
 }
 

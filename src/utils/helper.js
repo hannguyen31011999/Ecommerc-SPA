@@ -78,3 +78,22 @@ export const renderMonth = () => {
         return <option value={index + 1} key={index}>{index + 1}</option>
     })
 }
+
+const capitalizeFirstLetter = string => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+export const renderBreadcrumb = (length, arr) => {
+    switch (length) {
+        case 3:
+            return capitalizeFirstLetter(arr[length - 1]);
+        case 4:
+            return `${capitalizeFirstLetter(arr[length - 2])} / ${capitalizeFirstLetter(arr[length - 1])}`;
+        case 5:
+            return `${capitalizeFirstLetter(arr[length - 3])} / ${capitalizeFirstLetter(arr[length - 2])}`;
+        case 6:
+            return `${capitalizeFirstLetter(arr[length - 4])} / ${capitalizeFirstLetter(arr[length - 1])}`;
+        default:
+            break;
+    }
+}

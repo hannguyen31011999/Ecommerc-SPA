@@ -37,6 +37,11 @@ export const editAct = (payload) => ({
     payload
 });
 
+export const fetchEditAct = (payload) => ({
+    type: contants.fetchEditContants,
+    payload
+})
+
 export const updateAct = (payload) => ({
     type: contants.updateContants,
     payload
@@ -98,6 +103,11 @@ export const modalEditVariantAct = (payload) => ({
     payload
 });
 
+export const fetchRelationshipAct = payload => ({
+    type: contants.fetchRelationship,
+    payload
+});
+
 // fetch data
 export const transAction = (pageSize) => async (dispatch) => {
     try {
@@ -107,18 +117,35 @@ export const transAction = (pageSize) => async (dispatch) => {
         const payload = {
             data: result.data,
             total: result.total,
-            lastPage: result.last_page,
-            categories: res.data.parent.categories,
-            discount: res.data.parent.discount
+            lastPage: result.last_page
         }
         dispatch(fetchSuccessAct(payload));
     } catch (e) {
         if (e.response) {
             alertErrors('Sorry, Server errors please try again!');
-            dispatch(loadingAct(false));
+            dispatch(fetchFailAct(false));
         }
     }
 }
+
+// fetch relationships
+export const fetchRelationshipAction = () => async (dispatch) => {
+    try {
+        const res = await apiProduct.fetchRelationshipApi();
+        const result = res.data.data;
+        const payload = {
+            categories: result.categories,
+            discount: result.discount
+        }
+        dispatch(fetchRelationshipAct(payload));
+    } catch (e) {
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(fetchFailAct(false));
+        }
+    }
+}
+
 
 // fetch pagination
 export const paginationAction = (current, pageSize) => async (dispatch) => {
@@ -134,74 +161,83 @@ export const paginationAction = (current, pageSize) => async (dispatch) => {
     } catch (e) {
         if (e.response) {
             alertErrors('Sorry, Server errors please try again!');
-            dispatch(loadingAct(false));
+            dispatch(fetchFailAct(false));
         }
     }
 }
 
-// create
-export const createProductAction = (data, form, file, description, [image, setImage], setCurrent) => async (dispatch) => {
+// create product
+export const createProductAction = (data, description, [image, setImage], reset, setError) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
         const res = await apiProduct.create(data);
         if (res.data.status_code === STATUS_SUCCESS) {
+            description.current = "";
+            setImage({ ...image, fileList: [] });
+            reset();
             dispatch(createAct(res.data.data));
             alertSuccess('Create success');
-            form.resetFields();
-            file.current = {};
-            description.current = '';
-            setImage({ ...image, fileList: [] });
-            setCurrent(0);
         } else {
             for (const [key, value] of Object.entries(res.data.message)) {
-                form.setFields([
-                    {
-                        name: key,
-                        errors: value,
-                    },
-                ]);
-                alertErrors(value[0], 6000);
+                setError(key, {
+                    type: "manual",
+                    message: value[0],
+                });
             }
             dispatch(fetchFailAct(false));
         }
     } catch (e) {
         if (e.response) {
             alertErrors('Sorry, Server errors please try again!');
-            dispatch(loadingAct(false));
+            dispatch(fetchFailAct(false));
         }
     }
 }
 
-// update
-export const updateProductAction = (id, data, form, [current, setCurrent]) => async (dispatch) => {
+// edit product
+export const fetchEditProductAction = (id) => async (dispatch) => {
+    try {
+        dispatch(loadingAct(true));
+        const res = await apiProduct.edit(id);
+        if (res.data.status_code === STATUS_SUCCESS) {
+            dispatch(fetchEditAct({
+                option: res.data.option,
+                product: res.data.product
+            }));
+        }
+    } catch (e) {
+        if (e.response) {
+            alertErrors('Sorry, Server errors please try again!');
+            dispatch(fetchFailAct(false));
+        }
+    }
+}
+
+// update product
+export const updateProductAction = (id, data, setError, history) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
         const res = await apiProduct.update(id, data);
         if (res.data.status_code === STATUS_SUCCESS) {
             dispatch(updateAct({ update: res.data.data, id }));
-            setCurrent(0)
-            alertSuccess('Update success');
+            alertSuccess("Update success");
         } else {
-            const message = {};
             for (const [key, value] of Object.entries(res.data.message)) {
-                form.setFields([
-                    {
-                        name: key,
-                        errors: value,
-                    },
-                ]);
-                alertErrors(value[0], 6000);
+                setError(key, {
+                    type: "manual",
+                    message: value[0]
+                });
             }
         }
     } catch (e) {
         if (e.response) {
             alertErrors('Sorry, Server errors please try again!');
-            dispatch(loadingAct(false));
+            dispatch(fetchFailAct(false));
         }
     }
 }
 
-// delete
+// delete product
 export const deleteProductAction = (id) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
@@ -213,12 +249,12 @@ export const deleteProductAction = (id) => async (dispatch) => {
     } catch (e) {
         if (e.response) {
             alertErrors('Sorry, Server errors please try again!');
-            dispatch(loadingAct(false));
+            dispatch(fetchFailAct(false));
         }
     }
 }
 
-// seach
+// seach product
 export const seachProductAction = (pageSize, keyword) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
@@ -232,51 +268,49 @@ export const seachProductAction = (pageSize, keyword) => async (dispatch) => {
         dispatch(seachAct(payload));
     } catch (e) {
         if (e.response) {
-            alertErrors('Sorry, Server errors please try again!');
-            dispatch(loadingAct(false));
+            alertErrors('Product not found');
+            dispatch(fetchFailAct(false));
         }
     }
 }
 
 // create variant
-export const createVariantAction = (id, data, form, file, [image, setImage]) => async (dispatch) => {
+export const createVariantAction = (id, formData, [image, setImage], reset, setError) => async (dispatch) => {
     // createVariantAct
     try {
         dispatch(loadingAct(true));
-        const res = await apiProduct.createVariant(id, data);
-        if (res.data.status_code === STATUS_SUCCESS) {
+        const res = await apiProduct.createVariant(id, formData);
+        console.log(res.data.status_code == STATUS_SUCCESS);
+        if (res.data.status_code == STATUS_SUCCESS) {
             let result = res.data.data;
             let data = {
                 id,
                 variant: result.variant,
                 sku: result.sku
             }
+            reset();
+            setImage({ ...image, fileList: [] });
             dispatch(createVariantAct(data));
             alertSuccess('Create success');
-            form.resetFields();
-            file.current = {};
-            setImage({ ...image, fileList: [] });
         } else {
-            const message = {};
             for (const [key, value] of Object.entries(res.data.message)) {
-                form.setFields([
-                    {
-                        name: key,
-                        errors: value,
-                    },
-                ]);
-                alertErrors(value[0], 6000);
+                setError(key, {
+                    type: "manual",
+                    message: value[0],
+                });
             }
+            dispatch(fetchFailAct(false));
         }
     } catch (e) {
         if (e.response) {
             alertErrors('Sorry, Server errors please try again!');
-            dispatch(loadingAct(false));
+            dispatch(fetchFailAct(false));
         }
     }
 }
 
-export const updateVariantProductAction = (product_id, id, data, form) => async (dispatch) => {
+// update variant
+export const updateVariantProductAction = (id, data, form) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
         const res = await apiProduct.updateVariant(id, data);
@@ -285,7 +319,6 @@ export const updateVariantProductAction = (product_id, id, data, form) => async 
             alertSuccess('Update success');
             form.resetFields();
         } else {
-            const message = {};
             for (const [key, value] of Object.entries(res.data.message)) {
                 form.setFields([
                     {
@@ -293,18 +326,18 @@ export const updateVariantProductAction = (product_id, id, data, form) => async 
                         errors: value,
                     },
                 ]);
-                alertErrors(value[0], 6000);
             }
             dispatch(fetchFailAct(false));
         }
     } catch (e) {
         if (e.response) {
             alertErrors('Sorry, Server errors please try again!');
-            dispatch(loadingAct(false));
+            dispatch(fetchFailAct(false));
         }
     }
 }
 
+// delete variant
 export const deleteVariantAction = (product_id, id) => async (dispatch) => {
     try {
         dispatch(loadingAct(true));
@@ -319,7 +352,7 @@ export const deleteVariantAction = (product_id, id) => async (dispatch) => {
     } catch (e) {
         if (e.response) {
             alertErrors('Sorry, Server errors please try again!');
-            dispatch(loadingAct(false));
+            dispatch(fetchFailAct(false));
         }
     }
 }

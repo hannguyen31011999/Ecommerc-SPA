@@ -98,7 +98,7 @@ function TableComponent() {
             key: 'review_status',
             render: (text, data) => {
                 return (
-                    data.review_status === 1 ?
+                    parseInt(data.review_status) === 1 ?
                         <Switch
                             checkedChildren="Block"
                             unCheckedChildren="Open"

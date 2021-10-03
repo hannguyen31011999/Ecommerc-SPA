@@ -8,6 +8,7 @@ import * as purchase from '../Account/Modules/Actions';
 import * as messenger from '../../../redux/Actions/MessagesActions';
 import { logoutAuthAction } from '../../../redux/Actions/Admin/authActions';
 import { STATUS_SUCCESS } from '../../../settings/config';
+
 export default function HeaderTop(props) {
     const history = useHistory();
     const dispatch = useDispatch();
@@ -40,10 +41,6 @@ export default function HeaderTop(props) {
 
         }
     }
-    const redirectPage = (e, slug) => {
-        e.preventDefault();
-        history.push(slug);
-    }
     return (
         <div className="header__topbar">
             <div className="container">
@@ -55,7 +52,7 @@ export default function HeaderTop(props) {
                             <div className="header__topbar--user">
                                 {
                                     localStorage.getItem(INFO) &&
-                                    <a href="">
+                                    <a href="*" onClick={(e) => { e.preventDefault() }}>
                                         <i className="lni lni-user" />{JSON.parse(localStorage.getItem(INFO)).name}
                                     </a>
                                 }

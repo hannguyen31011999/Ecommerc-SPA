@@ -66,6 +66,12 @@
                 }
             }
         }
+        .sidebar__item--content {
+            width: 100%;
+            display: flex;
+            padding: 12px 20px;
+            justify-content: center;
+        }
     }
     @include responsive('large') {
         .sidebar__item {
@@ -110,16 +116,17 @@
         .sidebar__navItem {
             padding: $pd-1 $pd-3 - 10;
             transition: $tran-2;
+            margin: 5px 0;
             .sidebar__navlink {
                 text-decoration: none;
                 @include styleText($fs-0,#000,0,0,$fw-2);
             }
             &:hover {
-                background-color: rgba($gray,0.5);
+                background-color: rgba($gray,0.1);
             }
         }
         .navItem__active {
-            background-color: rgba($gray,0.5);
+            background-color: rgba($gray,0.1);
         }
     }
     .openMenu {

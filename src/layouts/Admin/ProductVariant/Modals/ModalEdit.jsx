@@ -2,15 +2,13 @@ import React, { useState, useRef } from 'react'
 import {
     Form,
     Input,
-    Button,
     Modal,
     Upload
 } from 'antd';
-import { FolderAddOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useHistory } from "react-router-dom";
 import * as trans from '../modules/Actions';
 import { STORAGE } from '../../../../settings/configUrl';
+import { onPreview } from '../../../../services/admin/product';
 
 let styled = {
     marginBottom: "12px",
@@ -27,29 +25,14 @@ export default function ModalEdit() {
     let [errors, setErrors] = useState({
         image: ''
     });
-    let file = useRef({});
     const onChange = ({ fileList: newFileList }) => {
         setFileList(newFileList);
-    };
-    const onPreview = async file => {
-        let src = file.url;
-        if (!src) {
-            src = await new Promise(resolve => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file.originFileObj);
-                reader.onload = () => resolve(reader.result);
-            });
-        }
-        const image = new Image();
-        image.src = src;
-        const imgWindow = window.open(src);
-        imgWindow.document.write(image.outerHTML);
     };
     const handleSubmit = (values) => {
         let dataEdit = {};
         let formData = new FormData();
-        if (fileList.length > 0 && file.current) {
-            dataEdit = { ...values, image: file.current }
+        if (fileList.length > 0) {
+            dataEdit = { ...values, image: fileList[0].originFileObj }
         } else {
             dataEdit = { ...values }
         }
@@ -113,9 +96,6 @@ export default function ModalEdit() {
                         onChange={onChange}
                         onPreview={onPreview}
                         maxCount={1}
-                        beforeUpload={img => {
-                            file.current = img;
-                        }}
                     >
                         {'Upload File'}
                     </Upload>

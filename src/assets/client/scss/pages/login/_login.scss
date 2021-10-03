@@ -63,6 +63,9 @@
                     }
                 }
             }
+            @include responsive('mobile'){
+                width: auto;
+            }
         }
         .login__option {
             margin: $mg-1 + 10 0;
@@ -169,6 +172,9 @@
         }
         @include responsive('small'){
             width: 100%;
+        }
+        @include responsive('mobile'){
+            padding: 30px 20px;
         }
     }
     @include responsive('small'){

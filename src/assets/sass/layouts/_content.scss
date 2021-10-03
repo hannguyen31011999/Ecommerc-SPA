@@ -249,3 +249,31 @@
         border: 1px solid $info;
     }
 }
+
+.form__admin {
+    background-color: $white;
+    margin: 0 20px;
+    padding: $pd-2;
+    border-radius: 4px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 12px;
+    label {
+        font-size: $fs-0;
+        font-weight: 600;
+        color: #081828;
+        opacity: 0.5;
+    }
+    .form__title {
+        margin-bottom: $mg-0;
+        h4 {
+            @include styleText($fs-1,#081828,0,0,$fw-4);
+            padding-bottom: $pd-1;
+            border-bottom: 1px solid #eee;
+        }
+    }
+    .form__left {
+        padding: $pd-1 $pd-2;
+    }
+    .form__right {
+        padding: $pd-1 0;
+    }
+}

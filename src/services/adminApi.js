@@ -178,6 +178,9 @@ export const apiProduct = {
         return callApiAdmin(`product/list?pageSize=${pageSize}&token=${getToken()}`);
         // return callApiAdmin(`product/list?pageSize=${pageSize}`);
     },
+    fetchRelationshipApi() {
+        return callApiAdmin(`product/parent?token=${getToken()}`);
+    },
     changePagination(currentPage, pageSize = 10) {
         return callApiAdmin(`product/list?page=${currentPage}&pageSize=${pageSize}&token=${getToken()}`);
         // return callApiAdmin(`product/list?page=${currentPage}&pageSize=${pageSize}`);
@@ -203,11 +206,11 @@ export const apiProduct = {
         // return callApiAdmin(`product/seach?keyword=${keyword}&pageSize=${pageSize}`);
     },
     createVariant(id, form) {
-        return callApiAdmin(`product/variant/${id}?token=${getToken()}`, 'post', form);
+        return callApiAdmin(`product/variant/create/${id}?token=${getToken()}`, 'post', form);
         // return callApiAdmin(`product/variant/${id}`, 'post', form);
     },
     updateVariant(id, form) {
-        return callApiAdmin(`product/variant/${id}?token=${getToken()}`, 'post', form);
+        return callApiAdmin(`product/variant/update/${id}?token=${getToken()}`, 'post', form);
         // return callApiAdmin(`product/variant/${id}`, 'post', form);
     },
     deleteVariant(id) {

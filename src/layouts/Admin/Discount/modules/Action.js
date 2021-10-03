@@ -131,7 +131,6 @@ export const updateDiscountAction = (id, data, form) => async (dispatch) => {
             dispatch(updateAct({ update: res.data.data, id }));
             alertSuccess('Update success');
         } else {
-            const message = {};
             for (const [key, value] of Object.entries(res.data.message)) {
                 form.setFields([
                     {

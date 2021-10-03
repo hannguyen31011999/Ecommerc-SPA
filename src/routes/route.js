@@ -3,6 +3,10 @@ import DashboardComponent from "../layouts/Admin/Dashboard/DashboardComponent";
 import CategoriesComponent from '../layouts/Admin/Categories/CategoriesComponent';
 import UserComponent from '../layouts/Admin/User/UserComponent';
 import ProductComponent from '../layouts/Admin/Product/ProductComponent';
+import CreateProduct from '../layouts/Admin/Product/Modals/Product/CreateProduct';
+import EditProduct from '../layouts/Admin/Product/Modals/Product/EditProduct';
+import CreateVariant from '../layouts/Admin/Product/Modals/Variant/CreateVariant';
+import EditVariant from '../layouts/Admin/Product/Modals/Variant/EditVariant';
 import ProductVariant from '../layouts/Admin/ProductVariant/ProductVariant';
 import OrderComponent from '../layouts/Admin/Order/OrderComponent';
 import OrderDetailComponent from '../layouts/Admin/OrderDetails/OrderDetailComponent';
@@ -43,6 +47,26 @@ export const adminRoutes = [
     {
         path: '/admin/product',
         component: ProductComponent,
+        exact: true
+    },
+    {
+        path: '/admin/product/create',
+        component: CreateProduct,
+        exact: true
+    },
+    {
+        path: '/admin/product/edit/:id',
+        component: EditProduct,
+        exact: true
+    },
+    {
+        path: '/admin/product/:id/variant/create',
+        component: CreateVariant,
+        exact: true
+    },
+    {
+        path: '/admin/product/variant/:id/edit',
+        component: EditVariant,
         exact: true
     },
     {

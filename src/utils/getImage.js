@@ -35,11 +35,8 @@ export const init = {
                 formData.append('image', file);
                 const res = await axios({
                     method: 'POST',
-                    url: `${BASE_URL_ADMIN}/post/upload`,
-                    data: formData,
-                    headers: {
-                        "Authorization": `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`
-                    }
+                    url: `${BASE_URL_ADMIN}/post/upload?token=${localStorage.getItem(ACCESS_TOKEN)}`,
+                    data: formData
                 });
                 callback(`${BASE_URL}/${res.data}`, { alt: 'Image' });
             };
