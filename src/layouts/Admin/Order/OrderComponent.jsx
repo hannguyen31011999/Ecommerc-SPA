@@ -103,23 +103,6 @@ export default function OrderComponent(props) {
             key: 'order_note'
         },
         {
-            title: 'Status',
-            dataIndex: 'order_status',
-            key: 'order_status',
-            sorter: (a, b) => a.order_status - b.order_status,
-            sortDirections: ['descend', 'ascend'],
-            render: (text, data) => {
-                return (
-                    <Select value={data.order_status} onChange={(values) => { handleChangeStatus(values, data.id) }}>
-                        <Option value={1} disabled={true}>Comfirm</Option>
-                        <Option value={2}>Relivering</Option>
-                        <Option value={3} disabled={data.order_status == 3 || parseInt(data.order_status) == 1 ? true : false}>Relivered</Option>
-                        <Option value={4}>Cancelled</Option>
-                    </Select>
-                )
-            }
-        },
-        {
             title: 'Detail',
             render: (text, data) => {
                 return (
