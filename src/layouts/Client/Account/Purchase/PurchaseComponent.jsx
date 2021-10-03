@@ -86,8 +86,9 @@ export default function PurchaseComponent(props) {
                         </p>
                         <p>Total amount: <span className="purchase__price--total">
                             ${item.order_details.reduce((total, ord) => {
+                                console.log(ord.product_price * ord.qty)
                                 return total += ord.product_price * ord.qty;
-                            }, 0) + item.transport_price}
+                            }, 0) + parseInt(item.transport_price)}
                         </span></p>
                     </div>
                     {
