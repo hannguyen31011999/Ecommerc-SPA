@@ -66,7 +66,7 @@ const DashBoardReducer = (state = initialState, { type, payload }) => {
                     let num = 0;
                     order.forEach(ord => {
                         console.log(ord)
-                        if (ord.month === index + 1) {
+                        if (ord.month == index + 1) {
                             num = parseInt(ord.total);
                         }
                     });
