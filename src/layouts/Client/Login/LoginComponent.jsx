@@ -87,7 +87,7 @@ export default function LoginComponent(props) {
                         </div>
                         <div className="login__social row">
                             <div className="col-md-4 login__item">
-                                <a href="https://quan9-store.000webhostapp.com/api/redirect/facebook" className="login__facebook">
+                                <a href="https://1234-demo.000webhostapp.com/api/redirect/facebook" className="login__facebook">
                                     <i className="lni lni-facebook-filled" />
                                     Facebook login
                                 </a>
