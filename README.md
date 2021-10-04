@@ -1,6 +1,14 @@
 <h4>Công nghệ sử dụng</h4>
--Frontend: HTML5, CSS3, SCSS, BOOTSTRAP 5, REACTJS, REDUX, REDUX THUNK <br>
+-Frontend: HTML5, CSS3, SCSS, BOOTSTRAP 5, REACTJS, REDUX, REDUX THUNK, PUSHER - REALTIME <br>
 -Backend: PHP, Framework Laravel & MySQL <br>
+
+<h5>Chức năng chính</h5>
++Về phần client:
+-Đăng nhập, Đăng kí, Đăng nhập với facebook, Giỏ hàng, Thanh toán trực tuyến paypal, Phân trang với infinite-scroll, Lịch sử mua hàng, Thay đổi thông tin, Thay đổi mật khẩu, Chatbox với admin, Bình luận sản phẩm, filter sản phẩm, Phí vận chuyển....... <br>
++Về phần admin:
+-Tổng hợp số liệu của user,visitor,order,revenue với chart
+-Thêm, sửa, xóa, tìm kiếm, phân trang với module post, categories, product, product variant, product sku, review, user.....
+-Export file excel và tính tổng đơn hàng
 
 
 Link Demo: https://store-quan9.vercel.app </br>
