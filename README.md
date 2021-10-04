@@ -24,5 +24,5 @@ h?k44C.i
 sb-x91858000171@personal.example.com
 mgpu*<1A
 
-<p>Link Demo: https://store-quan9.vercel.app</p>
-<p>Link Video: </p>
+Link Demo: https://store-quan9.vercel.app
+Link Video:
