@@ -14,7 +14,7 @@
 
 
 Link Demo: https://store-quan9.vercel.app </br>
-Link Video: </br>
+Link Video: https://www.youtube.com/watch?v=MLUDbCVtdoY </br>
 
 
 
