@@ -1,27 +1,27 @@
 <h4>Tài khoản paypal sanbox test thanh toán</h4>
 
 -acount test 1
-sb-ecrye7749741@personal.example.com
+sb-ecrye7749741@personal.example.com </br>
 BxtI0:.6
 
 -account test 2
-sb-8ollz7749954@personal.example.com
+sb-8ollz7749954@personal.example.com </br>
 |hD@kB3o
 
 -account test 3
-sb-x436jy7748351@business.example.com
-2-qlK4;x
+sb-x436jy7748351@business.example.com </br>
+2-qlK4;x 
 
 -account test 4
-sb-pwuhp7744554@personal.example.com
+sb-pwuhp7744554@personal.example.com </br>
 F*<;fFY5
 
 -account test 5
-sb-dsjnw7744472@personal.example.com
+sb-dsjnw7744472@personal.example.com </br>
 h?k44C.i
 
 -account test 6
-sb-x91858000171@personal.example.com
+sb-x91858000171@personal.example.com </br>
 mgpu*<1A
 
 Link Demo: https://store-quan9.vercel.app
