@@ -4,7 +4,7 @@
 
 <h5>Chức năng chính</h5>
 +Về phần client:<br>
--Đăng nhập, Đăng kí, Đăng nhập với facebook, Giỏ hàng, Thanh toán trực tuyến paypal, Phân trang với infinite-scroll, Lịch sử mua hàng, Thay đổi thông tin, Thay đổi mật khẩu, Chatbox với admin, Bình luận sản phẩm, filter sản phẩm, Phí vận chuyển....... <br>
+-Đăng nhập, Đăng kí, Đăng nhập với facebook, Giỏ hàng, Thanh toán trực tuyến paypal, Phân trang với infinite-scroll, Lịch sử mua hàng, Thay đổi thông tin, Thay đổi mật khẩu, Chatbox với admin, Bình luận sản phẩm, Filter sản phẩm, Phí vận chuyển....... <br>
 +Về phần admin:<br>
 -Tổng hợp số liệu của user,visitor,order,revenue với chart<br>
 -Thêm, sửa, xóa, tìm kiếm, phân trang với module post, categories, product, product variant, product sku, review, user.....<br>
