@@ -1,5 +1,5 @@
 <h4>Công nghệ sử dụng</h4>
--Frontend: HTML5, CSS3, SCSS, BOOTSTRAP 5, REACTJS, REDUX, REDUX THUNK, PUSHER - REALTIME <br>
+-Frontend: HTML5, CSS3, SCSS, BOOTSTRAP 5, REACTJS, REDUX, REDUX THUNK, UI - ANT DESIGN, LAZYLOAD, PUSHER - REALTIME <br>
 -Backend: PHP, Framework Laravel & MySQL <br>
 
 <h5>Chức năng chính</h5>
