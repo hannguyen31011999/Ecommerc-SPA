@@ -9,6 +9,8 @@
 -Tổng hợp số liệu của user,visitor,order,revenue với chart<br>
 -Thêm, sửa, xóa, tìm kiếm, phân trang với module post, categories, product, product variant, product sku, review, user.....<br>
 -Export file excel và tính tổng đơn hàng<br>
+-Chatbox với user<br>
+-Cập nhật notification khi user order<br>
 
 
 Link Demo: https://store-quan9.vercel.app </br>
