@@ -1,3 +1,15 @@
+<h4>Công nghệ sử dụng</h4>
+-Frontend: HTML5, CSS3, SCSS, BOOTSTRAP 5, REACTJS, REDUX, REDUX THUNK <br>
+-Backend: PHP, Framework Laravel & MySQL <br>
+
+
+Link Demo: https://store-quan9.vercel.app </br>
+Link Video: </br>
+
+
+
+
+
 <h4>Tài khoản paypal sanbox test thanh toán</h4>
 
 -acount test 1 </br>
@@ -24,5 +36,4 @@ h?k44C.i
 sb-x91858000171@personal.example.com </br>
 mgpu*<1A
 
-Link Demo: https://store-quan9.vercel.app
-Link Video:
+
