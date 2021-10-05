@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Popconfirm, Space, Spin } from 'antd';
+import { Space, Spin } from 'antd';
 import { ACCESS_TOKEN, INFO, STORAGE } from '../../../../settings/configUrl';
-import { returnStatus } from '../../../../utils/helper';
 import InfiniteScroll from "react-infinite-scroll-component";
 import * as action from '../Modules/Actions';
 import ComfirmComponent from './ComfirmComponent';
@@ -11,6 +10,7 @@ import DeliveringComponent from './DeliveringComponent';
 import DeliveredComponent from './DeliveredComponent';
 import CancelComponent from './CancelComponent';
 import { alertSuccess } from '../../../../settings/config';
+import * as service from '../../../../services/purchase';
 
 
 export default function PurchaseComponent(props) {
@@ -45,70 +45,6 @@ export default function PurchaseComponent(props) {
         if (currentPage < lastPage) {
             dispatch(action.paginationAllPurchaseAction(user.id, currentPage + 1));
         }
-    }
-    const renderPurchase = (order) => {
-        return order?.map(item => {
-            return (
-                <div className="purchase__order" key={item.id}>
-                    <div className="purchase__status">
-                        <p>Code:{item.id}</p>
-                        <p>{returnStatus(item.order_status)}</p>
-                    </div>
-                    <div className="purchase__list">
-                        {
-                            item.order_details?.map(ord => {
-                                const sku = ord.product_skus;
-                                return (
-                                    <div className="purchase__item" key={ord.id}>
-                                        <div className="purchase__image">
-                                            <a href="*"><img src={`${STORAGE}/products/${sku.sku_image}`} alt="*" /></a>
-                                        </div>
-                                        <div className="purchase__product">
-                                            <h4 className="product__name">
-                                                <a href="*">{ord.product_name}</a>
-                                            </h4>
-                                            <h5 className="product__sku">Color: {sku.color}</h5>
-                                            <p className="product__qty">x{ord.qty}</p>
-                                        </div>
-                                        <div className="purchase__price">
-                                            <p>${ord.qty * ord.product_price}</p>
-                                        </div>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
-                    <div className="purchase__total">
-                        <p>Transport fee:
-                            <span className="purchase__price--total">
-                                ${item.transport_price}
-                            </span>
-                        </p>
-                        <p>Total amount: <span className="purchase__price--total">
-                            ${item.order_details.reduce((total, ord) => {
-                                return total += parseInt(ord.product_price) * parseInt(ord.qty);
-                            }, 0) + parseInt(item.transport_price)}
-                        </span></p>
-                    </div>
-                    {
-                        item.order_status == 1 ?
-                            <div className="purchase__action">
-                                <Popconfirm
-                                    placement="bottomRight"
-                                    title="You want to delete?"
-                                    onConfirm={() => {
-                                        dispatch(action.deletePurchaseAction(item.id, 4))
-                                    }}
-                                    cancelText="No"
-                                    okText="Yes"
-                                >
-                                    <button className="product__btn">Cancel</button>
-                                </Popconfirm>
-                            </div> : ''
-                    }
-                </div>
-            )
-        });
     }
     return (
         <>
@@ -146,7 +82,7 @@ export default function PurchaseComponent(props) {
                         next={scrollPurchase}
                         hasMore={true}
                     >
-                        {data.length > 0 ? renderPurchase(data) : <div className="purchase__empty">
+                        {data.length > 0 ? service.renderPurchase(data) : <div className="purchase__empty">
                             <figure>
                                 <img src={process.env.PUBLIC_URL + "/img/order.png"} alt="*" />
                             </figure>

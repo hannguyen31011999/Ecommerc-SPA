@@ -7,7 +7,7 @@ export const renderPurchase = (order) => {
             <div className="purchase__order" key={item.id}>
                 <div className="purchase__status">
                     <p>Code:{item.id}</p>
-                    <p>{returnStatus(item.order_status)}</p>
+                    <p>{returnStatus(parseInt(item.order_status))}</p>
                 </div>
                 <div className="purchase__list">
                     {
