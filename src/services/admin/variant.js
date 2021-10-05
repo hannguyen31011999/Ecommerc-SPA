@@ -28,7 +28,8 @@ export const createVariant = (id, values, reset, setError, [image, setImage], [e
         for (const key in values) {
             formData.append(key, values[key]);
         }
-        formData.append('image', image.fileList[0].originFileObj);
+        // formData.append('image', image.fileList[0].originFileObj);
+        formData.append('image', image.fileList[0]);
         dispatch(actions.createVariantAction(id, formData, [image, setImage], reset, setError));
     } else {
         setErr({ ...err, image: "Image is required" });

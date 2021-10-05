@@ -49,7 +49,7 @@ export default function ModalCreate() {
             values.sku_promotion_price = 0;
         }
         if (fileList.length > 0 && file.current) {
-            const data = { ...values, image: file.current }
+            const data = { ...values, image: fileList[0].originFileObj }
             let formData = new FormData();
             for (const key in data) {
                 formData.append(key, data[key]);

@@ -88,7 +88,8 @@ export const createProduct = (values, reset, setError, [image, setImage], desc, 
                 formData.append(key, values[key]);
             }
             formData.append('product_desc', desc.current);
-            formData.append('image', image.fileList[0].originFileObj);
+            // formData.append('image', image.fileList[0].originFileObj);
+            formData.append('image', image.fileList[0]);
             dispatch(actions.createProductAction(formData, desc, [image, setImage], reset, setError));
         }
     } else {
