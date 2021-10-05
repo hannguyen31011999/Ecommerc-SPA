@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom';
 import { Space, Spin } from 'antd';
-import { ACCESS_TOKEN, INFO, STORAGE } from '../../../../settings/configUrl';
-import { returnStatus } from '../../../../utils/helper';
+import { ACCESS_TOKEN, INFO } from '../../../../settings/configUrl';
 import { useSelector, useDispatch } from 'react-redux';
 import * as action from '../Modules/Actions';
 import InfiniteScroll from 'react-infinite-scroll-component';

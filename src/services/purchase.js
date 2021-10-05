@@ -41,8 +41,8 @@ export const renderPurchase = (order) => {
                     </p>
                     <p>Total amount: <span className="purchase__price--total">
                         ${item.order_details.reduce((total, ord) => {
-                            return total += ord.product_price * ord.qty;
-                        }, 0) + item.transport_price}
+                            return total += parseInt(ord.product_price) * parseInt(ord.qty);
+                        }, 0) + parseInt(item.transport_price)}
                     </span></p>
                 </div>
                 {
