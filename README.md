@@ -1,70 +1,49 @@
-# Getting Started with Create React App
+<h4>Công nghệ sử dụng</h4>
+-Frontend: HTML5, CSS3, SCSS, BOOTSTRAP 5, REACTJS, REDUX, REDUX THUNK, UI - ANT DESIGN, LAZYLOAD, PUSHER - REALTIME <br>
+-Backend: PHP, Framework Laravel & MySQL <br>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h5>Chức năng chính</h5>
++Về phần client:<br>
+-Đăng nhập, Đăng kí, Đăng nhập với facebook, Giỏ hàng, Thanh toán trực tuyến paypal, Phân trang với infinite-scroll, Lịch sử mua hàng, Thay đổi thông tin, Thay đổi mật khẩu, Chatbox với admin, Bình luận sản phẩm, Filter sản phẩm, Phí vận chuyển....... <br>
++Về phần admin:<br>
+-Tổng hợp số liệu của user,visitor,order,revenue với chart<br>
+-Thêm, sửa, xóa, tìm kiếm, phân trang với module post, categories, product, product variant, product sku, review, user.....<br>
+-Export file excel và tính tổng đơn hàng<br>
+-Chatbox với user<br>
+-Cập nhật notification khi user order<br>
 
-## Available Scripts
 
-In the project directory, you can run:
+Link Demo: https://store-quan9.vercel.app </br>
+Link Video: https://www.youtube.com/watch?v=MLUDbCVtdoY </br>
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<h4>Tài khoản paypal sanbox test thanh toán</h4>
 
-### `npm run build`
+-acount test 1 </br>
+sb-ecrye7749741@personal.example.com </br>
+BxtI0:.6
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+-account test 2 </br>
+sb-8ollz7749954@personal.example.com </br>
+|hD@kB3o
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+-account test 3 </br>
+sb-x436jy7748351@business.example.com </br>
+2-qlK4;x 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+-account test 4 </br>
+sb-pwuhp7744554@personal.example.com </br>
+F*<;fFY5
 
-### `npm run eject`
+-account test 5 </br>
+sb-dsjnw7744472@personal.example.com </br>
+h?k44C.i
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+-account test 6 </br>
+sb-x91858000171@personal.example.com </br>
+mgpu*<1A
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
